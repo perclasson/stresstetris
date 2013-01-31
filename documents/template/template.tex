@@ -1,0 +1,107 @@
+% För att generera en pdf-fil:
+% pdflatex template.tex
+% 
+% Använd helst makefilen med:
+% make template.pdf
+
+\documentclass[a4paper,11pt]{article}
+
+% Skriv på svenska med svenska tecken
+\usepackage[T1]{fontenc}
+\usepackage[english,swedish]{babel}
+\usepackage[latin1]{inputenc}
+
+% Bra för att typsätta URL:ar
+\usepackage{url}
+\urlstyle{same}
+
+
+\title{Om risker vid rapportskrivande}
+\author{Ola Westin}
+
+
+\begin{document}
+
+% Skapa titelblad
+\maketitle
+
+\section{Inledning}
+
+Ibland måste man skriva rapporter av olika slag. Vad man inte alltid
+tänker på är att man då utsätter sig för stora risker.
+
+En undersökning om risker i samband med skrivning \cite{author99}
+visar att det är farligt. Man kan råka ut för allt möjligt från
+idétorka till inlämningspanik.
+
+\section{Diskussion}
+
+Den genomsnittlige rapportskrivaren väntar alltid till sista sekunden
+innan den börjar skriva. Detta får ofta följder som sömnlöshet,
+magbesvär och förvirring.
+
+\subsection{Sömnlöshet}
+
+Om man skriver för länge i ett sträck hinner man inte sova ordentligt.
+De stunder av sömn man ändå får består ofta av korta stunder då man
+somnat framför tangentbordet.
+
+\subsection{Magbesvär}
+
+Intensiva skrivarsessioner kan leda till att man glömmer bort att äta.
+När magen väl lyckas göra sig påmind är man så utmattad att man inte
+längre orkar laga mat. Om man inte snabbt får hjälp kan man i värsta
+fall svälta ihjäl.
+
+\subsection{Förvirring}
+
+Resulatet av skrivandet kan bli en rapport som är så förvirrande att
+läsarna inte förstår innehållet. Dessa läsare blir förstås besvikna.
+
+\section{Rekommendationer}
+
+För att undvika dessa risker bör man vidta lämpliga åtgärder
+\cite{website}.
+
+\begin{itemize}
+
+\item{Tid}
+
+Se till att börja i tid. Om man har gott om tid på sig har man även
+tid att sova.
+
+\item{Mat}
+
+Ät regelbundet. Om man har svårt att komma ihåg att äta kan man skaffa
+sig en ät-och-sov-klocka \cite{bamse}.
+
+\item{Försökspersoner}
+
+Skaffa försökspersoner som läser igenom rapporten innan den
+publiceras. Se till att välja personer som inte är allt för närstående
+då risken alltid finns att de blir galna och måste spärras in.
+
+\end{itemize}
+
+\section{Slutsatser}
+
+Att skriva rapporter är förenat med vissa risker. Dock kan man oftast
+motverka dessa risker med några enkla grepp.
+
+% Starta referenslista
+\begin{thebibliography}{99}
+% Lägg till referenserna i innehållsförteckningen
+\addcontentsline{toc}{section}{Referenser}
+
+\bibitem{bamse}Andreasson,~R. (1987). \emph{Bamse}, 17, 47 (nr 47,
+1987).
+
+\bibitem{author99}Author,~J.~D. (1999). The risks of writing. \emph{A
+Scientific Journal}, 47, 11 (April 1999), 47--50. ISSN 0001-1234.
+
+\bibitem{website}Webauthor. \emph{A web site}. \\
+URL: \url{http://www.web.site/} (2001-11-17).
+
+\end{thebibliography}
+
+\end{document}
