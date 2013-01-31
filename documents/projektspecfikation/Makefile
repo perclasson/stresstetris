@@ -7,7 +7,7 @@ DVIPS=dvips -Ppdf -ta4
 PDFLATEX=pdflatex
 THUMBPDF=thumbpdf
 
-all:	
+all:
 
 clean:	
 	rm -f *~ *.log *.aux *.out *.toc *.idx thumb*
