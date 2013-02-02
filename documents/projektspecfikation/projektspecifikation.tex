@@ -36,12 +36,13 @@
 Ämnet vi har valt handlar om att använda och mäta biofeedback, i vårt projekt mäter vi GSR (Galvanic Skin Response). I GSR mäter man hudens elektroniska resistans. Resistansen ändras beroende på hur mycket huden svettas, vilket kan användas som ett mått på hur stressad en människa är (resistansen minskar vid stress). Vi kommer att använda ett armband för mätning av GSR, kallat Affectiva Q Sensor. Det vore mycket intressant att nu undersöka om en spelupplevelse kan ändras beroende på spelarens stress, genom att få mätdata i realtid från sensorn som mäter spelarens GSR.
 
 \section{Problemformulering}
-
+Problemställningen kommer att handla om det är möjligt att använda GSR för att få feedback i spel i realtid, och om den uppmätta resistansen beskriver spelarens stress på ett korrekt vis. Frågan blir då om det är möjligt att ändra spelets svårighetsgrad beroende på spelarens stress. När vi då minskar eller ökar svårighetsnivån, kommer detta i sin tur påverka spelaren, så att spelaren kan spela längre, eller tycker att spelupplevelsen upplevs som behagligare. Koncist kan frågeställningen formuleras som nedan:
+\newline\newline
 Kan vi mäta spelarens GSR, och beroende på personens stress, ändra ett spels svårighetsgrad i realtid?
 
-\section{Utförande}
+\section{Tillvägagångssätt}
 
-Armbandet som vi lånar från KTH har medföljande mjukvara som mäter GSR, handrörelser och temperatur och plottar dessa i grafer i realtid. Vi kan dock inte utvinna denna data utan att stoppa körningen och skriva informationen till en textfil. På grund av detta så kommer vi att behöva skriva en egen applikation som lyssnar på datorns bluethoothport och skickar mätinstrumentets data till vårt spel. Utan en sådan lösning kommer vi inte att kunna hämta ut någon data från armbandet i realtid. Det finns ett protokoll på hur armbandet skickar data och i vilket format den kommer i, denna information har vi fått från tillverkaren.
+Armbandet som vi lånar från KTH har medföljande mjukvara som mäter GSR, handrörelser och temperatur och plottar dessa i grafer i realtid. Vi kan dock inte utvinna denna data utan att stoppa körningen och skriva informationen till en textfil. På grund av detta så kommer vi att behöva skriva en egen applikation som lyssnar på datorns bluethoothport och skickar mätinstrumentets data till vårt spel. Utan en sådan lösning kommer vi inte att kunna hämta ut någon data från armbandet i realtid. Det finns ett protokoll\cite{protocol} på hur armbandet skickar data och i vilket format den kommer i, denna information har vi fått från tillverkaren.
 \newline\newline
 Nästa steg i vårt projekt blir att ta del av den litteratur som berör GSR för att bättre förstå och kunna hantera datan vi får från armbandet. Utifrån denna kunskap kan vi ta ut den datan som är viktiga för våra experiment från bluetoothporten och möjligtvis lägga på ett filter för att förbättra datan. Efter detta bör spelet (tetris) implementeras, även till detta moment är det bra om vi har gått igenom forskningsartiklar som berör stress, i bästa fall stress i samband med datorspelande. Detta för att det ska bli lättare att utarbeta funktioner i spelet som upplevs stressande för användaren. Efter att spelet är klart ska datan från armbandet integreras i spelet och om möjligt göra att spelet förändrar beteende beroende på stressnivån hos användaren. 
 
@@ -61,7 +62,7 @@ Implementationen av spelet sker under resten av mars, det vill säga den \emph{me
 % Lägg till referenserna i innehållsförteckningen
 \addcontentsline{toc}{section}{Referenser}
 
-\bibitem{}Affectiva Q, (2012), Affectiva Q Sensor 2.0 Protocol.
+\bibitem{protocol}Affectiva Q, (2012), Affectiva Q Sensor 2.0 Protocol.
 
 \bibitem{}Schnittker, R., (2012), Electrodermal activity of novice drivers during driving simulator training - an explorative study.
 
