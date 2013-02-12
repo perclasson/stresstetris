@@ -33,29 +33,27 @@
 
 \section{Bakgrund}
 
-Ämnet vi har valt handlar om att använda och mäta biofeedback, i vårt projekt mäter vi GSR (Galvanic Skin Response). I GSR mäter man hudens elektroniska resistans. Resistansen ändras beroende på hur mycket huden svettas, vilket kan användas som ett mått på hur stressad en människa är (resistansen minskar vid stress). Vi kommer att använda ett armband för mätning av GSR, kallat Affectiva Q Sensor. Det vore mycket intressant att nu undersöka om en spelupplevelse kan ändras beroende på spelarens stress, genom att få mätdata i realtid från sensorn som mäter spelarens GSR.
+Ämnet vi har valt handlar om att använda och mäta biofeedback, i vårt projekt mäter vi GSR (Galvanic Skin Response). I GSR mäter man hudens elektroniska resistans. Resistansen ändras beroende på hur mycket huden svettas, vilket kan användas som ett mått på hur stressad en människa är (resistansen minskar vid stress). I vårt projekt kommer vi att använda ett armband som mäter GSR, kallat Affectiva Q Sensor. Det vore mycket intressant att nu undersöka hur ett spels svårighetsnivå korrelerar med spelarens stress, genom att få mätdata i realtid från sensorn som mäter spelarens GSR.
 
 \section{Problemformulering}
-Problemformuleringen kommer att handla om det är möjligt att använda GSR för att ge feedback till ett spel i realtid om användarens stressnivå, och om den uppmätta resistansen beskriver spelarens stress på ett korrekt vis. Frågan blir då om det är möjligt att ändra spelets svårighetsgrad beroende på spelarens stress. Kan man se någon förändring i spelarens stressnivå i takt med att spelets svårighetsgrad förändras? Koncist kan frågeställningen formuleras som nedan:
-\newline\newline
-Kan vi mäta spelarens GSR, och beroende på personens stress, ändra ett spels svårighetsgrad i realtid?
+Vi ska använda vårt GSR armband för att mäta användares GSR värden när den spelar ett eget implementerat tetris. Vårt tetris är designat på så vis att vi kan ändra svårighetsgrad (i form av hastighet på blocken, hur många block som finns med från början etc). Vi ska undersöka hur bra armbandet fungerar, genom att mäta hur spelarens GSR-värden korrelerar med förändringar i spelets svårighetsgrad. Vi antar då att det är mer stressande med en högre svårighetsgrad. Om det går att se ett  samband ska vi undersöka olika filter för att filtrera den råa datan för att se vilket som ger en kurva som överenstämmer bäst med svårighetsförändringarna.
 
 \section{Tillvägagångssätt}
 
-Armbandet som vi lånar från KTH har medföljande mjukvara som mäter GSR, handrörelser och temperatur och plottar dessa i grafer i realtid. Vi kan dock inte utvinna denna data utan att stoppa körningen och skriva informationen till en textfil. På grund av detta så kommer vi att behöva skriva en egen applikation som lyssnar på datorns bluethoothport och skickar mätinstrumentets data till vårt spel. Utan en sådan lösning kommer vi inte att kunna hämta ut någon data från armbandet i realtid. Det finns ett protokoll\cite{protocol} på hur armbandet skickar data och i vilket format den kommer i, denna information har vi fått från tillverkaren.
+Armbandet som vi lånar från KTH har medföljande mjukvara som mäter GSR, handrörelser och temperatur och plottar dessa i grafer i realtid. Vi behöver dock den råa datan från armbandet för att kunna använda oss av ett eget filter. Vi behöver därför skriva en applikation som lyssnar på datorns bluetoothport, hämtar in den råa datan från armbandet och filtrerar den. Vi ska sedan plotta datan antingen i realtid eller i efterhand (den behövs då sparas i en fil). Olika filter kommer att användas för att se vilket som ger en kurva som bäst överensstämmer med förändringarna i svårighetsgrad. Vi kommer att behöva ta del av litteratur som berör GSR för att bättre förstå och kunna hantera datan vi får från armbandet. Utifrån denna kunskap kan vi ta ut den data som är viktig för våra filter från bluetoothporten. Det finns ett protokoll på hur armbandet skickar data och i vilket format den kommer i, denna information har vi fått från tillverkaren.
 \newline\newline
-Nästa steg i vårt projekt blir att ta del av den litteratur som berör GSR för att bättre förstå och kunna hantera datan vi får från armbandet. Utifrån denna kunskap kan vi ta ut den datan som är viktiga för våra experiment från bluetoothporten och möjligtvis lägga på ett filter för att förbättra datan. Efter detta bör spelet (tetris) implementeras, även till detta moment är det bra om vi har gått igenom forskningsartiklar som berör stress, i bästa fall stress i samband med datorspelande. Detta för att det ska bli lättare att utarbeta funktioner i spelet som upplevs stressande för användaren. Efter att spelet är klart ska datan från armbandet integreras i spelet och om möjligt göra att spelet förändrar beteende beroende på stressnivån hos användaren. 
+Efter detta bör spelet (tetris) implementeras, även till detta moment är det bra om vi har gått igenom forskningsartiklar som berör stress, i bästa fall stress i samband med datorspelande. Detta för att det ska bli lättare att avgöra vilka funktioner i spelet som vi kan använda för att göra användaren stressad (hastighet på block, musik etc.). Utifrån denna kunskap skapar vi en konstant i spelet som står för dess svårighetsgrad, och denna kontants förändringar ska vi plotta på en graf för att sedan kunna jämföra med GSR värdena. Alla funktioners beteende som har med svårighetsgrad att göra i spelet kommer att baseras på denna konstant.
 
 \section{Tidsplan}
-Bluetoothapplikationen bör vara klar så snart som möjligt så att vi kan låna armbandet och provköra den för att få rå data direkt från armbandet. Arbetet sker \emph{mellan den 4:e februari och den 15:e februari}. 
+bör vara klar så snart som möjligt så att vi kan låna armbandet och provköra den för att få rå data direkt från armbandet. Bokning för att testa bandet sker i samband med detta. Arbetet sker \emph{mellan den 4:e februari och den 17:e februari}. 
 \newline\newline
-Läsning av litteratur om GSR och även protokollet för armbandet för att kunna bearbeta den råa datan. Detta sker efter att bluetoothapplikationen är klar. Bokning för att testa bandet sker i samband med detta. Läsningen \emph{påbörjas den 16:e februari och avslutas senast den 19:e februari}.
+Läsning av litteratur om GSR och även protokollet för armbandet för att kunna bearbeta den råa datan. Detta sker efter att bluetoothapplikationen är klar. Läsningen \emph{påbörjas den 17:e februari och avslutas senast den 20:e februari}.
 \newline\newline
-Filtrering av rå data från armbandet sker efter läsningen om GSR och studerande av mätinstrumentets protokoll. Med filtreringen så vill vi få ut den relevanta informationen i datan, det vill säga värden på GSR. Detta sker \emph{mellan den 20:e februari och den 27:e februari}. 
+Filtrering av rå data från armbandet sker efter läsningen om GSR och studerande av mätinstrumentets protokoll. Detta sker \emph{mellan den 20:e februari och den 27:e februari}. 
 \newline\newline
 Läsningen om stress bör vara klar innan implementationen av vårt tetris sker, så denna kommer att vara \emph{mellan den 28:e februari och den 3:e mars}.
 \newline\newline
-Implementationen av spelet sker under resten av mars, det vill säga den \emph{mellan den 4:e mars och den 31:a mars}. Detta så att vi har lite mer än en vecka till rapportskrivande, och även lite extra tid ifall att implementationen skulle ta längre tid än väntat. 
+Implementationen av spelet sker under resten av mars, det vill säga \emph{mellan den 4:e mars och den 31:a mars}. Detta så att vi har lite mer än en vecka till rapportskrivande, och även lite extra tid ifall att implementationen skulle ta längre tid än väntat. Vi kommer även att utföra våra studier av hur bra överensstämmelsen är under denna tid.
 
 % Starta referenslista lool
 \begin{thebibliography}{99}
@@ -67,6 +65,13 @@ Implementationen av spelet sker under resten av mars, det vill säga den \emph{me
 \bibitem{}Schnittker, R., (2012), Electrodermal activity of novice drivers during driving simulator training - an explorative study.
 
 \bibitem{}Ledalab, Programvara för att analys av GSR.\\URL: \url{http://www.ledalab.de/} (2013-01-31).
+
+\bibitem{}Sykes, J., Brown, S., (2003), Affective gaming: measuring emotion through the gamepad
+
+\bibitem{}Bersak, D., McDarby, G., Augenblick, N., McDarby, P., McDonnell, D., McDonald, B., Karkun, R., (2002), Intelligent Biofeedback using an Immersive Competitive Environment
+
+\bibitem{}Shengsheng Ruan, Ling Chen, Jie Sun, and Gencai Chen, (2009), Study on the Change of Physiological Signals during Playing Body-Controlled Games
+
 
 \end{thebibliography}
 
