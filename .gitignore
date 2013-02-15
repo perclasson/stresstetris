@@ -10,5 +10,6 @@
 *.aux
 *.pdf
 *.*~
-
+.classpath
+.project
 bin/*
