@@ -27,13 +27,13 @@ public class Square {
 		return y;
 	}
 
-	public Square setX(float x) {
-		this.x = x;
+	public Square updateX(float x) {
+		this.x = this.x + x;
 		return this;
 	}
 
-	public Square setY(float y) {
-		this.y = y;
+	public Square updateY(float y) {
+		this.y = this.y + y;
 		return this;
 	}
 
