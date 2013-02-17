@@ -12,8 +12,8 @@ public class Square {
 			if (color == Codes.RED) {
 				image = new Image("images/block.png");	
 			}
-			this.x = y;
-			this.y = x;
+			this.x = x;
+			this.y = y;
 		} catch (SlickException e) {
 			e.printStackTrace();
 		}
