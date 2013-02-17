@@ -27,12 +27,14 @@ public class Square {
 		return y;
 	}
 
-	public void setX(float x) {
+	public Square setX(float x) {
 		this.x = x;
+		return this;
 	}
 
-	public void setY(float y) {
+	public Square setY(float y) {
 		this.y = y;
+		return this;
 	}
 
 	public void draw() {
