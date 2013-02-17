@@ -8,20 +8,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Parser {
-	public List<Float> parseInputStream(InputStream stream) throws IOException {
-		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+	public List<Float> parseInputStream(InputStream stream) {
 		List<Float> list = new ArrayList<Float>();
-		
-		String line = reader.readLine();
-		
-		while (line != null) {
-			list.add(getData(line));
+
+		try {
+			BufferedReader reader = new BufferedReader(new InputStreamReader(
+					stream));
+			String line = reader.readLine();
+
+			while (line != null) {
+				list.add(getData(line));
+				line = reader.readLine();
+			}
+		} catch (IOException e) {
+			System.err.println("Stream data incorrect!");
 		}
-		
+
 		return list;
 	}
-	
+
 	public Float getData(String line) {
-		return Float.parseFloat(line.split(",")[6]);		
+		return Float.parseFloat(line.split(",")[6]);
 	}
 }
