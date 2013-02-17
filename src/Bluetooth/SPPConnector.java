@@ -3,9 +3,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 
 import javax.bluetooth.*;
 import javax.microedition.io.*;
@@ -20,7 +17,7 @@ public class SPPConnector {
 	private void startServer() throws IOException {
 
 		// Create a UUID for SPP
-		UUID uuid = new UUID("1101", true);
+		//UUID uuid = new UUID("1101", true);
 		// Create the servicve url
 		String connectionString = "btspp://101DC0869F1E:3";
 		// open server url
