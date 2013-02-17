@@ -38,9 +38,9 @@ public class GamePlayState extends BasicGameState {
 			block.moveLeft();
 		} else if (input.isKeyPressed(Input.KEY_RIGHT)) {
 			block.moveRight();
-		} else if (input.isKeyPressed(Input.KEY_DOWN)) {
-			block.rotate();
 		} else if (input.isKeyPressed(Input.KEY_UP)) {
+			block.rotate();
+		} else if (input.isKeyPressed(Input.KEY_DOWN)) {
 			block.reverseRotate();
 		}
 		block.moveDown();
