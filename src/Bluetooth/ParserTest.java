@@ -23,7 +23,7 @@ public class ParserTest extends TestCase {
 	public void tearDown() {
 		line = null;
 		parser = null;
-		dummy = null;
+		dummy.shutDown();
 	}
 
 	public void testGetData() {
