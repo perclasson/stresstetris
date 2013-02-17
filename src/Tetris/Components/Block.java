@@ -13,6 +13,10 @@ public class Block {
 	protected void setSquares(ArrayList<Square> squares) {
 		this.squares = squares;
 	}
+	
+	public ArrayList<Square> getSquares() {
+		return squares;
+	}
 
 	public void draw() {
 		for (Square square : squares) {
