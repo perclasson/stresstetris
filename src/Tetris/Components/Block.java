@@ -33,6 +33,10 @@ public class Block {
 	public int getPosition() {
 		return position;
 	}
+	
+	public void setPosition(int position) {
+		this.position = position;
+	}
 
 	public void moveRight() {
 		for (Square square : squares) {
