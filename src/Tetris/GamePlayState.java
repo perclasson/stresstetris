@@ -7,12 +7,12 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-import Tetris.Components.Block;
+import Tetris.Components.OBlock;
 
 
 public class GamePlayState extends BasicGameState{
 	private int stateID = -1;
-	private Block block;
+	private OBlock block;
 	
 	public GamePlayState(int stateID)
 	{
@@ -21,7 +21,7 @@ public class GamePlayState extends BasicGameState{
 	@Override
 	public void init(GameContainer container, StateBasedGame game)
 			throws SlickException {
-		block = new Block(0);
+		block = new OBlock(0, 100, 100);
 		
 	}
 

@@ -1,6 +1,6 @@
 package Tetris.Components;
 
-public class ColorCodes {
+public class Codes {
 	
 	public static final int RED = 0;
 	public static final int ORANGE = 1;
@@ -9,5 +9,6 @@ public class ColorCodes {
 	public static final int TEAL = 4;
 	public static final int BLUE = 5;
 	public static final int PURPLE = 6;
+	public static final int BLOCK_SIZE = 20;
 
 }

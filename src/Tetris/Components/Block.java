@@ -1,49 +1,48 @@
 package Tetris.Components;
 
-import org.newdawn.slick.Image;
-import org.newdawn.slick.SlickException;
+import java.util.ArrayList;
 
 public class Block {
-	private Image image;
-	private float x, y;
-
-	public Block(int color) {
-		try {
-			if (color == 0) {
-				image = new Image("images/block.png");	
-			}
-			x = 100;
-			y = 100;
-		} catch (SlickException e) {
-			e.printStackTrace();
-		}
+	private ArrayList<Square> squares;
+    private int position;
+    
+	public Block(int position) {
+		this.position = position;
 	}
-
-	public float getX() {
-		return x;
-	}
-
-	public float getY() {
-		return y;
+	
+	protected void setSquares(ArrayList<Square> squares) {
+		this.squares = squares;
 	}
 
 	public void draw() {
-		image.draw(x, y);
+		for (Square square : squares) {
+			square.draw();
+		}
 	}
 
-	public void moveLeft() {
-		x -= 3;
-	}
+	public void rotate() {
 
-	public void moveRight() {
-		x += 3;
 	}
 
 	public void moveDown() {
-		y += 0.5f;
+		for (Square square : squares) {
+			square.moveDown();
+		}
+	}
+	
+	public int getPosition() {
+		return position;
 	}
 
-	public void moveUp() {
-		y -= 3;
+	public void moveRight() {
+		for (Square square : squares) {
+			square.moveRight();
+		}
+	}
+
+	public void moveLeft() {
+		for (Square square : squares) {
+			square.moveLeft();
+		}
 	}
 }
