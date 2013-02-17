@@ -23,6 +23,10 @@ public class Block {
 	public void rotate() {
 
 	}
+	
+	public void reverseRotate() {
+		
+	}
 
 	public void moveDown() {
 		for (Square square : squares) {

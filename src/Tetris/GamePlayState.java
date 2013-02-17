@@ -7,12 +7,12 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-import Tetris.Components.OBlock;
+import Tetris.Components.TBlock;
 
 
 public class GamePlayState extends BasicGameState{
 	private int stateID = -1;
-	private OBlock block;
+	private TBlock block;
 	
 	public GamePlayState(int stateID)
 	{
@@ -21,7 +21,7 @@ public class GamePlayState extends BasicGameState{
 	@Override
 	public void init(GameContainer container, StateBasedGame game)
 			throws SlickException {
-		block = new OBlock(0, 100, 100);
+		block = new TBlock(0, 100, 100);
 		
 	}
 
@@ -35,11 +35,16 @@ public class GamePlayState extends BasicGameState{
 	public void update(GameContainer container, StateBasedGame game, int delta)
 			throws SlickException {
 		Input input = container.getInput();
-		if(input.isKeyDown(Input.KEY_A)) {
+		if(input.isKeyDown(Input.KEY_LEFT)) {
 			block.moveLeft();
 		} 
-		else if(input.isKeyDown(Input.KEY_D)) {
+		else if(input.isKeyDown(Input.KEY_RIGHT)) {
 			block.moveRight();
+		}
+		else if(input.isKeyDown(Input.KEY_DOWN)) {
+			block.rotate();
+		} else if(input.isKeyDown(Input.KEY_DOWN)) {
+			block.reverseRotate();
 		}
 		block.moveDown();
 	}
