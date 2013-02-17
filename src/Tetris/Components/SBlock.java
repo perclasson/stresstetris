@@ -59,8 +59,7 @@ public class SBlock extends Block {
 	}
 
 	public void reverseRotate() {
-		System.out.println(Math.abs(getPosition() - 1) % 4);
-		editPosition(Math.abs(getPosition() - 1) % 4);
+		editPosition(Math.abs(getPosition() + 3) % 4);
 	}
 
 }

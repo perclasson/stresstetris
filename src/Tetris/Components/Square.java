@@ -42,11 +42,11 @@ public class Square {
 	}
 
 	public void moveLeft() {
-		x -= 3;
+		x -= Codes.BLOCK_SIZE;
 	}
 
 	public void moveRight() {
-		x += 3;
+		x += Codes.BLOCK_SIZE;
 	}
 
 	public void moveDown() {
