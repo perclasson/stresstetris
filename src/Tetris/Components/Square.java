@@ -10,7 +10,7 @@ public class Square {
 	public Square(int color, float x, float y) {
 		try {
 			if (color == Codes.RED) {
-				image = new Image("images/block.png");	
+				image = new Image("images/block.png");
 			}
 			this.x = x;
 			this.y = y;
@@ -25,6 +25,14 @@ public class Square {
 
 	public float getY() {
 		return y;
+	}
+
+	public void setX(float x) {
+		this.x = x;
+	}
+
+	public void setY(float y) {
+		this.y = y;
 	}
 
 	public void draw() {
