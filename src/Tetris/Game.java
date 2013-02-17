@@ -11,7 +11,6 @@ public class Game extends StateBasedGame {
 
 	public Game() {
 		super("Stress Tetris");
-		// TODO Auto-generated constructor stub
 	}
 
 	public static void main(String[] args) throws SlickException {

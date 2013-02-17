@@ -26,7 +26,6 @@ public class MainMenuState extends BasicGameState {
 		menuX = 10;
 		menuY = 400;
 		this.stateID = stateID;
-		theme = new Sound("sounds/theme.wav");
 	}
 
 	@Override
@@ -49,12 +48,14 @@ public class MainMenuState extends BasicGameState {
 		startGameOption.draw(menuX, menuY, startGameScale);
 
 		exitOption.draw(menuX, menuY + 80, exitScale);
+		
 
 	}
 
 	@Override
 	public void update(GameContainer gc, StateBasedGame sb, int delta)
 			throws SlickException {
+		
 		float scaleStep = 0.001f;
 		Input input = gc.getInput();
 
@@ -62,8 +63,6 @@ public class MainMenuState extends BasicGameState {
 		int mouseY = input.getMouseY();
 		boolean insideStartGame = false;
 		boolean insideExit = false;
-		if (!theme.playing())
-			theme.play();
 		if ((mouseX >= menuX && mouseX <= menuX + startGameOption.getWidth())
 				&& (mouseY >= menuY && mouseY <= menuY
 						+ startGameOption.getHeight())) {
@@ -96,7 +95,6 @@ public class MainMenuState extends BasicGameState {
 			if (exitScale > 1.0f)
 				exitScale -= scaleStep * delta;
 		}
-
 	}
 
 	@Override
