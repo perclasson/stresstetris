@@ -24,19 +24,6 @@ public class Block {
 		}
 	}
 
-
-	public void rotate() {
-		editPosition(getPosition()+1 % 4);
-	}
-	
-	public void reverseRotate() {
-		editPosition(getPosition()-1 % 4);
-	}
-	
-	private void editPosition(int i) {
-		
-	}
-
 	public void moveDown() {
 		for (Square square : squares) {
 			square.moveDown();
