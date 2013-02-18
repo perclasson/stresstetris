@@ -1,7 +1,9 @@
 package Tetris;
 
+
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
@@ -12,6 +14,7 @@ import Tetris.Components.SBlock;
 public class GamePlayState extends BasicGameState {
 	private int stateID = -1;
 	private SBlock block;
+	private Image background;
 
 	public GamePlayState(int stateID) {
 		this.stateID = stateID;
@@ -21,12 +24,13 @@ public class GamePlayState extends BasicGameState {
 	public void init(GameContainer container, StateBasedGame game)
 			throws SlickException {
 		block = new SBlock(0, 100, 100);
-
+		background = new Image("images/gamegrid.png");
 	}
 
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g)
 			throws SlickException {
+		background.draw(0,0);
 		block.draw();
 	}
 
