@@ -14,10 +14,10 @@ public class OBlock extends Block {
 	public ArrayList<Square> generateSquares(float x, float y) {
 		ArrayList<Square> squares = new ArrayList<Square>();
 		squares.add(new Square(color, x, y));
-		squares.add(new Square(color, x + Values.BLOCK_SIZE, y));
-		squares.add(new Square(color, x, y + Values.BLOCK_SIZE));
-		squares.add(new Square(color, x + Values.BLOCK_SIZE, y
-				+ Values.BLOCK_SIZE));
+		squares.add(new Square(color, x + Values.SIZE, y));
+		squares.add(new Square(color, x, y + Values.SIZE));
+		squares.add(new Square(color, x + Values.SIZE, y
+				+ Values.SIZE));
 
 		return squares;
 	}

@@ -14,13 +14,17 @@ public class SBlock extends Block {
 
 	public ArrayList<Square> generateSquares(float x, float y) {
 		squares = new ArrayList<Square>();
-		mainSquare = new Square(color, x + Values.BLOCK_SIZE, y);
+		mainSquare = new Square(color, x + Values.SIZE, y);
 		squares.add(mainSquare);
-		squares.add(new Square(color, x + 2 * Values.BLOCK_SIZE, y));
-		squares.add(new Square(color, x, y + Values.BLOCK_SIZE));
-		squares.add(new Square(color, x + Values.BLOCK_SIZE, y
-				+ Values.BLOCK_SIZE));
+		squares.add(new Square(color, x + 2 * Values.SIZE, y));
+		squares.add(new Square(color, x, y + Values.SIZE));
+		squares.add(new Square(color, x + Values.SIZE, y
+				+ Values.SIZE));
 		return squares;
+	}
+	
+	public void setPosition(float x, float y) {
+		setSquares(generateSquares(x, y));
 	}
 
 	public void editPosition(int newPosition) {
@@ -28,38 +32,38 @@ public class SBlock extends Block {
 		float y = mainSquare.getY();
 
 		if (newPosition == 0) {
-			squares.get(1).setX(x + Values.BLOCK_SIZE).setY(y);
-			squares.get(2).setX(x - Values.BLOCK_SIZE)
-					.setY(y + Values.BLOCK_SIZE);
-			squares.get(3).setX(x).setY(y + Values.BLOCK_SIZE);
+			squares.get(1).setX(x + Values.SIZE).setY(y);
+			squares.get(2).setX(x - Values.SIZE)
+					.setY(y + Values.SIZE);
+			squares.get(3).setX(x).setY(y + Values.SIZE);
 		} else if (newPosition == 1) {
-			squares.get(1).setX(x).setY(y + Values.BLOCK_SIZE);
-			squares.get(2).setX(x - Values.BLOCK_SIZE)
-					.setY(y - Values.BLOCK_SIZE);
-			squares.get(3).setX(x - Values.BLOCK_SIZE).setY(y);
+			squares.get(1).setX(x).setY(y + Values.SIZE);
+			squares.get(2).setX(x - Values.SIZE)
+					.setY(y - Values.SIZE);
+			squares.get(3).setX(x - Values.SIZE).setY(y);
 
 		} else if (newPosition == 2) {
-			squares.get(1).setX(x - Values.BLOCK_SIZE).setY(y);
-			squares.get(2).setX(x + Values.BLOCK_SIZE)
-					.setY(y - Values.BLOCK_SIZE);
-			squares.get(3).setX(x).setY(y - Values.BLOCK_SIZE);
+			squares.get(1).setX(x - Values.SIZE).setY(y);
+			squares.get(2).setX(x + Values.SIZE)
+					.setY(y - Values.SIZE);
+			squares.get(3).setX(x).setY(y - Values.SIZE);
 
 		} else if (newPosition == 3) {
-			squares.get(1).setX(x).setY(y - Values.BLOCK_SIZE);
-			squares.get(2).setX(x + Values.BLOCK_SIZE)
-					.setY(y + Values.BLOCK_SIZE);
-			squares.get(3).setX(x + Values.BLOCK_SIZE).setY(y);
+			squares.get(1).setX(x).setY(y - Values.SIZE);
+			squares.get(2).setX(x + Values.SIZE)
+					.setY(y + Values.SIZE);
+			squares.get(3).setX(x + Values.SIZE).setY(y);
 		}
 
-		setPosition(newPosition);
+		setRotation(newPosition);
 	}
 
 	public void rotate() {
-		editPosition((getPosition() + 1) % 4);
+		editPosition((getRotation() + 1) % 4);
 	}
 
 	public void reverseRotate() {
-		editPosition((getPosition() + 3) % 4);
+		editPosition((getRotation() + 3) % 4);
 	}
 
 }

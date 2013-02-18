@@ -10,7 +10,7 @@ public class Square {
 	public Square(int color, float x, float y) {
 		try {
 			Image allColors = new Image("images/sprites.png");
-			image = allColors.getSubImage(color*Values.BLOCK_SIZE, 0, Values.BLOCK_SIZE, Values.BLOCK_SIZE); 
+			image = allColors.getSubImage(color*Values.SIZE, 0, Values.SIZE, Values.SIZE); 
 			
 			this.x = x;
 			this.y = y;
@@ -42,11 +42,11 @@ public class Square {
 	}
 
 	public void moveLeft() {
-		x -= Values.BLOCK_SIZE;
+		x -= Values.SIZE;
 	}
 
 	public void moveRight() {
-		x += Values.BLOCK_SIZE;
+		x += Values.SIZE;
 	}
 
 	public void moveDown() {

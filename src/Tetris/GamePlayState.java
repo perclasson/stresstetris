@@ -9,11 +9,11 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-import Tetris.Components.SBlock;
+import Tetris.Components.TBlock;
 
 public class GamePlayState extends BasicGameState {
 	private int stateID = -1;
-	private SBlock block;
+	private TBlock block;
 	private Image background;
 
 	public GamePlayState(int stateID) {
@@ -23,7 +23,12 @@ public class GamePlayState extends BasicGameState {
 	@Override
 	public void init(GameContainer container, StateBasedGame game)
 			throws SlickException {
-		block = new SBlock(0, 100, 100);
+		block = new TBlock(0, 276, 26);
+		/* From left: 276 px
+		   From top: 26 px
+		   Height: 22 blocks = 550 px
+		   Width: 10 blocks = 250px
+		 */
 		background = new Image("images/gamegrid.png");
 	}
 
@@ -46,6 +51,8 @@ public class GamePlayState extends BasicGameState {
 			block.rotate();
 		} else if (input.isKeyPressed(Input.KEY_DOWN)) {
 			block.reverseRotate();
+		} else if (input.isKeyPressed(Input.KEY_R)) {
+			block.setPosition(276, 26);
 		}
 		block.moveDown();
 	}

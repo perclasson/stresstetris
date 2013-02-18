@@ -4,10 +4,10 @@ import java.util.ArrayList;
 
 public class Block {
 	private ArrayList<Square> squares;
-    private int position;
+    private int rotation;
     
-	public Block(int position) {
-		this.position = position;
+	public Block(int rotation) {
+		this.rotation = rotation;
 	}
 	
 	protected void setSquares(ArrayList<Square> squares) {
@@ -30,12 +30,12 @@ public class Block {
 		}
 	}
 	
-	public int getPosition() {
-		return position;
+	public int getRotation() {
+		return rotation;
 	}
 	
-	public void setPosition(int position) {
-		this.position = position;
+	public void setRotation(int rotation) {
+		this.rotation = rotation;
 	}
 
 	public void moveRight() {
@@ -49,4 +49,6 @@ public class Block {
 			square.moveLeft();
 		}
 	}
+	
+	
 }

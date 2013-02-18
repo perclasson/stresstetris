@@ -11,6 +11,6 @@ public class Values {
 	public static final int GREEN = 6;
 	public static final int YELLOW = 7;
 	public static final int ORANGE = 8;
-	public static final int BLOCK_SIZE = 30;
+	public static final int SIZE = 25;
 
 }
