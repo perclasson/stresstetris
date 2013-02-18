@@ -3,7 +3,7 @@ package Tetris.Components;
 import java.util.ArrayList;
 
 public class SBlock extends Block {
-	private final int color = Codes.RED;
+	private final int color = Values.ORANGE;
 	private ArrayList<Square> squares;
 	private Square mainSquare;
 
@@ -14,12 +14,12 @@ public class SBlock extends Block {
 
 	public ArrayList<Square> generateSquares(float x, float y) {
 		squares = new ArrayList<Square>();
-		mainSquare = new Square(color, x + Codes.BLOCK_SIZE, y);
+		mainSquare = new Square(color, x + Values.BLOCK_SIZE, y);
 		squares.add(mainSquare);
-		squares.add(new Square(color, x + 2 * Codes.BLOCK_SIZE, y));
-		squares.add(new Square(color, x, y + Codes.BLOCK_SIZE));
-		squares.add(new Square(color, x + Codes.BLOCK_SIZE, y
-				+ Codes.BLOCK_SIZE));
+		squares.add(new Square(color, x + 2 * Values.BLOCK_SIZE, y));
+		squares.add(new Square(color, x, y + Values.BLOCK_SIZE));
+		squares.add(new Square(color, x + Values.BLOCK_SIZE, y
+				+ Values.BLOCK_SIZE));
 		return squares;
 	}
 
@@ -28,27 +28,27 @@ public class SBlock extends Block {
 		float y = mainSquare.getY();
 
 		if (newPosition == 0) {
-			squares.get(1).setX(x + Codes.BLOCK_SIZE).setY(y);
-			squares.get(2).setX(x - Codes.BLOCK_SIZE)
-					.setY(y + Codes.BLOCK_SIZE);
-			squares.get(3).setX(x).setY(y + Codes.BLOCK_SIZE);
+			squares.get(1).setX(x + Values.BLOCK_SIZE).setY(y);
+			squares.get(2).setX(x - Values.BLOCK_SIZE)
+					.setY(y + Values.BLOCK_SIZE);
+			squares.get(3).setX(x).setY(y + Values.BLOCK_SIZE);
 		} else if (newPosition == 1) {
-			squares.get(1).setX(x).setY(y + Codes.BLOCK_SIZE);
-			squares.get(2).setX(x - Codes.BLOCK_SIZE)
-					.setY(y - Codes.BLOCK_SIZE);
-			squares.get(3).setX(x - Codes.BLOCK_SIZE).setY(y);
+			squares.get(1).setX(x).setY(y + Values.BLOCK_SIZE);
+			squares.get(2).setX(x - Values.BLOCK_SIZE)
+					.setY(y - Values.BLOCK_SIZE);
+			squares.get(3).setX(x - Values.BLOCK_SIZE).setY(y);
 
 		} else if (newPosition == 2) {
-			squares.get(1).setX(x - Codes.BLOCK_SIZE).setY(y);
-			squares.get(2).setX(x + Codes.BLOCK_SIZE)
-					.setY(y - Codes.BLOCK_SIZE);
-			squares.get(3).setX(x).setY(y - Codes.BLOCK_SIZE);
+			squares.get(1).setX(x - Values.BLOCK_SIZE).setY(y);
+			squares.get(2).setX(x + Values.BLOCK_SIZE)
+					.setY(y - Values.BLOCK_SIZE);
+			squares.get(3).setX(x).setY(y - Values.BLOCK_SIZE);
 
 		} else if (newPosition == 3) {
-			squares.get(1).setX(x).setY(y - Codes.BLOCK_SIZE);
-			squares.get(2).setX(x + Codes.BLOCK_SIZE)
-					.setY(y + Codes.BLOCK_SIZE);
-			squares.get(3).setX(x + Codes.BLOCK_SIZE).setY(y);
+			squares.get(1).setX(x).setY(y - Values.BLOCK_SIZE);
+			squares.get(2).setX(x + Values.BLOCK_SIZE)
+					.setY(y + Values.BLOCK_SIZE);
+			squares.get(3).setX(x + Values.BLOCK_SIZE).setY(y);
 		}
 
 		setPosition(newPosition);

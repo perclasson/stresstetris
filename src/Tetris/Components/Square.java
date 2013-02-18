@@ -9,9 +9,9 @@ public class Square {
 
 	public Square(int color, float x, float y) {
 		try {
-			if (color == Codes.RED) {
-				image = new Image("images/block.png");
-			}
+			Image allColors = new Image("images/sprites.png");
+			image = allColors.getSubImage(color*Values.BLOCK_SIZE, 0, Values.BLOCK_SIZE, Values.BLOCK_SIZE); 
+			
 			this.x = x;
 			this.y = y;
 		} catch (SlickException e) {
@@ -42,11 +42,11 @@ public class Square {
 	}
 
 	public void moveLeft() {
-		x -= Codes.BLOCK_SIZE;
+		x -= Values.BLOCK_SIZE;
 	}
 
 	public void moveRight() {
-		x += Codes.BLOCK_SIZE;
+		x += Values.BLOCK_SIZE;
 	}
 
 	public void moveDown() {
