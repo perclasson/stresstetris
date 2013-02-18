@@ -10,11 +10,12 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import Tetris.Components.TBlock;
+import Tetris.Components.Values;
 
 public class GamePlayState extends BasicGameState {
 	private int stateID = -1;
 	private TBlock block;
-	private Image background;
+	private Image frame, grid;
 
 	public GamePlayState(int stateID) {
 		this.stateID = stateID;
@@ -23,20 +24,23 @@ public class GamePlayState extends BasicGameState {
 	@Override
 	public void init(GameContainer container, StateBasedGame game)
 			throws SlickException {
-		block = new TBlock(0, 276, 26);
+		block = new TBlock(0, 276+4*Values.SIZE, 26);
 		/* From left: 276 px
 		   From top: 26 px
 		   Height: 22 blocks = 550 px
 		   Width: 10 blocks = 250px
 		 */
-		background = new Image("images/gamegrid.png");
+		frame = new Image("images/frame.png");
+		grid = new Image("images/grid.png");
 	}
 
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g)
 			throws SlickException {
-		background.draw(0,0);
+		grid.draw(276,26);
 		block.draw();
+		frame.draw(0,0);
+		
 	}
 
 	@Override

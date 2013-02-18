@@ -27,11 +27,15 @@ public class TBlock extends Block {
 	}
 
 	public void rotate() {
-		editPosition((getRotation() + 1) % 4);
+		if(canRotate()) {
+			editPosition((getRotation() + 1) % 4);
+		}
 	}
 
 	public void reverseRotate() {
-		editPosition((getRotation() + 3) % 4);
+		if(canRotate()) {
+			editPosition((getRotation() + 3) % 4);
+		}
 	}
 
 	private void editPosition(int i) {
@@ -60,5 +64,26 @@ public class TBlock extends Block {
 			break;
 		}
 		setRotation(i);
+	}
+	
+	public boolean canRotate() {
+		int touching = 0;
+		for(Square square : squares) {
+			float x = square.getX();
+			float y = square.getY();
+			if(x + Values.SIZE == Values.GRID_XSTART+Values.GRID_WIDTH) {
+				touching++;
+			}
+			if(x == Values.GRID_XSTART) {
+				touching++;
+			}
+			if(y > Values.GRID_YSTART+Values.GRID_HEIGHT) {
+				touching++;
+			}
+		}
+		if(touching < 3) {
+			return true;
+		}
+		return false;
 	}
 }

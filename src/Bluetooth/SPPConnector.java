@@ -19,8 +19,8 @@ public class SPPConnector {
 		// Create a UUID for SPP
 		//UUID uuid = new UUID("1101", true);
 		// Create the servicve url
-		String connectionString = "btspp://101DC0869F1E:3";
-		// open server url
+		String connectionString = "btspp://000666493182:2";
+		// open server url66
 		StreamConnection streamConn= (StreamConnection) Connector
 				.open(connectionString);
 

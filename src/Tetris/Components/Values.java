@@ -12,5 +12,9 @@ public class Values {
 	public static final int YELLOW = 7;
 	public static final int ORANGE = 8;
 	public static final int SIZE = 25;
+	public static final int GRID_XSTART = 276;
+	public static final int GRID_YSTART = 26;
+	public static final int GRID_WIDTH = 250;
+	public static final int GRID_HEIGHT = 550;
 
 }

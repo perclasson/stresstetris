@@ -56,4 +56,29 @@ public class Square {
 	public void moveUp() {
 		y -= 3;
 	}
+	
+	public boolean canMoveUp() {
+		if(y - Values.SIZE < Values.GRID_YSTART) {
+			return false;
+		}
+		return true;
+	}
+	public boolean canMoveDown() {
+		if(y + Values.SIZE > Values.GRID_YSTART+Values.GRID_HEIGHT) {
+			return false;
+		}
+		return true;
+	}
+	public boolean canMoveRight() {
+		if(x + 2*Values.SIZE > Values.GRID_XSTART+Values.GRID_WIDTH) {
+			return false;
+		}
+		return true;
+	}
+	public boolean canMoveLeft() {
+		if(x - Values.SIZE < Values.GRID_XSTART) {
+			return false;
+		}
+		return true;
+	}
 }
