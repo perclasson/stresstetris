@@ -1,7 +1,11 @@
-package Tetris.Components;
+package tetris.components;
 
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+
+import resources.BlockInfo;
+import resources.Measurements;
+
 
 public class Square {
 	private Image image;
@@ -11,7 +15,7 @@ public class Square {
 	public Square(int color, float x, float y, float speed) {
 		try {
 			Image allColors = new Image("images/sprites.png");
-			image = allColors.getSubImage(color*Values.SIZE, 0, Values.SIZE, Values.SIZE); 
+			image = allColors.getSubImage(color*BlockInfo.SIZE, 0, BlockInfo.SIZE, BlockInfo.SIZE); 
 			
 			this.x = x;
 			this.y = y;
@@ -44,7 +48,7 @@ public class Square {
 	}
 
 	public void moveLeft() {
-		x -= Values.SIZE;
+		x -= BlockInfo.SIZE;
 	}
 	
 	public void moveLeft(float dist) {
@@ -52,7 +56,7 @@ public class Square {
 	}
 
 	public void moveRight() {
-		x += Values.SIZE;
+		x += BlockInfo.SIZE;
 	}
 	
 	public void moveRight(float dist) {
@@ -72,25 +76,25 @@ public class Square {
 	}
 	
 	public boolean canMoveUp() {
-		if(y - Values.SIZE < Values.GRID_YSTART) {
+		if(y - BlockInfo.SIZE < Measurements.GRID_YSTART) {
 			return false;
 		}
 		return true;
 	}
 	public boolean canMoveDown() {
-		if(y + Values.SIZE +speed> Values.GRID_YSTART+Values.GRID_HEIGHT) {
+		if(y + BlockInfo.SIZE +speed> Measurements.GRID_YSTART+Measurements.GRID_HEIGHT) {
 			return false;
 		}
 		return true;
 	}
 	public boolean canMoveRight() {
-		if(x + 2*Values.SIZE > Values.GRID_XSTART+Values.GRID_WIDTH) {
+		if(x + 2*BlockInfo.SIZE > Measurements.GRID_XSTART+Measurements.GRID_WIDTH) {
 			return false;
 		}
 		return true;
 	}
 	public boolean canMoveLeft() {
-		if(x - Values.SIZE < Values.GRID_XSTART) {
+		if(x - BlockInfo.SIZE < Measurements.GRID_XSTART) {
 			return false;
 		}
 		return true;

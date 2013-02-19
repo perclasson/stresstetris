@@ -1,6 +1,4 @@
-package Tetris;
-
-import java.util.ArrayList;
+package tetris;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -10,7 +8,11 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-import Tetris.Components.*;
+import resources.BlockInfo;
+import resources.Colors;
+import resources.Measurements;
+import tetris.components.*;
+
 
 public class GamePlayState extends BasicGameState {
 	private int stateID = -1;
@@ -19,13 +21,13 @@ public class GamePlayState extends BasicGameState {
 	private Square[][] gridSquares;
 	private float blockSpeed;
 	private CollisionHandler collisionHandler;
-	private static final int gridWidth = Values.GRID_WIDTH / Values.SIZE;
-	private static final int gridHeight = Values.GRID_HEIGHT / Values.SIZE;
+	private static final int gridWidth = Measurements.GRID_WIDTH / BlockInfo.SIZE;
+	private static final int gridHeight = Measurements.GRID_HEIGHT / BlockInfo.SIZE;
 
 	public GamePlayState(int stateID) {
 		this.stateID = stateID;
-		gridSquares = new Square[gridWidth][gridHeight];
-		blockSpeed = 3f;
+		gridSquares = new Square[gridWidth][gridHeight]; //A matrix containing all squares in the grid
+		blockSpeed = 2f;//The speed with which all blocks will be falling
 		collisionHandler = new CollisionHandler(this);
 	}
 
@@ -34,7 +36,7 @@ public class GamePlayState extends BasicGameState {
 			throws SlickException {
 		System.out.println(blockSpeed);
 		//testFill();
-		block = new SBlock(0, 276 + 4 * Values.SIZE, 26, blockSpeed);
+		block = new TBlock(276 + 4 * BlockInfo.SIZE, 26, blockSpeed);
 		/*
 		 * From left: 276 px From top: 26 px Height: 22 blocks = 550 px Width:
 		 * 10 blocks = 250px
@@ -43,12 +45,15 @@ public class GamePlayState extends BasicGameState {
 		grid = new Image("images/grid.png");
 	}
 	
+	/**
+	 * Fills the right and left borders with squares (for testing purposes)
+	 */
 	public void testFill() {
 		for(int i = 0; i < 22; i++) {
-			gridSquares[0][i] = new Square(Values.RED, Values.GRID_XSTART, Values.GRID_YSTART+i*25, 0);
+			gridSquares[0][i] = new Square(Colors.RED, Measurements.GRID_XSTART, Measurements.GRID_YSTART+i*25, 0);
 		}
 		for(int j = 0; j < 22; j++) {
-			gridSquares[9][j] = new Square(Values.ORANGE, Values.GRID_XSTART+9*Values.SIZE, +Values.GRID_YSTART+j*25, 0);
+			gridSquares[9][j] = new Square(Colors.ORANGE, Measurements.GRID_XSTART+9*BlockInfo.SIZE, +Measurements.GRID_YSTART+j*25, 0);
 		}
 	}
 
@@ -61,21 +66,27 @@ public class GamePlayState extends BasicGameState {
 		frame.draw(0, 0);
 	}
 
+	/**
+	 * Moves the active block across the grid. The block can only move right, left or down if
+	 * it will not collide with squares already in the grid. If the block will collide while
+	 * moving down, it is halted and all of it's squares are added to the grid on the 
+	 * positions they stopped moving. A new block is generated after the active one has
+	 * stopped.
+	 */
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int delta)
 			throws SlickException {
 		if (!block.isMoving()) {
-			System.out.println("blocket rörde sig inte...");
 			addSquares(block);
-			block = new SBlock(0, 276 + 4 * Values.SIZE, 26, blockSpeed);
+			block = new TBlock(276 + 4 * BlockInfo.SIZE, 26, blockSpeed);
 		}
 		Input input = container.getInput();
 		if (input.isKeyPressed(Input.KEY_LEFT)) {
-			if (collisionHandler.willCollideLeft(block) == 0) {
+			if (!collisionHandler.willCollideLeft(block)) {
 				block.moveLeft();
 			}
 		} else if (input.isKeyPressed(Input.KEY_RIGHT)) {
-			if (collisionHandler.willCollideRight(block) == 0) {
+			if (!collisionHandler.willCollideRight(block)) {
 				block.moveRight();
 			}
 		} else if (input.isKeyPressed(Input.KEY_UP)) {
@@ -87,16 +98,17 @@ public class GamePlayState extends BasicGameState {
 		}
 		
 		float collisionDistance = collisionHandler.willCollideDown(block);
-		System.out.println(collisionDistance);
 		if (collisionDistance > 0) {
-			block.moveDown(collisionDistance);
+			block.moveDown(collisionDistance); //The block is moved down the distance left to collision
 			block.halt();
 		} else {
 			block.moveDown();
 		}
-		//block.moveDown();
 	}
 
+	/**
+	 * Draws all the squares on the grid.
+	 */
 	public void drawGridSquares() {
 		for (int i = 0; i < gridWidth; i++) {
 			for (int j = 0; j < gridHeight; j++) {
@@ -107,19 +119,18 @@ public class GamePlayState extends BasicGameState {
 		}
 	}
 
+	/**
+	 * Adds squares from a block to the grid. The grid is a 10x22 matrix, and all the squares
+	 * are added to appropriate coordinates using the size of the grid and the size of a square.
+	 * @param block The block which squares will be added
+	 */
 	public void addSquares(Block block) {
 		for (Square square : block.getSquares()) {
-			int xIndex = (int) (square.getX() - Values.GRID_XSTART)
-					/ Values.SIZE;
-			int yIndex = (int) (square.getY() - Values.GRID_YSTART)
-					/ Values.SIZE;
-			/*System.out.println(xIndex);
-			System.out.println(yIndex);
+			int xIndex = (int) (square.getX() - Measurements.GRID_XSTART)
+					/ BlockInfo.SIZE;
+			int yIndex = (int) (square.getY() - Measurements.GRID_YSTART)
+					/ BlockInfo.SIZE;
 
-			//square.setX(xIndex*Values.SIZE+Values.GRID_XSTART);
-			//square.setY(yIndex*Values.SIZE+Values.GRID_YSTART);
-			System.out.println(square.getX());
-			System.out.println(square.getY());*/
 			gridSquares[xIndex][yIndex] = square;
 		}
 	}
@@ -140,5 +151,4 @@ public class GamePlayState extends BasicGameState {
 	public float getBlockSpeed() {
 		return blockSpeed;
 	}
-
 }

@@ -1,4 +1,4 @@
-package Bluetooth;
+package bluetooth;
 
 import gnu.io.CommPortIdentifier;
 import gnu.io.NoSuchPortException;

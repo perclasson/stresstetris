@@ -1,4 +1,4 @@
-package Bluetooth;
+package bluetooth;
 
 import java.io.InputStream;
 import java.util.List;
