@@ -6,20 +6,22 @@ public class SBlock extends Block {
 	private final int color = Values.ORANGE;
 	private ArrayList<Square> squares;
 	private Square mainSquare;
+	private float speed;
 
-	public SBlock(int position, float x, float y) {
+	public SBlock(int position, float x, float y, float speed) {
 		super(position);
+		this.speed = speed;
 		setSquares(generateSquares(x, y));
 	}
 
 	public ArrayList<Square> generateSquares(float x, float y) {
 		squares = new ArrayList<Square>();
-		mainSquare = new Square(color, x + Values.SIZE, y);
+		mainSquare = new Square(color, x + Values.SIZE, y, speed);
 		squares.add(mainSquare);
-		squares.add(new Square(color, x + 2 * Values.SIZE, y));
-		squares.add(new Square(color, x, y + Values.SIZE));
+		squares.add(new Square(color, x + 2 * Values.SIZE, y, speed));
+		squares.add(new Square(color, x, y + Values.SIZE, speed));
 		squares.add(new Square(color, x + Values.SIZE, y
-				+ Values.SIZE));
+				+ Values.SIZE, speed));
 		return squares;
 	}
 	

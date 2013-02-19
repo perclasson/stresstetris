@@ -5,9 +5,31 @@ import java.util.ArrayList;
 public class Block {
 	private ArrayList<Square> squares;
 	private int rotation;
+	private boolean isMoving;
 
 	public Block(int rotation) {
 		this.rotation = rotation;
+		isMoving = true;
+	}
+
+	public boolean isMoving() {
+		return isMoving;
+	}
+
+	public void halt() {
+		isMoving = false;
+	}
+
+	public void rotate() {
+
+	}
+
+	public void reverseRotate() {
+
+	}
+
+	public void setPosition(float x, float y) {
+
 	}
 
 	protected void setSquares(ArrayList<Square> squares) {
@@ -25,7 +47,7 @@ public class Block {
 	}
 
 	public void moveDown() {
-		if (canMoveDown()) {
+		if (canMoveDown() && isMoving()) {
 			for (Square square : squares) {
 				square.moveDown();
 			}
@@ -41,18 +63,38 @@ public class Block {
 	}
 
 	public void moveRight() {
-		if (canMoveRight()) {
+		if (canMoveRight() && isMoving()) {
 			for (Square square : squares) {
 				square.moveRight();
 			}
 		}
 	}
 
+	public void moveRight(float dist) {
+		for (Square square : squares) {
+			square.moveRight(dist);
+		}
+
+	}
+
 	public void moveLeft() {
-		if (canMoveLeft()) {
+		if (canMoveLeft() && isMoving()) {
 			for (Square square : squares) {
 				square.moveLeft();
 			}
+		}
+	}
+
+	public void moveLeft(float dist) {
+		for (Square square : squares) {
+			square.moveLeft(dist);
+		}
+
+	}
+
+	public void moveDown(float dist) {
+		for (Square square : squares) {
+			square.moveDown(dist);
 		}
 	}
 
@@ -90,8 +132,15 @@ public class Block {
 		boolean canMove;
 		for (Square square : squares) {
 			canMove = square.canMoveDown();
-			if (!canMove)
+			if (!canMove) {
+				halt();
+					float distanceLeft = (float)((square.getY() + Values.SIZE)-(Values.GRID_YSTART+Values.GRID_HEIGHT));
+					if(distanceLeft < 0) 
+						distanceLeft = distanceLeft*-1;
+					moveDown(distanceLeft);
+					
 				return false;
+			}
 		}
 		return true;
 	}
