@@ -8,7 +8,7 @@ import tetris.CollisionHandler;
 
 public class IBlock extends Block {
 
-	private final int color = Colors.GREEN;
+	private final int color = Colors.YELLOW;
 	ArrayList<Square> squares;
 	private float speed;
 

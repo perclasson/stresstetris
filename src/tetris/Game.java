@@ -8,6 +8,7 @@ public class Game extends StateBasedGame {
 
 	public static final int MAINMENUSTATE = 0;
 	public static final int GAMEPLAYSTATE = 1;
+	public static final int GAMEOVERSTATE = 2;
 
 	public Game() {
 		super("Stress Tetris");

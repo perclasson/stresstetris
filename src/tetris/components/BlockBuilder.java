@@ -16,6 +16,7 @@ public class BlockBuilder {
 	public Block generateBlock() {
 		Random random = new Random();
 		int block = random.nextInt(7);
+		System.out.println(block);             
 		switch(block) {
 			case 0:
 				return new IBlock(276 + 4 * BlockInfo.SIZE, Measurements.GRID_YSTART

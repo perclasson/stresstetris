@@ -11,7 +11,7 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 public class MainMenuState extends BasicGameState {
-	private int stateID = -1;
+	private int stateID = 0;
 	Image background = null;
 	Image startGameOption = null;
 	Image exitOption = null;
