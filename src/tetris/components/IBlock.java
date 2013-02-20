@@ -71,33 +71,32 @@ public class IBlock extends Block {
 	}
 
 	private void editPosition(int i) {
-		float x = squares.get(0).getX();
-		float y = squares.get(0).getY();
+		float x = squares.get(1).getX();
+		float y = squares.get(1).getY();
 		switch (i) {
 		case 0:
-			squares.get(0).setX(x - BlockInfo.SIZE).setY(y + BlockInfo.SIZE);
-			squares.get(2).setX(x + BlockInfo.SIZE)
-					.setY(y + BlockInfo.SIZE);
+			squares.get(0).setX(x - BlockInfo.SIZE).setY(y);
+			squares.get(2).setX(x + BlockInfo.SIZE).setY(y);
 			squares.get(3).setX(x + 2 * BlockInfo.SIZE)
-					.setY(y + BlockInfo.SIZE);
+					.setY(y);
 			break;
 		case 1:
-			squares.get(0).setX(x + BlockInfo.SIZE).setY(y - BlockInfo.SIZE);
-			squares.get(2).setX(x + BlockInfo.SIZE).setY(y + BlockInfo.SIZE);
-			squares.get(3).setX(x + BlockInfo.SIZE)
-					.setY(y + 2 * BlockInfo.SIZE);
+			squares.get(0).setX(x).setY(y - BlockInfo.SIZE);
+			squares.get(2).setX(x).setY(y + BlockInfo.SIZE);
+			squares.get(3).setX(x)
+					.setY(y + 2* BlockInfo.SIZE);
 			break;
 		case 2:
-			squares.get(0).setX(x - BlockInfo.SIZE).setY(y + BlockInfo.SIZE);
-			squares.get(2).setX(x + BlockInfo.SIZE).setY(y + BlockInfo.SIZE);
+			squares.get(0).setX(x - BlockInfo.SIZE).setY(y);
+			squares.get(2).setX(x + BlockInfo.SIZE).setY(y);
 			squares.get(3).setX(x + 2 * BlockInfo.SIZE)
-					.setY(y + BlockInfo.SIZE);
+					.setY(y);
 			break;
 		case 3:
-			squares.get(0).setX(x + BlockInfo.SIZE).setY(y - BlockInfo.SIZE);
-			squares.get(2).setX(x + BlockInfo.SIZE).setY(y + BlockInfo.SIZE);
-			squares.get(3).setX(x + BlockInfo.SIZE)
-					.setY(y + 2 * BlockInfo.SIZE);
+			squares.get(0).setX(x).setY(y - BlockInfo.SIZE);
+			squares.get(2).setX(x).setY(y + BlockInfo.SIZE);
+			squares.get(3).setX(x)
+					.setY(y + 2* BlockInfo.SIZE);
 			break;
 		}
 		setRotation(i);

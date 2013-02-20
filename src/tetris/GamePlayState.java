@@ -40,7 +40,7 @@ public class GamePlayState extends BasicGameState {
 	public void init(GameContainer container, StateBasedGame game)
 			throws SlickException {
 		// testFill2();
-		block = new OBlock(276 + 4 * BlockInfo.SIZE, Measurements.GRID_YSTART
+		block = new IBlock(276 + 4 * BlockInfo.SIZE, Measurements.GRID_YSTART
 				- BlockInfo.SIZE, blockSpeed);
 		/*
 		 * From left: 276 px From top: 26 px Height: 22 blocks = 550 px Width:
@@ -108,7 +108,7 @@ public class GamePlayState extends BasicGameState {
 			addSquares(block);
 			// block.setSquares(null);
 			getFullRows();
-			block = new TBlock(276 + 4 * BlockInfo.SIZE,
+			block = new LBlock(276 + 4 * BlockInfo.SIZE,
 					Measurements.GRID_YSTART - BlockInfo.SIZE, blockSpeed);
 		}
 		Input input = container.getInput();

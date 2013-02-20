@@ -6,9 +6,9 @@ import resources.BlockInfo;
 import resources.Colors;
 import tetris.CollisionHandler;
 
-public class LBlock extends Block{
+public class JBlock extends Block{
 
-	private final int color = Colors.TEAL;
+	private final int color = Colors.PURPLE;
 	ArrayList<Square> squares;
 	private float speed;
 
@@ -18,7 +18,7 @@ public class LBlock extends Block{
 	 * @param y The starting y-coordinate for the block's main square
 	 * @param speed The speed with which the block will be falling
 	 */
-	public LBlock(float x, float y, float speed) {
+	public JBlock(float x, float y, float speed) {
 		super();
 		this.speed = speed;
 		setSquares(generateSquares(x, y));
@@ -36,7 +36,7 @@ public class LBlock extends Block{
 	public ArrayList<Square> generateSquares(float x, float y) {
 		squares = new ArrayList<Square>();
 		squares.add(new Square(color, x, y, speed)); // main square
-		squares.add(new Square(color, x+BlockInfo.SIZE, y - BlockInfo.SIZE, speed));
+		squares.add(new Square(color, x-BlockInfo.SIZE, y - BlockInfo.SIZE, speed));
 		squares.add(new Square(color, x-BlockInfo.SIZE, y, speed));
 		squares.add(new Square(color, x+ BlockInfo.SIZE, y,speed ));
 
@@ -72,24 +72,24 @@ public class LBlock extends Block{
 		float y = squares.get(0).getY();
 		switch (i) {
 		case 0:
-			squares.get(1).setY(y - BlockInfo.SIZE).setX(x+BlockInfo.SIZE);
+			squares.get(1).setY(y - BlockInfo.SIZE).setX(x-BlockInfo.SIZE);
 			squares.get(2).setY(y).setX(x - BlockInfo.SIZE);
 			squares.get(3).setY(y).setX(x + BlockInfo.SIZE);
 			break;
 		case 1:
-			squares.get(1).setY(y - BlockInfo.SIZE).setX(x);
+			squares.get(1).setY(y-BlockInfo.SIZE).setX(x);
 			squares.get(2).setY(y+BlockInfo.SIZE).setX(x);
-			squares.get(3).setY(y + BlockInfo.SIZE).setX(x+BlockInfo.SIZE);
+			squares.get(3).setY(y - BlockInfo.SIZE).setX(x+BlockInfo.SIZE);
 			break;
 		case 2:
-			squares.get(1).setY(y).setX(x-BlockInfo.SIZE);
-			squares.get(2).setY(y).setX(x + BlockInfo.SIZE);
-			squares.get(3).setY(y + BlockInfo.SIZE).setX(x-BlockInfo.SIZE);
+			squares.get(1).setY(y).setX(x- BlockInfo.SIZE);
+			squares.get(2).setY(y).setX(x+ BlockInfo.SIZE);
+			squares.get(3).setY(y + BlockInfo.SIZE).setX(x+BlockInfo.SIZE);
 			break;
 		case 3:
-			squares.get(1).setY(y-BlockInfo.SIZE).setX(x);
-			squares.get(2).setY(y - BlockInfo.SIZE).setX(x-BlockInfo.SIZE);
-			squares.get(3).setY(y + BlockInfo.SIZE).setX(x);
+			squares.get(1).setY(y+BlockInfo.SIZE).setX(x);
+			squares.get(2).setY(y - BlockInfo.SIZE).setX(x);
+			squares.get(3).setY(y + BlockInfo.SIZE).setX(x-BlockInfo.SIZE);
 			break;
 		}
 		setRotation(i);
@@ -104,7 +104,7 @@ public class LBlock extends Block{
 	 * @param dir 1 if the rotation is to be clockwise, otherwise 3 (reverse rotation)
 	 */
 	public boolean canRotate(int dir) {
-		LBlock block = new LBlock(getMainSquareXPos(), getMainSquareYPos(), 0);
+		JBlock block = new JBlock(getMainSquareXPos(), getMainSquareYPos(), 0);
 		block.editPosition((getRotation()+dir) % 4);
 		System.out.println(CollisionHandler.isColliding(block));
 		if(CollisionHandler.isColliding(block)) {
