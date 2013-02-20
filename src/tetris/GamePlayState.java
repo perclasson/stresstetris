@@ -1,5 +1,7 @@
 package tetris;
 
+import java.util.ArrayList;
+
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -27,16 +29,15 @@ public class GamePlayState extends BasicGameState {
 	public GamePlayState(int stateID) {
 		this.stateID = stateID;
 		gridSquares = new Square[gridWidth][gridHeight]; //A matrix containing all squares in the grid
-		blockSpeed = 2f;//The speed with which all blocks will be falling
+		blockSpeed = 1f;//The speed with which all blocks will be falling
 		collisionHandler = new CollisionHandler(this);
 	}
 
 	@Override
 	public void init(GameContainer container, StateBasedGame game)
 			throws SlickException {
-		System.out.println(blockSpeed);
-		//testFill();
-		block = new TBlock(276 + 4 * BlockInfo.SIZE, 26, blockSpeed);
+		//testFill2();
+		block = new OBlock(276 + 4 * BlockInfo.SIZE, Measurements.GRID_YSTART-BlockInfo.SIZE, blockSpeed);
 		/*
 		 * From left: 276 px From top: 26 px Height: 22 blocks = 550 px Width:
 		 * 10 blocks = 250px
@@ -54,6 +55,17 @@ public class GamePlayState extends BasicGameState {
 		}
 		for(int j = 0; j < 22; j++) {
 			gridSquares[9][j] = new Square(Colors.ORANGE, Measurements.GRID_XSTART+9*BlockInfo.SIZE, +Measurements.GRID_YSTART+j*25, 0);
+		}
+	}
+	public void testFill2() {
+		for(int i = 0; i < 10; i++) {
+			gridSquares[i][4] = new Square(Colors.BLUE, Measurements.GRID_XSTART+BlockInfo.SIZE*i, Measurements.GRID_YSTART+3*25, 0);
+		}
+		for(int i = 0; i < 10; i++) {
+			gridSquares[i][5] = new Square(Colors.BLUE, Measurements.GRID_XSTART+BlockInfo.SIZE*i, Measurements.GRID_YSTART+4*25, 0);
+		}
+		for(int i = 0; i < 10; i++) {
+			gridSquares[i][21] = new Square(Colors.BLUE, Measurements.GRID_XSTART+BlockInfo.SIZE*i, Measurements.GRID_YSTART+21*25, 0);
 		}
 	}
 
@@ -76,9 +88,11 @@ public class GamePlayState extends BasicGameState {
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int delta)
 			throws SlickException {
+		
 		if (!block.isMoving()) {
 			addSquares(block);
-			block = new TBlock(276 + 4 * BlockInfo.SIZE, 26, blockSpeed);
+			//block.setSquares(null);
+			block = new TBlock(276 + 4 * BlockInfo.SIZE, Measurements.GRID_YSTART-BlockInfo.SIZE, blockSpeed);
 		}
 		Input input = container.getInput();
 		if (input.isKeyPressed(Input.KEY_LEFT)) {
@@ -95,6 +109,10 @@ public class GamePlayState extends BasicGameState {
 			block.reverseRotate();
 		} else if (input.isKeyPressed(Input.KEY_R)) {
 			block.setPosition(276, 26);
+		} if(input.isKeyDown(Input.KEY_SPACE)) {
+			block.setSpeed(10);
+		} else {
+			block.setSpeed(getBlockSpeed());
 		}
 		
 		float collisionDistance = collisionHandler.willCollideDown(block);
@@ -104,6 +122,8 @@ public class GamePlayState extends BasicGameState {
 		} else {
 			block.moveDown();
 		}
+		getFullRows();
+		
 	}
 
 	/**
@@ -130,13 +150,81 @@ public class GamePlayState extends BasicGameState {
 					/ BlockInfo.SIZE;
 			int yIndex = (int) (square.getY() - Measurements.GRID_YSTART)
 					/ BlockInfo.SIZE;
-
 			gridSquares[xIndex][yIndex] = square;
 		}
 	}
+	
+	public ArrayList<Integer> getFullRows() {
+		boolean isFull = true;
+		ArrayList<Integer> toBeDeleted = new ArrayList<Integer>();
+		int lastFull = -1;
+		int firstFull = -1;
+		for (int i = 0; i < gridHeight; i++) {
+			for (int j = 0; j < gridWidth; j++) {
+				if(gridSquares[j][i] == null) {
+					isFull = false;
+				}
+			}
+			if(isFull) {
+				System.out.println("Rad " + i + " är full!");
+				removeRow(i);
+				if(lastFull != -1) {
+					moveSquares(i+(i-lastFull), 0, (i-lastFull));
+				}
+				if(firstFull == -1)
+					firstFull = i;
+				toBeDeleted.add(i);
+				lastFull = i;
+			}
+			isFull = true;
+		}
+		if(lastFull == firstFull && firstFull != -1)
+			moveSquares(firstFull, 0, 1);
+		return toBeDeleted;
+	}
+	
+	public void removeRow(int row) {
+		for (int i = 0; i < 10; i++) {
+			gridSquares[i][row] = null;
+		}
+	}
 
-	public void removeRow(int i) {
+	public void removeRows(ArrayList<Integer> rows) {
+		if(rows.size() != 0) 
+			System.out.println(rows.get(0));
+		for(Integer row : rows) {
+			for (int i = 0; i < 10; i++) {
+				gridSquares[i][row] = null;
+			}
+		}
+	}
+	public void moveSquares(int start, int stop, int step) {
+		System.out.println("Vi börjar flytta: " + start);
+		System.out.println("Vi slutar flytta: " + stop);
+		for (int j = start; j >= stop; j--) {
+			for (int i = 0; i < gridWidth; i++) {
+				if (j >= 21)
+					continue;
+				if (gridSquares[i][j] != null) {
+					System.out.println("vi försöker flytta en square");
+					gridSquares[i][j + 1] = gridSquares[i][j];
+					gridSquares[i][j + 1].setY(gridSquares[i][j].getY()
+							+ BlockInfo.SIZE);
+					gridSquares[i][j] = null;
+				}
 
+			}
+		}
+	}
+	public void moveAllSquaresDown() {
+		for(int i =gridWidth-1; i >= 0;i--) {
+			for(int j =gridHeight-2; j >= 0;j--) {
+				if(gridSquares[i][j] != null && gridSquares[i][j+1] != null) {
+					gridSquares[i][j] = gridSquares[i][j+1];
+					gridSquares[i][j+1].setY(gridSquares[i][j+1].getY()+BlockInfo.SIZE);
+				}
+			}
+		}
 	}
 
 	public Square[][] getGridSquares() {

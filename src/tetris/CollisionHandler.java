@@ -5,7 +5,7 @@ import resources.Measurements;
 import tetris.components.*;
 
 public class CollisionHandler {
-	private GamePlayState gamePS;
+	//private GamePlayState gamePS;
 	private static Square[][] squares;
 
 	/**
@@ -16,7 +16,7 @@ public class CollisionHandler {
 	 * 			  executed.
 	 */
 	public CollisionHandler(GamePlayState gps) {
-		gamePS = gps;
+		//gamePS = gps;
 		squares = gps.getGridSquares();
 	}
 
@@ -74,7 +74,6 @@ public class CollisionHandler {
 					}
 				}
 			}
-			System.out.println("X: " + square.getX());
 			if(square.getX() < Measurements.GRID_XSTART || square.getX()+BlockInfo.SIZE > Measurements.GRID_XSTART+Measurements.GRID_WIDTH) {
 				return true;
 			}
@@ -143,7 +142,7 @@ public class CollisionHandler {
 						Square gridSquare = squares[i][j];
 						if (gridSquare.getX() == square.getX() && !(gridSquare.getY() < square.getY())) {
 							if (gridSquare.getY() <= (square.getY()+BlockInfo.SIZE
-									+ gamePS.getBlockSpeed())) {
+									+ block.getSpeed())) {
 								float distanceLeft = (float)(gridSquare.getY()-(square.getY()+BlockInfo.SIZE));
 								if(distanceLeft >0)
 									return distanceLeft;

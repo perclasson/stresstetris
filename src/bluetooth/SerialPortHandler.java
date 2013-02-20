@@ -82,6 +82,7 @@ public class SerialPortHandler {
 	/**
 	 * Sets the serial port parameters
 	 */
+	@SuppressWarnings("unused")
 	private void setSerialPortParameters() throws IOException {
 		int baudRate = 115200;
 

@@ -24,6 +24,10 @@ public class Square {
 			e.printStackTrace();
 		}
 	}
+	
+	public void setSpeed(float speed) {
+		this.speed = speed;
+	}
 
 	public float getX() {
 		return x;

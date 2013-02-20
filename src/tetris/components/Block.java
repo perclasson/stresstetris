@@ -27,6 +27,14 @@ public class Block {
 	public boolean isMoving() {
 		return isMoving;
 	}
+	public float getSpeed() {
+		return squares.get(0).getSpeed();
+	}
+	public void setSpeed(float speed) {
+		for(Square square : squares) {
+			square.setSpeed(speed);
+		}
+	}
 
 	/**
 	 * Stops all movement of the block.
@@ -61,7 +69,7 @@ public class Block {
 	 * (the squares the block is built from).
 	 * @param squares A new list of squares which the block will be built from
 	 */
-	protected void setSquares(ArrayList<Square> squares) {
+	public void setSquares(ArrayList<Square> squares) {
 		this.squares = squares;
 	}
 
