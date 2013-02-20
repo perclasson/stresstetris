@@ -21,6 +21,7 @@ public class GamePlayState extends BasicGameState {
 	private Image frame, grid;
 	private Square[][] gridSquares;
 	private float blockSpeed;
+	private BlockBuilder builder;
 	private CollisionHandler collisionHandler;
 	private static final int gridWidth = Measurements.GRID_WIDTH
 			/ BlockInfo.SIZE;
@@ -34,14 +35,14 @@ public class GamePlayState extends BasicGameState {
 															// the grid
 		blockSpeed = 1f;// The speed with which all blocks will be falling
 		collisionHandler = new CollisionHandler(this);
+		builder = new BlockBuilder(this);
 	}
 
 	@Override
 	public void init(GameContainer container, StateBasedGame game)
 			throws SlickException {
 		// testFill2();
-		block = new IBlock(276 + 4 * BlockInfo.SIZE, Measurements.GRID_YSTART
-				- BlockInfo.SIZE, blockSpeed);
+		block = builder.generateBlock();
 		/*
 		 * From left: 276 px From top: 26 px Height: 22 blocks = 550 px Width:
 		 * 10 blocks = 250px
@@ -108,8 +109,7 @@ public class GamePlayState extends BasicGameState {
 			addSquares(block);
 			// block.setSquares(null);
 			getFullRows();
-			block = new LBlock(276 + 4 * BlockInfo.SIZE,
-					Measurements.GRID_YSTART - BlockInfo.SIZE, blockSpeed);
+			block = builder.generateBlock();
 		}
 		Input input = container.getInput();
 		if (input.isKeyPressed(Input.KEY_LEFT)) {
