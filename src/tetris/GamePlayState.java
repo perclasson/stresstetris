@@ -30,9 +30,7 @@ public class GamePlayState extends BasicGameState {
 
 	public GamePlayState(int stateID) {
 		this.stateID = stateID;
-		gridSquares = new Square[gridWidth][gridHeight]; // A matrix containing
-															// all squares in
-															// the grid
+		gridSquares = new Square[gridWidth][gridHeight];
 		blockSpeed = 1f;// The speed with which all blocks will be falling
 		collisionHandler = new CollisionHandler(this);
 		builder = new BlockBuilder(this);
@@ -41,48 +39,9 @@ public class GamePlayState extends BasicGameState {
 	@Override
 	public void init(GameContainer container, StateBasedGame game)
 			throws SlickException {
-		// testFill2();
 		block = builder.generateBlock();
-		/*
-		 * From left: 276 px From top: 26 px Height: 22 blocks = 550 px Width:
-		 * 10 blocks = 250px
-		 */
 		frame = new Image("images/frame.png");
 		grid = new Image("images/grid.png");
-	}
-
-	/**
-	 * Fills the right and left borders with squares (for testing purposes)
-	 */
-	public void testFill() {
-		for (int i = 0; i < 22; i++) {
-			gridSquares[0][i] = new Square(Colors.RED,
-					Measurements.GRID_XSTART,
-					Measurements.GRID_YSTART + i * 25, 0);
-		}
-		for (int j = 0; j < 22; j++) {
-			gridSquares[9][j] = new Square(Colors.ORANGE,
-					Measurements.GRID_XSTART + 9 * BlockInfo.SIZE,
-					+Measurements.GRID_YSTART + j * 25, 0);
-		}
-	}
-
-	public void testFill2() {
-		for (int i = 0; i < 10; i++) {
-			gridSquares[i][4] = new Square(Colors.BLUE,
-					Measurements.GRID_XSTART + BlockInfo.SIZE * i,
-					Measurements.GRID_YSTART + 3 * 25, 0);
-		}
-		for (int i = 0; i < 10; i++) {
-			gridSquares[i][5] = new Square(Colors.BLUE,
-					Measurements.GRID_XSTART + BlockInfo.SIZE * i,
-					Measurements.GRID_YSTART + 4 * 25, 0);
-		}
-		for (int i = 0; i < 10; i++) {
-			gridSquares[i][21] = new Square(Colors.BLUE,
-					Measurements.GRID_XSTART + BlockInfo.SIZE * i,
-					Measurements.GRID_YSTART + 21 * 25, 0);
-		}
 	}
 
 	@Override
@@ -106,10 +65,13 @@ public class GamePlayState extends BasicGameState {
 			throws SlickException {
 
 		if (!block.isMoving()) {
-			addSquares(block);
-			// block.setSquares(null);
-			getFullRows();
-			block = builder.generateBlock();
+			if (block.isInsideGrid()) {
+				addSquares(block);
+				getFullRows();
+				block = builder.generateBlock();
+			} else {
+				// Game is lost
+			}
 		}
 		Input input = container.getInput();
 		if (input.isKeyPressed(Input.KEY_LEFT)) {
@@ -210,8 +172,6 @@ public class GamePlayState extends BasicGameState {
 	}
 
 	public void moveSquares(int start, int stop) {
-		System.out.println("Vi b�rjar flytta: " + start);
-		System.out.println("Vi slutar flytta: " + stop);
 		for (int j = start; j >= stop; j--) {
 			for (int i = 0; i < gridWidth; i++) {
 				if (j >= 21)
