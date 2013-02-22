@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import resources.BlockInfo;
 import resources.Colors;
+import resources.Measurements;
 
 
 public class OBlock extends Block {
@@ -21,6 +22,11 @@ public class OBlock extends Block {
 		super();
 		this.speed = speed;
 		setSquares(generateSquares(x,y));
+	}
+	
+	public void setOnTop() {
+		setSquares(generateSquares(276 + 4 * BlockInfo.SIZE,
+				Measurements.GRID_YSTART - BlockInfo.SIZE));
 	}
 
 	public ArrayList<Square> generateSquares(float x, float y) {

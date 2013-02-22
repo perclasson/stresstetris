@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import resources.BlockInfo;
 import resources.Colors;
+import resources.Measurements;
 import tetris.CollisionHandler;
 
 public class JBlock extends Block{
@@ -33,6 +34,11 @@ public class JBlock extends Block{
 
 	}
 
+	public void setOnTop() {
+		setSquares(generateSquares(276 + 4 * BlockInfo.SIZE,
+				Measurements.GRID_YSTART - BlockInfo.SIZE));
+	}
+	
 	public ArrayList<Square> generateSquares(float x, float y) {
 		squares = new ArrayList<Square>();
 		squares.add(new Square(color, x, y, speed)); // main square

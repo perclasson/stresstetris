@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import resources.BlockInfo;
 import resources.Colors;
+import resources.Measurements;
 import tetris.CollisionHandler;
 
 
@@ -42,6 +43,11 @@ public class TBlock extends Block {
 		squares.add(new Square(color, x- BlockInfo.SIZE, y,speed ));
 
 		return squares;
+	}
+	
+	public void setOnTop() {
+		setSquares(generateSquares(276 + 4 * BlockInfo.SIZE,
+				Measurements.GRID_YSTART - BlockInfo.SIZE));
 	}
 
 	public void setPosition(float x, float y) {

@@ -2,11 +2,17 @@ package tetris;
 
 import java.util.ArrayList;
 
+import org.newdawn.slick.AngelCodeFont;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+
+import java.awt.Font;
+import org.newdawn.slick.UnicodeFont;
+import org.newdawn.slick.font.effects.ColorEffect;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -17,16 +23,19 @@ import tetris.components.*;
 
 public class GamePlayState extends BasicGameState {
 	private int stateID = -1;
-	private Block block;
+	private int score;
+	private Block block, nextBlock;
 	private Image frame, grid;
 	private Square[][] gridSquares;
 	private float blockSpeed;
+	private boolean paused;
 	private BlockBuilder builder;
 	private CollisionHandler collisionHandler;
 	private static final int gridWidth = Measurements.GRID_WIDTH
 			/ BlockInfo.SIZE;
 	private static final int gridHeight = Measurements.GRID_HEIGHT
 			/ BlockInfo.SIZE;
+	UnicodeFont uFont;
 
 	public GamePlayState(int stateID) {
 		this.stateID = stateID;
@@ -34,12 +43,27 @@ public class GamePlayState extends BasicGameState {
 		blockSpeed = 1f;// The speed with which all blocks will be falling
 		collisionHandler = new CollisionHandler(this);
 		builder = new BlockBuilder(this);
-	}
+		Font font = new java.awt.Font
+				("Verdana", Font.BOLD, 20);
+				
+		uFont = new UnicodeFont(font);
+			uFont.getEffects().add(new ColorEffect(java.awt.Color.white));
+			uFont.addNeheGlyphs();
+			try {
+				uFont.loadGlyphs();
+			} catch (SlickException e) {
+				e.printStackTrace();
+			}	
+		}
 
 	@Override
 	public void init(GameContainer container, StateBasedGame game)
 			throws SlickException {
+		paused = false;
+		score = 0;
 		block = builder.generateBlock();
+		block.setOnTop();
+		nextBlock = builder.generateBlock();
 		frame = new Image("images/frame.png");
 		grid = new Image("images/grid.png");
 	}
@@ -47,10 +71,13 @@ public class GamePlayState extends BasicGameState {
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g)
 			throws SlickException {
+		g.setFont(uFont);
 		grid.draw(276, 26);
 		drawGridSquares();
 		block.draw();
 		frame.draw(0, 0);
+		nextBlock.draw();
+		g.drawString(Integer.toString(score),592,205);
 	}
 
 	/**
@@ -63,47 +90,65 @@ public class GamePlayState extends BasicGameState {
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int delta)
 			throws SlickException {
-
-		if (!block.isMoving()) {
-			if (block.isInsideGrid()) {
-				addSquares(block);
-				getFullRows();
-				block = builder.generateBlock();
-			} else {
-				// Game is lost
-			}
-		}
 		Input input = container.getInput();
-		if (input.isKeyPressed(Input.KEY_LEFT)) {
-			if (!collisionHandler.willCollideLeft(block)) {
-				block.moveLeft();
+		if (input.isKeyPressed(Input.KEY_P)) {
+			pause();
+		}
+		if (!paused) {
+			if (!block.isMoving()) {
+				if (block.isInsideGrid()) {
+					prepareNextBlock();
+				} else {
+					// Game is lost
+				}
 			}
-		} else if (input.isKeyPressed(Input.KEY_RIGHT)) {
-			if (!collisionHandler.willCollideRight(block)) {
-				block.moveRight();
+			if (input.isKeyPressed(Input.KEY_LEFT)) {
+				if (!collisionHandler.willCollideLeft(block)) {
+					block.moveLeft();
+				}
+			} else if (input.isKeyPressed(Input.KEY_RIGHT)) {
+				if (!collisionHandler.willCollideRight(block)) {
+					block.moveRight();
+				}
+			} else if (input.isKeyPressed(Input.KEY_UP)) {
+				block.rotate();
+			} else if (input.isKeyPressed(Input.KEY_DOWN)) {
+				block.reverseRotate();
+			} else if (input.isKeyPressed(Input.KEY_R)) {
+				block.setPosition(276, 26);
 			}
-		} else if (input.isKeyPressed(Input.KEY_UP)) {
-			block.rotate();
-		} else if (input.isKeyPressed(Input.KEY_DOWN)) {
-			block.reverseRotate();
-		} else if (input.isKeyPressed(Input.KEY_R)) {
-			block.setPosition(276, 26);
-		}
-		if (input.isKeyDown(Input.KEY_SPACE)) {
-			block.setSpeed(10);
-		} else {
-			block.setSpeed(getBlockSpeed());
-		}
+			if (input.isKeyDown(Input.KEY_SPACE)) {
+				block.setSpeed(10);
+			} else {
+				block.setSpeed(getBlockSpeed());
+			}
 
-		float collisionDistance = collisionHandler.willCollideDown(block);
-		if (collisionDistance > 0) {
-			block.moveDown(collisionDistance); // The block is moved down the
-												// distance left to collision
-			block.halt();
-		} else {
-			block.moveDown();
-		}
+			float collisionDistance = collisionHandler.willCollideDown(block);
+			if (collisionDistance > 0) {
+				block.moveDown(collisionDistance); // The block is moved down
+													// the
+													// distance left to
+													// collision
+				block.halt();
+			} else {
+				block.moveDown();
+			}
 
+		}
+	}
+	
+	public void prepareNextBlock() {
+		addSquares(block);
+		int fullRows = editRows(); 
+		updateScore(fullRows);
+		nextBlock.setOnTop();
+		block = nextBlock;
+		nextBlock = builder.generateBlock();
+	}
+	
+	public void updateScore(int fullRow) {
+		if(fullRow!=0)
+			score += (100*fullRow) + (Math.pow(10, fullRow-1));
 	}
 
 	/**
@@ -116,6 +161,14 @@ public class GamePlayState extends BasicGameState {
 					gridSquares[i][j].draw();
 				}
 			}
+		}
+	}
+
+	public void pause() {
+		if (paused) {
+			paused = false;
+		} else {
+			paused = true;
 		}
 	}
 
@@ -137,9 +190,10 @@ public class GamePlayState extends BasicGameState {
 		}
 	}
 
-	public void getFullRows() {
+	public int editRows() {
 		boolean isFull = true;
-
+		int numberOfFull = 0;
+		
 		for (int i = 0; i < gridHeight; i++) {
 			for (int j = 0; j < gridWidth; j++) {
 				if (gridSquares[j][i] == null) {
@@ -150,9 +204,11 @@ public class GamePlayState extends BasicGameState {
 			if (isFull) {
 				removeRow(i);
 				moveSquares(i, 0);
+				numberOfFull++;
 			}
 			isFull = true;
 		}
+		return numberOfFull;
 	}
 
 	public void removeRow(int row) {

@@ -38,7 +38,7 @@ public class Block {
 			square.setSpeed(speed);
 		}
 	}
-
+	
 	/**
 	 * Stops all movement of the block.
 	 */
@@ -254,6 +254,9 @@ public class Block {
 			}
 		}
 		return true;
+	}
+
+	public void setOnTop() {
 	}
 
 }

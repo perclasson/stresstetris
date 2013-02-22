@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import resources.BlockInfo;
 import resources.Colors;
+import resources.Measurements;
 import tetris.CollisionHandler;
 
 
@@ -31,6 +32,11 @@ public class ZBlock extends Block {
 	 */
 	public float getMainSquareXPos() {
 		return mainSquare.getX();
+	}
+	
+	public void setOnTop() {
+		setSquares(generateSquares(276 + 4 * BlockInfo.SIZE,
+				Measurements.GRID_YSTART - BlockInfo.SIZE));
 	}
 	
 	/**
