@@ -112,12 +112,12 @@ public class GamePlayState extends BasicGameState {
 				}
 			} else if (input.isKeyPressed(Input.KEY_UP)) {
 				block.rotate();
-			} else if (input.isKeyPressed(Input.KEY_DOWN)) {
-				block.reverseRotate();
+			/*} else if (input.isKeyPressed(Input.KEY_DOWN)) {
+				block.reverseRotate();*/
 			} else if (input.isKeyPressed(Input.KEY_R)) {
 				block.setPosition(276, 26);
 			}
-			if (input.isKeyDown(Input.KEY_SPACE)) {
+			if (input.isKeyDown(Input.KEY_DOWN)) {
 				block.setSpeed(10);
 			} else {
 				block.setSpeed(getBlockSpeed());
