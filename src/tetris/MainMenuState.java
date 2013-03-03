@@ -5,7 +5,6 @@ import java.awt.Font;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
-import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 import org.newdawn.slick.UnicodeFont;
@@ -17,19 +16,13 @@ public class MainMenuState extends BasicGameState {
 	private int stateID = 0;
 	private FontButton[] buttons;
 	private UnicodeFont font;
-	Image background = null;
-	Image startGameOption = null;
-	Image exitOption = null;
-	int menuX;
-	int menuY;
+	private Image background;
 	Sound theme;
 
 	float startGameScale = 1;
 	float exitScale = 1;
 
 	public MainMenuState(int stateID) throws SlickException {
-		menuX = 10;
-		menuY = 400;
 		this.stateID = stateID;
 	}
 
