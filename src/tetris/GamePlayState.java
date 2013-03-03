@@ -1,28 +1,26 @@
 package tetris;
 
+import java.awt.Font;
 import java.util.ArrayList;
 
-import org.newdawn.slick.AngelCodeFont;
-import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-
-import java.awt.Font;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import resources.BlockInfo;
-import resources.Colors;
 import resources.Measurements;
-import tetris.components.*;
+import tetris.components.Block;
+import tetris.components.BlockBuilder;
+import tetris.components.Square;
 
 public class GamePlayState extends BasicGameState {
-	private int stateID = -1;
+	private int stateID = 1;
 	private int score;
 	private Block block, nextBlock;
 	private Image frame, grid;
@@ -35,7 +33,11 @@ public class GamePlayState extends BasicGameState {
 			/ BlockInfo.SIZE;
 	private static final int gridHeight = Measurements.GRID_HEIGHT
 			/ BlockInfo.SIZE;
-	UnicodeFont uFont;
+	private UnicodeFont font;
+	private UnicodeFont bigFont;
+	private int timeSinceGameOver;
+	private boolean viewGameOverText;
+	
 
 	public GamePlayState(int stateID) {
 		this.stateID = stateID;
@@ -43,20 +45,12 @@ public class GamePlayState extends BasicGameState {
 		blockSpeed = 1f;// The speed with which all blocks will be falling
 		collisionHandler = new CollisionHandler(this);
 		builder = new BlockBuilder(this);
-		Font font = new java.awt.Font
-				("Verdana", Font.BOLD, 20);
-				
-		uFont = new UnicodeFont(font);
-			uFont.getEffects().add(new ColorEffect(java.awt.Color.white));
-			uFont.addNeheGlyphs();
-			try {
-				uFont.loadGlyphs();
-			} catch (SlickException e) {
-				e.printStackTrace();
-			}	
-		}
+		timeSinceGameOver = 0;
+		viewGameOverText = false;
+	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public void init(GameContainer container, StateBasedGame game)
 			throws SlickException {
 		paused = false;
@@ -66,18 +60,31 @@ public class GamePlayState extends BasicGameState {
 		nextBlock = builder.generateBlock();
 		frame = new Image("images/frame.png");
 		grid = new Image("images/grid.png");
+		
+		font = new UnicodeFont(new java.awt.Font("Verdana", Font.BOLD, 20));
+		font.getEffects().add(new ColorEffect(java.awt.Color.white));
+		font.addNeheGlyphs();
+		font.loadGlyphs();
+		
+		bigFont = new UnicodeFont(new java.awt.Font("Verdana", Font.BOLD, 40));
+		bigFont.getEffects().add(new ColorEffect(java.awt.Color.gray));
+		bigFont.addNeheGlyphs();
+		bigFont.loadGlyphs();
 	}
 
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g)
 			throws SlickException {
-		g.setFont(uFont);
 		grid.draw(276, 26);
 		drawGridSquares();
 		block.draw();
 		frame.draw(0, 0);
 		nextBlock.draw();
-		g.drawString(Integer.toString(score),592,205);
+		font.drawString(592, 205, Integer.toString(score));
+		
+		if (viewGameOverText) {
+			bigFont.drawString(585, 250, "Game\nOver");
+		}
 	}
 
 	/**
@@ -99,7 +106,13 @@ public class GamePlayState extends BasicGameState {
 				if (block.isInsideGrid()) {
 					prepareNextBlock();
 				} else {
-					// Game is lost
+					// Game is lost, view game over text for 3 seconds
+					// and then go to next game state
+					viewGameOverText = true;
+					timeSinceGameOver += delta;
+					if (timeSinceGameOver >= 3000) {
+						game.enterState(Game.GAMEOVERSTATE);
+					}
 				}
 			}
 			if (input.isKeyPressed(Input.KEY_LEFT)) {
@@ -112,8 +125,10 @@ public class GamePlayState extends BasicGameState {
 				}
 			} else if (input.isKeyPressed(Input.KEY_UP)) {
 				block.rotate();
-			/*} else if (input.isKeyPressed(Input.KEY_DOWN)) {
-				block.reverseRotate();*/
+				/*
+				 * } else if (input.isKeyPressed(Input.KEY_DOWN)) {
+				 * block.reverseRotate();
+				 */
 			} else if (input.isKeyPressed(Input.KEY_R)) {
 				block.setPosition(276, 26);
 			}
@@ -136,19 +151,19 @@ public class GamePlayState extends BasicGameState {
 
 		}
 	}
-	
+
 	public void prepareNextBlock() {
 		addSquares(block);
-		int fullRows = editRows(); 
+		int fullRows = editRows();
 		updateScore(fullRows);
 		nextBlock.setOnTop();
 		block = nextBlock;
 		nextBlock = builder.generateBlock();
 	}
-	
+
 	public void updateScore(int fullRow) {
-		if(fullRow!=0)
-			score += (100*fullRow) + (Math.pow(10, fullRow-1));
+		if (fullRow != 0)
+			score += (100 * fullRow) + (Math.pow(10, fullRow - 1));
 	}
 
 	/**
@@ -193,7 +208,7 @@ public class GamePlayState extends BasicGameState {
 	public int editRows() {
 		boolean isFull = true;
 		int numberOfFull = 0;
-		
+
 		for (int i = 0; i < gridHeight; i++) {
 			for (int j = 0; j < gridWidth; j++) {
 				if (gridSquares[j][i] == null) {
@@ -218,8 +233,6 @@ public class GamePlayState extends BasicGameState {
 	}
 
 	public void removeRows(ArrayList<Integer> rows) {
-		if (rows.size() != 0)
-			System.out.println(rows.get(0));
 		for (Integer row : rows) {
 			for (int i = 0; i < 10; i++) {
 				gridSquares[i][row] = null;
@@ -233,7 +246,6 @@ public class GamePlayState extends BasicGameState {
 				if (j >= 21)
 					continue;
 				if (gridSquares[i][j] != null) {
-					System.out.println("vi f�rs�ker flytta en square");
 					gridSquares[i][j + 1] = gridSquares[i][j];
 					gridSquares[i][j + 1].setY(gridSquares[i][j].getY()
 							+ BlockInfo.SIZE);
