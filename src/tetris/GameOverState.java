@@ -9,12 +9,10 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
-import org.newdawn.slick.gui.AbstractComponent;
-import org.newdawn.slick.gui.ComponentListener;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-public class GameOverState extends BasicGameState implements ComponentListener {
+public class GameOverState extends BasicGameState {
 	private int stateID = 2;
 	Image background = null;
 	Image startGameOption = null;
@@ -78,10 +76,6 @@ public class GameOverState extends BasicGameState implements ComponentListener {
 	@Override
 	public int getID() {
 		return stateID;
-	}
-
-	public void componentActivated(AbstractComponent source) {
-		System.out.println("ACTIVL : " + source);
 	}
 
 }
