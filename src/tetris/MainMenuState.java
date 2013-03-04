@@ -38,7 +38,7 @@ public class MainMenuState extends BasicGameState {
 		font.loadGlyphs();
 
 		buttons = new FontButton[2];
-		buttons[0] = new FontButton(container, font, "PLAY", 330, 310, game,
+		buttons[0] = new FontButton(container, font, "PLAY", 340, 310, game,
 				stateID) {
 			@Override
 			public void perform() {
@@ -46,7 +46,7 @@ public class MainMenuState extends BasicGameState {
 			}
 		};
 
-		buttons[1] = new FontButton(container, font, "EXIT", 330, 370, game,
+		buttons[1] = new FontButton(container, font, "EXIT", 340, 370, game,
 				stateID) {
 			@Override
 			public void perform() {

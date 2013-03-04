@@ -49,7 +49,7 @@ public class GameOverState extends BasicGameState {
 			}
 		};
 		
-		buttons[1] = new FontButton(container, font, "BACK", 340, 370,
+		buttons[1] = new FontButton(container, font, "BACK", 330, 370,
 				game, stateID) {
 			@Override
 			public void perform() {
