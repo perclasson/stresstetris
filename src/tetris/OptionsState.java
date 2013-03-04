@@ -34,7 +34,7 @@ public class OptionsState extends BasicGameState {
 	@Override
 	public void init(GameContainer container, final StateBasedGame game)
 			throws SlickException {
-		background = new Image("images/gameover.png");
+		background = new Image("images/tetris.png");
 		font = new UnicodeFont(new java.awt.Font("Verdana", Font.BOLD, 40));
 		font.getEffects().add(new ColorEffect(new Color(211, 211, 211)));
 		font.addNeheGlyphs();

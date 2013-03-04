@@ -46,7 +46,7 @@ public class MainMenuState extends BasicGameState {
 			}
 		};
 
-		buttons[1] = new FontButton(container, font, "OPTIONS", 340, 370, game,
+		buttons[1] = new FontButton(container, font, "OPTIONS", 295, 370, game,
 				stateID) {
 			@Override
 			public void perform() {
