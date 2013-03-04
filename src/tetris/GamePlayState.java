@@ -47,6 +47,17 @@ public class GamePlayState extends BasicGameState {
 		viewGameOverText = false;
 	}
 
+	private void resetGame() {
+		gridSquares = new Square[gridWidth][gridHeight];
+		collisionHandler = new CollisionHandler(this);
+		builder = new BlockBuilder(this);
+		timeSinceGameOver = 0;
+		viewGameOverText = false;
+		block = builder.generateBlock();
+		block.setOnTop();
+		nextBlock = builder.generateBlock();
+	}
+
 	@Override
 	@SuppressWarnings("unchecked")
 	public void init(GameContainer container, StateBasedGame game)
@@ -114,6 +125,7 @@ public class GamePlayState extends BasicGameState {
 					timeSinceGameOver += delta;
 					if (timeSinceGameOver >= 3000) {
 						game.enterState(Game.GAMEOVERSTATE);
+						resetGame();
 					}
 				}
 			}
