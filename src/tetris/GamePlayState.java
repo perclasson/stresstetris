@@ -290,4 +290,8 @@ public class GamePlayState extends BasicGameState {
 	public float getBlockSpeed() {
 		return blockSpeed;
 	}
+	
+	public void setBlockSpeed(float speed) {
+		blockSpeed = speed;
+	}
 }
