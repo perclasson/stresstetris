@@ -9,15 +9,14 @@ import java.io.IOException;
 public class DifficultyManager {
 
 	private BufferedReader in;
-	private boolean running, isReady;
+	private boolean isReady;
 	private GamePlayState gps;
 	private double currentTime, changeTime;
 	private float difficulty;
 
 	public DifficultyManager(File file, GamePlayState gps) {
 		try {
-			in = new BufferedReader(new FileReader(file));
-			running = true;
+			in = new BufferedReader(new FileReader(new File("conf/easy.dif")));
 			isReady = true;
 			currentTime = 0;
 			changeTime = 0;
@@ -35,9 +34,14 @@ public class DifficultyManager {
 		try {
 			if (isReady) {
 				line = in.readLine();
-				String[] args = line.split(",");
-				difficulty = Float.parseFloat(args[1]);
-				changeTime = Double.parseDouble(args[0]);
+				if (line != null) {
+					String[] args = line.split(",");
+					difficulty = Float.parseFloat(args[1]);
+					changeTime = Double.parseDouble(args[0]) * 1000;
+				}
+				else {
+					return;
+				}
 			}
 			if (changeTime <= currentTime) {
 				System.out.println("Time: " + currentTime);

@@ -36,8 +36,9 @@ public class GamePlayState extends BasicGameState {
 	private UnicodeFont font;
 	private int timeSinceGameOver;
 	private boolean viewGameOverText;
+	private DifficultyManager difficultManager;
 
-	public GamePlayState(int stateID) {
+	public GamePlayState(int stateID, Game game) {
 		this.stateID = stateID;
 		gridSquares = new Square[gridWidth][gridHeight];
 		blockSpeed = 1f;// The speed with which all blocks will be falling
@@ -45,6 +46,7 @@ public class GamePlayState extends BasicGameState {
 		builder = new BlockBuilder(this);
 		timeSinceGameOver = 0;
 		viewGameOverText = false;
+		difficultManager = new DifficultyManager(game.optionsFile, this);
 	}
 
 	private void resetGame() {
@@ -111,6 +113,8 @@ public class GamePlayState extends BasicGameState {
 			pause();
 		}
 		if (!paused) {
+			difficultManager.update(delta);
+			
 			if (!block.isMoving()) {
 				if (block.isInsideGrid()) {
 					prepareNextBlock();
