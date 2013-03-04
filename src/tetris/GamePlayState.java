@@ -33,7 +33,7 @@ public class GamePlayState extends BasicGameState {
 			/ BlockInfo.SIZE;
 	private static final int gridHeight = Measurements.GRID_HEIGHT
 			/ BlockInfo.SIZE;
-	private UnicodeFont font, bigFont;
+	private UnicodeFont font;
 	private int timeSinceGameOver;
 	private boolean viewGameOverText;
 
@@ -76,10 +76,6 @@ public class GamePlayState extends BasicGameState {
 		font.addNeheGlyphs();
 		font.loadGlyphs();
 
-		bigFont = new UnicodeFont(new java.awt.Font("Verdana", Font.BOLD, 40));
-		bigFont.getEffects().add(new ColorEffect(java.awt.Color.gray));
-		bigFont.addNeheGlyphs();
-		bigFont.loadGlyphs();
 	}
 
 	@Override
