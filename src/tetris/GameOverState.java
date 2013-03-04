@@ -7,7 +7,6 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.Sound;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
 import org.newdawn.slick.state.BasicGameState;
@@ -15,16 +14,9 @@ import org.newdawn.slick.state.StateBasedGame;
 
 public class GameOverState extends BasicGameState {
 	private int stateID = 2;
-	Image background = null;
-	Image startGameOption = null;
-	Image exitOption = null;
-	int menuX;
-	int menuY;
-	Sound theme;
-	UnicodeFont font;
-	float startGameScale = 1;
-	float exitScale = 1;
-	FontButton[] buttons;
+	private Image background;
+	private UnicodeFont font;
+	private FontButton[] buttons;
 
 	public GameOverState(int stateID) throws SlickException {
 		this.stateID = stateID;
