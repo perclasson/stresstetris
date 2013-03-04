@@ -1,5 +1,6 @@
 package tetris;
 
+import java.awt.Color;
 import java.awt.Font;
 
 import org.newdawn.slick.GameContainer;
@@ -30,14 +31,14 @@ public class MainMenuState extends BasicGameState {
 	@Override
 	public void init(GameContainer container, final StateBasedGame game)
 			throws SlickException {
-		background = new Image("images/mainmenu.png");
+		background = new Image("images/tetris.png");
 		font = new UnicodeFont(new java.awt.Font("Verdana", Font.BOLD, 40));
-		font.getEffects().add(new ColorEffect(java.awt.Color.white));
+		font.getEffects().add(new ColorEffect(new Color(211, 211, 211)));
 		font.addNeheGlyphs();
 		font.loadGlyphs();
 
 		buttons = new FontButton[2];
-		buttons[0] = new FontButton(container, font, "Play", 200, 250, game,
+		buttons[0] = new FontButton(container, font, "PLAY", 330, 310, game,
 				stateID) {
 			@Override
 			public void perform() {
@@ -45,7 +46,7 @@ public class MainMenuState extends BasicGameState {
 			}
 		};
 
-		buttons[1] = new FontButton(container, font, "Exit", 200, 310, game,
+		buttons[1] = new FontButton(container, font, "EXIT", 330, 370, game,
 				stateID) {
 			@Override
 			public void perform() {

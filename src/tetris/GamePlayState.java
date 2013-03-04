@@ -23,7 +23,7 @@ public class GamePlayState extends BasicGameState {
 	private int stateID = 1;
 	private int score;
 	private Block block, nextBlock;
-	private Image frame, grid;
+	private Image frame, grid, gameover;
 	private Square[][] gridSquares;
 	private float blockSpeed;
 	private boolean paused;
@@ -33,11 +33,9 @@ public class GamePlayState extends BasicGameState {
 			/ BlockInfo.SIZE;
 	private static final int gridHeight = Measurements.GRID_HEIGHT
 			/ BlockInfo.SIZE;
-	private UnicodeFont font;
-	private UnicodeFont bigFont;
+	private UnicodeFont font, bigFont;
 	private int timeSinceGameOver;
 	private boolean viewGameOverText;
-	
 
 	public GamePlayState(int stateID) {
 		this.stateID = stateID;
@@ -60,12 +58,13 @@ public class GamePlayState extends BasicGameState {
 		nextBlock = builder.generateBlock();
 		frame = new Image("images/frame.png");
 		grid = new Image("images/grid.png");
-		
+		gameover = new Image("images/gameover.png");
+
 		font = new UnicodeFont(new java.awt.Font("Verdana", Font.BOLD, 20));
 		font.getEffects().add(new ColorEffect(java.awt.Color.white));
 		font.addNeheGlyphs();
 		font.loadGlyphs();
-		
+
 		bigFont = new UnicodeFont(new java.awt.Font("Verdana", Font.BOLD, 40));
 		bigFont.getEffects().add(new ColorEffect(java.awt.Color.gray));
 		bigFont.addNeheGlyphs();
@@ -81,9 +80,12 @@ public class GamePlayState extends BasicGameState {
 		frame.draw(0, 0);
 		nextBlock.draw();
 		font.drawString(592, 205, Integer.toString(score));
-		
+
 		if (viewGameOverText) {
-			bigFont.drawString(585, 250, "Game\nOver");
+			if (timeSinceGameOver > 1500) {
+				gameover.setAlpha(((timeSinceGameOver - 1500) / 100) * 0.1f);
+				gameover.draw();
+			}
 		}
 	}
 
