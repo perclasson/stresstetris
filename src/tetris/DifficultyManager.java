@@ -6,7 +6,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-
 public class DifficultyManager {
 
 	private BufferedReader in;
@@ -32,27 +31,25 @@ public class DifficultyManager {
 	public void update(int delta) {
 		String line = "";
 		currentTime += delta;
-		
-		while (running) {
-			try {
-				if(isReady) {
-					line = in.readLine();
-					String[] args = line.split(",");
-					difficulty = Float.parseFloat(args[1]);
-					changeTime = Double.parseDouble(args[0]);
-				}
-				if(changeTime <= currentTime) {
-					System.out.println("Time: " + currentTime);
-					System.out.println("Difficulty: " + difficulty);
-					gps.setBlockSpeed(difficulty);
-					isReady = true;
-				} else {
-					isReady = false;
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
+
+		try {
+			if (isReady) {
+				line = in.readLine();
+				String[] args = line.split(",");
+				difficulty = Float.parseFloat(args[1]);
+				changeTime = Double.parseDouble(args[0]);
 			}
+			if (changeTime <= currentTime) {
+				System.out.println("Time: " + currentTime);
+				System.out.println("Difficulty: " + difficulty);
+				gps.setBlockSpeed(difficulty);
+				isReady = true;
+			} else {
+				isReady = false;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
-	
+
 }
