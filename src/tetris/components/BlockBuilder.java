@@ -10,7 +10,7 @@ public class BlockBuilder {
 	private float blockSpeed;
 	private float x, y;
 	public BlockBuilder(GamePlayState gps) {
-		blockSpeed = gps.getBlockSpeed();
+		blockSpeed = (float) gps.getBlockSpeed();
 		x = Measurements.GRID_XSTART+Measurements.GRID_WIDTH + 4*BlockInfo.SIZE;
 		y = Measurements.GRID_YSTART + 4*BlockInfo.SIZE;
 	}
@@ -20,19 +20,19 @@ public class BlockBuilder {
 		int block = random.nextInt(7);
 		switch (block) {
 		case 0:
-			return new IBlock(x,y-10, blockSpeed);
+			return new IBlock(x,y-10, blockSpeed);//I
 		case 1:
-			return new JBlock(x+10,y, blockSpeed);
+			return new JBlock(x+10,y, blockSpeed);//J
 		case 2:
-			return new LBlock(x+10,y, blockSpeed);
+			return new LBlock(x+10,y, blockSpeed);//L
 		case 3:
-			return new OBlock(x,y-BlockInfo.SIZE, blockSpeed);
+			return new OBlock(x,y-BlockInfo.SIZE, blockSpeed);//O
 		case 4:
-			return new SBlock(x-10,y-BlockInfo.SIZE, blockSpeed);
+			return new SBlock(x-10,y-BlockInfo.SIZE, blockSpeed);//S
 		case 5:
-			return new TBlock(x+10,y, blockSpeed);
+			return new TBlock(x+10,y, blockSpeed);//T
 		case 6:
-			return new ZBlock(x+10,y-BlockInfo.SIZE, blockSpeed);
+			return new ZBlock(x+10,y-BlockInfo.SIZE, blockSpeed);//Z
 		}
 		return null;
 	}

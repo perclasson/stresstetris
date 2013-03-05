@@ -16,7 +16,7 @@ public class DifficultyManager {
 
 	public DifficultyManager(File file, GamePlayState gps) {
 		try {
-			in = new BufferedReader(new FileReader(new File("conf/easy.dif")));
+			in = new BufferedReader(new FileReader(new File("conf/exp.dif")));
 			isReady = true;
 			currentTime = 0;
 			changeTime = 0;

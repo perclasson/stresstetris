@@ -81,7 +81,7 @@ public class CollisionHandler {
 				for (int j = 0; j < gridHeight; j++) {
 					if (squares[i][j] != null) {
 						Square gridSquare = squares[i][j];
-						if (square.getX() == gridSquare.getX()) {
+						if (square.getX() >= gridSquare.getX()-1 && square.getX() <= gridSquare.getX()+1) {
 							if (square.getY() <= gridSquare.getY()
 									+ BlockInfo.SIZE
 									&& square.getY() >= gridSquare.getY()
@@ -180,7 +180,7 @@ public class CollisionHandler {
 								&& !(gridSquare.getY() < square.getY())) {
 							if (gridSquare.getY() <= (square.getY()
 									+ BlockInfo.SIZE + block.getSpeed())) {
-								float distanceLeft = (float) (gridSquare.getY() - (square
+								float distanceLeft = (gridSquare.getY() - (square
 										.getY() + BlockInfo.SIZE));
 								if (distanceLeft > 0)
 									return distanceLeft;

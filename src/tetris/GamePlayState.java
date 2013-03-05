@@ -41,7 +41,7 @@ public class GamePlayState extends BasicGameState {
 	public GamePlayState(int stateID, Game game) {
 		this.stateID = stateID;
 		gridSquares = new Square[gridWidth][gridHeight];
-		blockSpeed = 1f;// The speed with which all blocks will be falling
+		blockSpeed = 3.3f;// The speed with which all blocks will be falling
 		collisionHandler = new CollisionHandler(this);
 		builder = new BlockBuilder(this);
 		timeSinceGameOver = 0;
@@ -139,14 +139,10 @@ public class GamePlayState extends BasicGameState {
 				}
 			} else if (input.isKeyPressed(Input.KEY_UP)) {
 				block.rotate();
-				/*
-				 * } else if (input.isKeyPressed(Input.KEY_DOWN)) {
-				 * block.reverseRotate();
-				 */
 			} else if (input.isKeyPressed(Input.KEY_R)) {
 				block.setPosition(276, 26);
 			}
-			if (input.isKeyDown(Input.KEY_DOWN)) {
+			else if (input.isKeyDown(Input.KEY_DOWN)) {
 				block.setSpeed(10);
 			} else {
 				block.setSpeed(getBlockSpeed());
@@ -154,6 +150,7 @@ public class GamePlayState extends BasicGameState {
 
 			float collisionDistance = collisionHandler.willCollideDown(block);
 			if (collisionDistance > 0) {
+				System.out.println(collisionDistance);
 				block.moveDown(collisionDistance); // The block is moved down
 													// the
 													// distance left to
@@ -173,6 +170,13 @@ public class GamePlayState extends BasicGameState {
 		nextBlock.setOnTop();
 		block = nextBlock;
 		nextBlock = builder.generateBlock();
+		for (int i = 0; i < gridWidth; i++) {
+			for (int j = 0; j < gridHeight; j++) {
+				if (gridSquares[i][j] != null) {
+					System.out.println("X: " + gridSquares[i][j].getX()+ ", Y: " + gridSquares[i][j].getY());
+				}
+			}
+		}
 	}
 
 	public void updateScore(int fullRow) {

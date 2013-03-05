@@ -2,6 +2,7 @@ package tetris;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.io.File;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -37,7 +38,8 @@ public class GameOverState extends BasicGameState {
 				stateID) {
 			@Override
 			public void perform() {
-				System.out.println("LAWL");
+				Test test = new Test(new File("conf/exp.dif"));
+				test.reveal();
 			}
 		};
 		
