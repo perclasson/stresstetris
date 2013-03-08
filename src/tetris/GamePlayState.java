@@ -1,12 +1,14 @@
 package tetris;
 
 import java.awt.Font;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
+import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
@@ -27,6 +29,7 @@ public class GamePlayState extends BasicGameState {
 	private Square[][] gridSquares;
 	private float blockSpeed;
 	private boolean paused;
+	private Music theme;
 	private BlockBuilder builder;
 	private CollisionHandler collisionHandler;
 	private static final int gridWidth = Measurements.GRID_WIDTH
@@ -36,7 +39,8 @@ public class GamePlayState extends BasicGameState {
 	private UnicodeFont font;
 	private int timeSinceGameOver;
 	private boolean viewGameOverText;
-	private DifficultyManager difficultManager;
+	private static DifficultyManager difficultyManager;
+	private Game game;
 
 	public GamePlayState(int stateID, Game game) {
 		this.stateID = stateID;
@@ -46,7 +50,8 @@ public class GamePlayState extends BasicGameState {
 		builder = new BlockBuilder(this);
 		timeSinceGameOver = 0;
 		viewGameOverText = false;
-		difficultManager = new DifficultyManager(game.optionsFile, this);
+		this.game = game;
+		difficultyManager = new DifficultyManager(game.optionsFile, this);
 	}
 
 	private void resetGame() {
@@ -57,7 +62,24 @@ public class GamePlayState extends BasicGameState {
 		viewGameOverText = false;
 		block = builder.generateBlock();
 		block.setOnTop();
+		theme.stop();
 		nextBlock = builder.generateBlock();
+	}
+	
+	@Override
+    public void enter(GameContainer gc, StateBasedGame sb) throws SlickException
+    {
+		difficultyManager = new DifficultyManager(game.optionsFile, this);
+		theme = new Music("sounds/themeTetris.wav");
+		theme.loop(0.8f, 1);
+    }
+	
+	public void updatePitch(float difficulty) {
+		float pitch = 0.8f + difficulty/10;
+		float pos = theme.getPosition();
+		theme.stop();
+		theme.loop(pitch, 1);
+		theme.setPosition(pos);
 	}
 
 	@Override
@@ -113,7 +135,7 @@ public class GamePlayState extends BasicGameState {
 			pause();
 		}
 		if (!paused) {
-			difficultManager.update(delta);
+			difficultyManager.update(delta);
 			
 			if (!block.isMoving()) {
 				if (block.isInsideGrid()) {
@@ -170,13 +192,7 @@ public class GamePlayState extends BasicGameState {
 		nextBlock.setOnTop();
 		block = nextBlock;
 		nextBlock = builder.generateBlock();
-		for (int i = 0; i < gridWidth; i++) {
-			for (int j = 0; j < gridHeight; j++) {
-				if (gridSquares[i][j] != null) {
-					System.out.println("X: " + gridSquares[i][j].getX()+ ", Y: " + gridSquares[i][j].getY());
-				}
-			}
-		}
+		
 	}
 
 	public void updateScore(int fullRow) {
@@ -200,8 +216,10 @@ public class GamePlayState extends BasicGameState {
 	public void pause() {
 		if (paused) {
 			paused = false;
+			theme.resume();
 		} else {
 			paused = true;
+			theme.pause();
 		}
 	}
 
@@ -214,11 +232,17 @@ public class GamePlayState extends BasicGameState {
 	 *            The block which squares will be added
 	 */
 	public void addSquares(Block block) {
+		DecimalFormat ds = new DecimalFormat("#.");
 		for (Square square : block.getSquares()) {
-			int xIndex = (int) (square.getX() - Measurements.GRID_XSTART)
+			float squareY = Float.valueOf(ds.format(square.getY()));
+			float squareX = Float.valueOf(ds.format(square.getX()));
+			int xIndex = (int) (squareX - Measurements.GRID_XSTART)
 					/ BlockInfo.SIZE;
-			int yIndex = (int) (square.getY() - Measurements.GRID_YSTART)
+			int yIndex = (int) (squareY - Measurements.GRID_YSTART)
 					/ BlockInfo.SIZE;
+			square.setX(xIndex*BlockInfo.SIZE + Measurements.GRID_XSTART);
+			square.setY(yIndex*BlockInfo.SIZE + Measurements.GRID_YSTART);
+
 			gridSquares[xIndex][yIndex] = square;
 		}
 	}
@@ -301,5 +325,10 @@ public class GamePlayState extends BasicGameState {
 	
 	public void setBlockSpeed(float speed) {
 		blockSpeed = speed;
+	}
+	
+	public static DifficultyManager getDifficultyManager() {
+		
+		return difficultyManager;
 	}
 }

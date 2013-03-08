@@ -38,7 +38,7 @@ public class GameOverState extends BasicGameState {
 				stateID) {
 			@Override
 			public void perform() {
-				Test test = new Test(new File("conf/exp.dif"));
+				ChartDrawer test = new ChartDrawer(GamePlayState.getDifficultyManager());
 				test.reveal();
 			}
 		};

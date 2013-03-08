@@ -45,15 +45,6 @@ public class Block {
 	 */
 	public void halt() {
 		isMoving = false;
-		adjustSquares();
-	}
-	
-	public void adjustSquares() {
-		DecimalFormat df = new DecimalFormat("#.");
-		for(Square square : squares) {
-			square.setX(Float.valueOf(df.format(square.getX())));
-			square.setY(Float.valueOf(df.format(square.getY())));
-		}
 	}
 
 	/**

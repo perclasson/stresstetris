@@ -16,6 +16,7 @@ public class Game extends StateBasedGame {
 
 	public Game() {
 		super("Stress Tetris");
+		optionsFile = new File("conf/easy.dif");
 	}
 
 	public static void main(String[] args) throws SlickException {
@@ -23,6 +24,10 @@ public class Game extends StateBasedGame {
 
 		app.setDisplayMode(800, 600, false);
 		app.start();
+	}
+	
+	public void setOptionsFile(File file) {
+		optionsFile = file;
 	}
 
 	@Override

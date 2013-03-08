@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class DifficultyManager {
 
@@ -13,14 +14,18 @@ public class DifficultyManager {
 	private GamePlayState gps;
 	private double currentTime, changeTime;
 	private float difficulty;
+	private static ArrayList<Double> timeStamps;
+	private static ArrayList<Float> difficultyStamps;
 
 	public DifficultyManager(File file, GamePlayState gps) {
 		try {
-			in = new BufferedReader(new FileReader(new File("conf/exp.dif")));
+			in = new BufferedReader(new FileReader(file));
 			isReady = true;
 			currentTime = 0;
 			changeTime = 0;
 			difficulty = 0;
+			timeStamps = new ArrayList<Double>();
+			difficultyStamps = new ArrayList<Float>();
 			this.gps = gps;
 		} catch (FileNotFoundException e) {
 			System.err.println("Could not find file: " + file.getName());
@@ -46,6 +51,9 @@ public class DifficultyManager {
 			if (changeTime <= currentTime) {
 				System.out.println("Time: " + currentTime);
 				System.out.println("Difficulty: " + difficulty);
+				timeStamps.add(Double.valueOf(currentTime/1000));
+				difficultyStamps.add(difficulty);
+				gps.updatePitch(difficulty);
 				gps.setBlockSpeed(difficulty);
 				isReady = true;
 			} else {
@@ -55,5 +63,11 @@ public class DifficultyManager {
 			e.printStackTrace();
 		}
 	}
-
+	public static ArrayList<Double> getTimeStamps() {
+		return timeStamps;
+	}
+	
+	public static ArrayList<Float> getDifficultyStamps() {
+		return difficultyStamps;
+	}
 }

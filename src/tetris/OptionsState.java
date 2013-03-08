@@ -21,12 +21,15 @@ public class OptionsState extends BasicGameState {
 	private File[] files;
 	private FontButton optionsButton;
 	private File optionsFile;
+	private Game mainGame;
 	
 	public OptionsState(int stateID, Game game) throws SlickException {
 		this.stateID = stateID;
 		this.optionsFile = game.optionsFile;
+		mainGame = game;
 	}
 
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public void init(GameContainer container, final StateBasedGame game)
@@ -63,7 +66,7 @@ public class OptionsState extends BasicGameState {
 				public void perform() {
 					setIsEnabled(false);
 					optionsButton.setIsEnabled(true);
-					optionsFile = file;
+					mainGame.setOptionsFile(file);
 					optionsButton = this;
 				}
 			};
