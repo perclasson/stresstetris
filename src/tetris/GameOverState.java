@@ -2,7 +2,6 @@ package tetris;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.io.File;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;

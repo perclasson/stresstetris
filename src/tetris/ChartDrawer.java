@@ -14,7 +14,7 @@ import org.jfree.data.category.DefaultCategoryDataset;
 public class ChartDrawer extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	private DifficultyManager manager;
+	
 	public void reveal() {
 		pack();
 		setVisible(true);
@@ -22,7 +22,6 @@ public class ChartDrawer extends JFrame {
 
 	public ChartDrawer(DifficultyManager manager) {
 		super("Difficulty chart");
-		this.manager = manager;
 		// This will create the dataset
 		CategoryDataset dataset = createDataset();
 		// based on the dataset we create the chart

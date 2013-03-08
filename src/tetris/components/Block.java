@@ -1,6 +1,5 @@
 package tetris.components;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import resources.BlockInfo;
