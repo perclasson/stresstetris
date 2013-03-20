@@ -16,14 +16,16 @@ import bluetooth.EDAReader;
 public class ChartDrawer extends JFrame {
 
 	private static final long serialVersionUID = 1L;
+	private int fittingMethod;
 	
 	public void reveal() {
 		pack();
 		setVisible(true);
 	}
 
-	public ChartDrawer(DifficultyManager manager) {
+	public ChartDrawer(int fittingMethod) {
 		super("Difficulty chart");
+		this.fittingMethod = fittingMethod;
 		// This will create the dataset
 		CategoryDataset dataset = createDiffDataset();
 		// based on the dataset we create the chart
@@ -109,8 +111,16 @@ public class ChartDrawer extends JFrame {
 		DefaultCategoryDataset result = new DefaultCategoryDataset();
 		final String series1 = "Session";
 		ArrayList<Long> timeStamps =EDAReader.getTimeStampsGSR();
-		ArrayList<Float> gsrStamps = fitCurve(EDAReader.getGSRStamps(), timeStamps);
-		timeStamps = formatStamps(timeStamps);
+		ArrayList<Float> gsrStamps = EDAReader.getGSRStamps();
+		
+		switch(fittingMethod) {
+		case 1:
+			gsrStamps = fitCurve(gsrStamps, timeStamps);
+			timeStamps = formatStamps(timeStamps);
+			break;
+		}
+		
+	
 		for(int i = 0; i < timeStamps.size(); i++) {
 			Long time = timeStamps.get(i);
 			result.addValue(gsrStamps.get(i),series1,time);
