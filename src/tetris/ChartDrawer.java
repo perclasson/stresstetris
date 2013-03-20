@@ -24,12 +24,12 @@ public class ChartDrawer extends JFrame {
 	}
 
 	public ChartDrawer(int fittingMethod) {
-		super("Difficulty chart");
+		super("EDA chart");
 		this.fittingMethod = fittingMethod;
 		// This will create the dataset
 		CategoryDataset dataset = createDiffDataset();
 		// based on the dataset we create the chart
-		JFreeChart chart = createDiffChart(dataset, "Difficulty over time");
+		JFreeChart chart = createDiffChart(dataset, "EDA over time");
 		// we put the chart into a panel
 		ChartPanel chartPanel = new ChartPanel(chart);
 		// default size
@@ -80,21 +80,21 @@ public class ChartDrawer extends JFrame {
 			float y4 = edaStamps.get(i+3);
 			
 			float c1 = 2*(y1+y2+y3+y4); //konstanter som står framför de okända i normalekvationerna
-			float c2 = 2*(x1*y1+x2*y2+x3*y3+x4*y4);
+			float c2 = 2*((x1*y1)+(x2*y2)+(x3*y3)+(x4*y4));
 			float a1 = 2*4;
 			float a2 = 2*(x1+x2+x3+x4);
 			float b1 = 2*(x1+x2+x3+x4);
-			float b2 = 2*(x1*x1+x2*x2+x3*x3+x4*x4);
+			float b2 = 2*((x1*x1)+(x2*x2)+(x3*x3)+(x4*x4));
 			
-			float Det11 = c1*b2-b1*c2; //Vi räknar ut determinanterna för att lösa systemet
-		    float Det12 = a1*b2-b1*a2;
+			float Det11 = (c1*b2)-(b1*c2); //Vi räknar ut determinanterna för att lösa systemet
+		    float Det12 = (a1*b2)-(b1*a2);
 
-			float Det21 = a1*c2-a2*c1;
-			float Det22 = a1*b2-a2*b1;
+			float Det21 = (a1*c2)-(a2*c1);
+			float Det22 = (a1*b2)-(a2*b1);
 			
 			float b1Sol = Det11/Det12; //ySol och xSol bildar ekvationen --y=xSol + ySol*x--
 			float b2Sol = Det21/Det22;
-			fitted.add(b1Sol+b2Sol*y4);
+			fitted.add(b1Sol+b2Sol*x4);
 		}
 		return fitted;
 	}
