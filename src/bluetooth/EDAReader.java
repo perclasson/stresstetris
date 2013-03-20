@@ -3,6 +3,7 @@ package bluetooth;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class EDAReader extends Thread {
 	private SerialPortHandler spHandler;
@@ -41,7 +42,7 @@ public class EDAReader extends Thread {
 							GSRStamps.add(data);
 							timeStampsGSR.add(delta);
 						} else {
-							if (calcStabilized()) {
+							if (isStabilized()) {
 								stabilized = true;
 								timeStampsGSR = new ArrayList<Long>();
 								GSRStamps = new ArrayList<Float>();
@@ -67,31 +68,29 @@ public class EDAReader extends Thread {
 
 	}
 
-	public boolean isStabilized() {
+	public boolean getStabilized() {
 		return stabilized;
 	}
 
-	private boolean calcStabilized() {
+	private boolean isStabilized() {
 		int noGSR = GSRStamps.size();
 		int noValuesPerSum = 20;
-		float firstSum = 0;
-		float secondSum = 0;
 		if (noGSR > 2 * noValuesPerSum) {
-			for (int i = noGSR - 2 * noValuesPerSum; i < noGSR - noValuesPerSum; i++) {
-				firstSum += GSRStamps.get(i);
-				secondSum += GSRStamps.get(i + noValuesPerSum);
+			List<Float> data = GSRStamps.subList(noGSR-2*noValuesPerSum, noGSR);
+			float min = 0f;
+			float max = 0f;
+			for (float x : data) {
+				max = Math.max(max, x);
+				min = Math.min(min, x);
 			}
-			// The difference in average between the two sums must be less then
-			// 1 for it to be stabilized
-			System.out.println((Math.abs(secondSum - firstSum) > 1 * noValuesPerSum));
-			if (Math.abs(secondSum - firstSum) > 1 * noValuesPerSum) {
-				return false;
+			if (Math.abs(max-min) < 5) {
+				return true;
 			}
 		}
 		return false;
 
 	}
-
+	
 	public static ArrayList<Long> getTimeStampsGSR() {
 		return timeStampsGSR;
 	}
