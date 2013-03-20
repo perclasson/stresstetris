@@ -12,14 +12,19 @@ import org.newdawn.slick.font.effects.ColorEffect;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import bluetooth.EDAReader;
+
 public class CooldownState extends BasicGameState {
 	private int stateID = 4;
 	private Image background;
 	private UnicodeFont font;
 	private int time = 0;
+	private Game game;
+	private EDAReader edaReader;
 
-	public CooldownState(int stateID) throws SlickException {
+	public CooldownState(int stateID, Game game) throws SlickException {
 		this.stateID = stateID;
+		this.game = game;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -31,8 +36,13 @@ public class CooldownState extends BasicGameState {
 		font.getEffects().add(new ColorEffect(new Color(211, 211, 211)));
 		font.addNeheGlyphs();
 		font.loadGlyphs();
-
 	}
+
+	@Override
+    public void enter(GameContainer gc, StateBasedGame sb) throws SlickException
+    {
+		edaReader = game.getEDAReader();
+    }
 
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g)
@@ -45,7 +55,8 @@ public class CooldownState extends BasicGameState {
 	public void update(GameContainer gc, StateBasedGame sb, int delta)
 			throws SlickException {
 		time += delta;
-		if (time > 3000) {
+		if (time > 10000) {
+			game.setBaseline(edaReader.getMedian());
 			sb.enterState(Game.GAMEPLAYSTATE);
 		}
 	}

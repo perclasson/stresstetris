@@ -21,6 +21,7 @@ public class Game extends StateBasedGame {
 	public boolean useGSR = false;
 	public boolean useGSRFeedback = false;
 	private EDAReader reader;
+	public float baseline;
 
 	public Game() {
 		super("Stress Tetris");
@@ -60,8 +61,12 @@ public class Game extends StateBasedGame {
 		this.addState(new GamePlayState(GAMEPLAYSTATE, this));
 		this.addState(new GameOverState(GAMEOVERSTATE));
 		this.addState(new OptionsState(OPTIONS, this));
-		this.addState(new CooldownState(COOLDOWN));
+		this.addState(new CooldownState(COOLDOWN, this));
 		this.addState(new StabilizerState(STABILIZER, this));
+	}
+
+	public void setBaseline(float input) {
+		baseline = input;
 	}
 
 }

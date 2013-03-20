@@ -66,7 +66,7 @@ public class StabilizerState extends BasicGameState {
 			throws SlickException {
 		time += delta;
 		noDots = 4 - (time / 500) % 4;
-		if (edaReader.getStabilized()) {
+		if (edaReader == null || edaReader.getStabilized()) {
 			sb.enterState(Game.COOLDOWN);
 		}
 	}

@@ -3,6 +3,7 @@ package bluetooth;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class EDAReader extends Thread {
@@ -109,6 +110,17 @@ public class EDAReader extends Thread {
 
 	public void finish() {
 		finished = true;
+	}
+
+	public Float getMedian() {
+		List<Float> data = new ArrayList<Float>(GSRStamps);
+		Collections.sort(data);
+		if (data.isEmpty()) {
+			return null;
+		}
+		else {
+			return data.get(GSRStamps.size()/2);	
+		}
 	}
 
 }
