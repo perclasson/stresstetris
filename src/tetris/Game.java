@@ -13,6 +13,8 @@ public class Game extends StateBasedGame {
 	public static final int GAMEOVERSTATE = 2;
 	public static final int OPTIONS = 3;
 	public File optionsFile;
+	public boolean useGSR = false;
+	public boolean useGSRFeedback = false;
 
 	public Game() {
 		super("Stress Tetris");
@@ -28,6 +30,12 @@ public class Game extends StateBasedGame {
 	
 	public void setOptionsFile(File file) {
 		optionsFile = file;
+	}
+	public void useGSR(boolean usage) {
+		useGSR = usage;
+	}
+	public void useGSRFeedback(boolean usage) {
+		useGSRFeedback = usage;
 	}
 
 	@Override

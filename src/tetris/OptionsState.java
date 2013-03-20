@@ -19,13 +19,13 @@ public class OptionsState extends BasicGameState {
 	private UnicodeFont font, smallFont;
 	private FontButton[] buttons;
 	private File[] files;
-	private FontButton optionsButton;
-	private File optionsFile;
+	private FontButton fileButtonSelected, gsrButtonSelected;
+	private File fileSelected;
 	private Game mainGame;
 	
 	public OptionsState(int stateID, Game game) throws SlickException {
 		this.stateID = stateID;
-		this.optionsFile = game.optionsFile;
+		this.fileSelected = game.optionsFile;
 		mainGame = game;
 	}
 
@@ -47,8 +47,9 @@ public class OptionsState extends BasicGameState {
 
 		File folder = new File("conf/");
 		files = folder.listFiles();
-
-		buttons = new FontButton[files.length + 1];
+		int noButtonsExcludingFiles = 4;
+		buttons = new FontButton[files.length + noButtonsExcludingFiles];
+		
 		buttons[0] = new FontButton(container, font, "BACK", 200, 270, game,
 				stateID) {
 			@Override
@@ -57,29 +58,67 @@ public class OptionsState extends BasicGameState {
 			}
 		};
 
+		buttons[1] = new FontButton(container, smallFont, "No GSR", 450, 345, game,
+				stateID) {
+			@Override
+			public void perform() {
+				setIsEnabled(false);
+				gsrButtonSelected.setIsEnabled(true);
+				mainGame.useGSR(false);
+				mainGame.useGSRFeedback(false);
+				gsrButtonSelected = this;
+			}
+		};
+		buttons[2] = new FontButton(container, smallFont, "Listen to GSR", 450, 375, game,
+				stateID) {
+			@Override
+			public void perform() {
+				setIsEnabled(false);
+				gsrButtonSelected.setIsEnabled(true);
+				mainGame.useGSR(true);
+				mainGame.useGSRFeedback(false);
+				gsrButtonSelected = this;
+			}
+		};
+		buttons[3] = new FontButton(container, smallFont, "Feedback from GSR", 450, 405, game,
+				stateID) {
+			@Override
+			public void perform() {
+				setIsEnabled(false);
+				gsrButtonSelected.setIsEnabled(true);
+				mainGame.useGSR(true);
+				mainGame.useGSRFeedback(true);
+				gsrButtonSelected = this;
+			}
+		};
+
 		for (int i = 0; i < files.length; i++) {
 			final File file = files[i];
 
-			buttons[i + 1] = new FontButton(container, smallFont,
-					file.getName(), 200, 345 + i * 30, game, stateID) {
+			buttons[i + noButtonsExcludingFiles] = new FontButton(container, smallFont,
+					"Difficulty: " + file.getName(), 200, 345 + i * 30, game, stateID) {
 				@Override
 				public void perform() {
 					setIsEnabled(false);
-					optionsButton.setIsEnabled(true);
+					fileButtonSelected.setIsEnabled(true);
 					mainGame.setOptionsFile(file);
-					optionsButton = this;
+					fileButtonSelected = this;
 				}
 			};
 
-			if (file == optionsFile) {
-				buttons[i + 1].setIsEnabled(false);
+			if (file == fileSelected) {
+				buttons[i + noButtonsExcludingFiles].setIsEnabled(false);
 			}
 		}
 
 		// Sets the first file as the chosen button.
-		optionsFile = files[0];
-		optionsButton = buttons[1];
-		optionsButton.setIsEnabled(false);
+		fileSelected = files[0];
+		fileButtonSelected = buttons[noButtonsExcludingFiles];
+		fileButtonSelected.setIsEnabled(false);
+		
+		//Set first GSR option as the chosen button.
+		gsrButtonSelected = buttons[1];
+		gsrButtonSelected.setIsEnabled(false);
 	}
 
 	@Override
@@ -103,7 +142,7 @@ public class OptionsState extends BasicGameState {
 	}
 	
 	public File getOptionsFile() {
-		return optionsFile;
+		return fileSelected;
 	}
 
 }
