@@ -68,7 +68,7 @@ public class ChartDrawer extends JFrame {
 	
 	private ArrayList<Float> fitCurve(ArrayList<Float> edaStamps, ArrayList<Long> timeStamps) {
 		ArrayList<Float> fitted = new ArrayList<Float>();
-		for(int i = 0; i < edaStamps.size(); i+=4) {
+		for(int i = 0; i+4 < edaStamps.size(); i+=4) {
 			long x1 = timeStamps.get(i);
 			long x2 = timeStamps.get(i+1);
 			long x3 = timeStamps.get(i+2);
@@ -101,7 +101,7 @@ public class ChartDrawer extends JFrame {
 	
 	public ArrayList<Long> formatStamps(ArrayList<Long> timeStamps) {
 		ArrayList<Long> result = new ArrayList<Long>();
-		for(int i = 0; i < timeStamps.size();i+=4) {
+		for(int i = 0; i+4 < timeStamps.size();i+=4) {
 			result.add(timeStamps.get(i));
 		}
 		return result;

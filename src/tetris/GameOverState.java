@@ -37,7 +37,7 @@ public class GameOverState extends BasicGameState {
 				stateID) {
 			@Override
 			public void perform() {
-				ChartDrawer test = new ChartDrawer(0);
+				ChartDrawer test = new ChartDrawer(1);
 				test.reveal();
 			}
 		};
