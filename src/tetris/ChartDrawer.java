@@ -115,6 +115,7 @@ public class ChartDrawer extends JFrame {
 		
 		switch(fittingMethod) {
 		case 1:
+			System.out.println("Fitted using LSM!");
 			gsrStamps = fitCurve(gsrStamps, timeStamps);
 			timeStamps = formatStamps(timeStamps);
 			break;
