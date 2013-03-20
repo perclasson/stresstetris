@@ -57,7 +57,9 @@ public class GamePlayState extends BasicGameState {
 	}
 
 	private void resetGame() {
-		edaReader.finish();
+		if (game.useGSR) {
+			edaReader.finish();
+		}
 		gridSquares = new Square[gridWidth][gridHeight];
 		collisionHandler = new CollisionHandler(this);
 		builder = new BlockBuilder(this);
@@ -76,8 +78,10 @@ public class GamePlayState extends BasicGameState {
 		difficultyManager = new DifficultyManager(game.optionsFile, this, game.useGSRFeedback);
 		theme = new Music("sounds/themeTetris.wav");
 		theme.loop(0.8f, 1);
-		edaReader = new EDAReader();
-		edaReader.start();
+		if (game.useGSR) {
+			edaReader = new EDAReader();
+			edaReader.start();	
+		}
     }
 	
 	public void updatePitch(float difficulty) {
@@ -105,7 +109,6 @@ public class GamePlayState extends BasicGameState {
 		font.getEffects().add(new ColorEffect(java.awt.Color.white));
 		font.addNeheGlyphs();
 		font.loadGlyphs();
-
 	}
 
 	@Override

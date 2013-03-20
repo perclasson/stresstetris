@@ -12,6 +12,7 @@ public class Game extends StateBasedGame {
 	public static final int GAMEPLAYSTATE = 1;
 	public static final int GAMEOVERSTATE = 2;
 	public static final int OPTIONS = 3;
+	public static final int COOLDOWN = 4;
 	public File optionsFile;
 	public boolean useGSR = false;
 	public boolean useGSRFeedback = false;
@@ -43,7 +44,8 @@ public class Game extends StateBasedGame {
 		this.addState(new MainMenuState(MAINMENUSTATE));
 		this.addState(new GamePlayState(GAMEPLAYSTATE, this));
 		this.addState(new GameOverState(GAMEOVERSTATE));		
-		this.addState(new OptionsState(OPTIONS, this));
+		this.addState(new OptionsState(OPTIONS, this));	
+		this.addState(new CooldownState(COOLDOWN));
 	}
 
 }

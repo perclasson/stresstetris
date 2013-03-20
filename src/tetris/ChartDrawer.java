@@ -41,7 +41,7 @@ public class ChartDrawer extends JFrame {
 		// default size
 		chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
 		// add it to our application
-		setContentPane(chartPanel);
+		//setContentPane(chartPanel);
 		setContentPane(chartPanel2);
 	}
 
@@ -69,9 +69,8 @@ public class ChartDrawer extends JFrame {
 		final String series1 = "Session";
 		ArrayList<Long> timeStamps =EDAReader.getTimeStampsGSR();
 		ArrayList<Float> gsrStamps = EDAReader.getGSRStamps();
-		DecimalFormat ds = new DecimalFormat("#.");
 		for(int i = 0; i < timeStamps.size(); i++) {
-			Long time = Long.valueOf(ds.format(timeStamps.get(i)));
+			Long time = timeStamps.get(i);
 			result.addValue(gsrStamps.get(i),series1,time);
 		}
 	

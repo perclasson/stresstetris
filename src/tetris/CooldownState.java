@@ -12,13 +12,14 @@ import org.newdawn.slick.font.effects.ColorEffect;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-public class MainMenuState extends BasicGameState {
-	private int stateID = 0;
-	private FontButton[] buttons;
-	private UnicodeFont font;
+public class CooldownState extends BasicGameState {
+	private int stateID = 4;
 	private Image background;
+	private UnicodeFont font;
+	private FontButton[] buttons;
+	private int time = 0;
 
-	public MainMenuState(int stateID) throws SlickException {
+	public CooldownState(int stateID) throws SlickException {
 		this.stateID = stateID;
 	}
 
@@ -32,37 +33,29 @@ public class MainMenuState extends BasicGameState {
 		font.addNeheGlyphs();
 		font.loadGlyphs();
 
-		buttons = new FontButton[3];
-		buttons[0] = new FontButton(container, font, "PLAY", 340, 310, game,
+		buttons = new FontButton[2];
+		buttons[0] = new FontButton(container, font, "STATISTICS", 260, 310, game,
 				stateID) {
 			@Override
 			public void perform() {
-				game.enterState(Game.COOLDOWN);
+				ChartDrawer test = new ChartDrawer(GamePlayState.getDifficultyManager());
+				test.reveal();
 			}
 		};
-
-		buttons[1] = new FontButton(container, font, "OPTIONS", 295, 370, game,
-				stateID) {
+		buttons[1] = new FontButton(container, font, "BACK", 330, 370,
+				game, stateID) {
 			@Override
 			public void perform() {
-				game.enterState(Game.OPTIONS);
+				game.enterState(Game.MAINMENUSTATE);
 			}
 		};
-
-		buttons[2] = new FontButton(container, font, "EXIT", 340, 430, game,
-				stateID) {
-			@Override
-			public void perform() {
-				((GameContainer) container).exit();
-			}
-		};
-
 	}
 
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g)
 			throws SlickException {
 		background.draw(0, 0);
+		
 		for (FontButton button : buttons) {
 			button.render(container, g);
 		}
@@ -71,6 +64,11 @@ public class MainMenuState extends BasicGameState {
 	@Override
 	public void update(GameContainer gc, StateBasedGame sb, int delta)
 			throws SlickException {
+		time += delta;
+		System.out.println(time);
+		if (time > 3000) {
+			sb.enterState(Game.GAMEPLAYSTATE);
+		}
 	}
 
 	@Override
