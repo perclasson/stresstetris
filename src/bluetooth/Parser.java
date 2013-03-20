@@ -28,6 +28,14 @@ public class Parser {
 	}
 
 	public Float getData(String line) {
-		return Float.parseFloat(line.split(",")[6]);
+		try {
+			return Float.parseFloat(line.split(",")[6]);
+		}
+		catch (NumberFormatException e) {
+			return null;
+		}
+		catch (ArrayIndexOutOfBoundsException e) {
+			return null;
+		}
 	}
 }

@@ -4,7 +4,6 @@ import gnu.io.CommPortIdentifier;
 import gnu.io.NoSuchPortException;
 import gnu.io.PortInUseException;
 import gnu.io.SerialPort;
-import gnu.io.UnsupportedCommOperationException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -40,39 +39,15 @@ public class SerialPortHandler {
 		return null;
 	}
 
-	/**
-	 * Get the serial port input stream
-	 * 
-	 * @return The serial port input stream
-	 */
+	public void closeConnection() {
+		serialPort.close();
+	}
+	
 	public InputStream getSerialInputStream() {
 		return inStream;
 	}
 
-	/**
-	 * Get the serial port output stream
-	 * 
-	 * @return The serial port output stream
-	 */
 	public OutputStream getSerialOutputStream() {
 		return outStream;
-	}
-
-	/**
-	 * Sets the serial port parameters
-	 */
-	@SuppressWarnings("unused")
-	private void setSerialPortParameters() throws IOException {
-		int baudRate = 115200;
-
-		try {
-			// Set serial port to 115200bps-8N1
-			serialPort.setSerialPortParams(baudRate, SerialPort.DATABITS_8,
-					SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
-
-			serialPort.setFlowControlMode(SerialPort.FLOWCONTROL_NONE);
-		} catch (UnsupportedCommOperationException ex) {
-			throw new IOException("Unsupported serial port parameter");
-		}
 	}
 }

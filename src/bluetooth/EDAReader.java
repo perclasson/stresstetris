@@ -31,15 +31,25 @@ public class EDAReader extends Thread {
 				currentTime = System.currentTimeMillis();
 				long delta = currentTime - startTime;
 				if (line != null) {
-					float data = parser.getData(line);
-					System.out.println("EDA: " + data + ", time stamp: " + delta);
-					GSRStamps.add(data);
-					timeStampsGSR.add(delta);
+					Float data = parser.getData(line);
+					if (data != null) {
+						System.out.println("EDA: " + data + ", time stamp: "
+								+ delta);
+						GSRStamps.add(data);
+						timeStampsGSR.add(delta);
+					}
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
+		try {
+			reader.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		spHandler.closeConnection();
+		
 	}
 
 	public static ArrayList<Long> getTimeStampsGSR() {

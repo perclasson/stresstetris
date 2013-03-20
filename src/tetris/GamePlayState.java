@@ -57,6 +57,7 @@ public class GamePlayState extends BasicGameState {
 	}
 
 	private void resetGame() {
+		edaReader.finish();
 		gridSquares = new Square[gridWidth][gridHeight];
 		collisionHandler = new CollisionHandler(this);
 		builder = new BlockBuilder(this);
