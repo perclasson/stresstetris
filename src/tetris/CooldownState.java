@@ -16,7 +16,6 @@ public class CooldownState extends BasicGameState {
 	private int stateID = 4;
 	private Image background;
 	private UnicodeFont font;
-	private FontButton[] buttons;
 	private int time = 0;
 
 	public CooldownState(int stateID) throws SlickException {
@@ -33,39 +32,19 @@ public class CooldownState extends BasicGameState {
 		font.addNeheGlyphs();
 		font.loadGlyphs();
 
-		buttons = new FontButton[2];
-		buttons[0] = new FontButton(container, font, "STATISTICS", 260, 310, game,
-				stateID) {
-			@Override
-			public void perform() {
-				ChartDrawer test = new ChartDrawer(GamePlayState.getDifficultyManager());
-				test.reveal();
-			}
-		};
-		buttons[1] = new FontButton(container, font, "BACK", 330, 370,
-				game, stateID) {
-			@Override
-			public void perform() {
-				game.enterState(Game.MAINMENUSTATE);
-			}
-		};
 	}
 
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g)
 			throws SlickException {
 		background.draw(0, 0);
-		
-		for (FontButton button : buttons) {
-			button.render(container, g);
-		}
+		font.drawString(200, 400, "Cooldown");
 	}
 
 	@Override
 	public void update(GameContainer gc, StateBasedGame sb, int delta)
 			throws SlickException {
 		time += delta;
-		System.out.println(time);
 		if (time > 3000) {
 			sb.enterState(Game.GAMEPLAYSTATE);
 		}

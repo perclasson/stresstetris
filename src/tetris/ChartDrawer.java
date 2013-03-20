@@ -41,7 +41,7 @@ public class ChartDrawer extends JFrame {
 		// default size
 		chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
 		// add it to our application
-		//setContentPane(chartPanel);
+		setContentPane(chartPanel);
 		setContentPane(chartPanel2);
 	}
 

@@ -10,12 +10,14 @@ public class EDAReader extends Thread {
 	private static ArrayList<Long> timeStampsGSR;
 	private static ArrayList<Float> GSRStamps;
 	private boolean finished;
+	private boolean stabilized;
 	private Parser parser;
 
 	public EDAReader() {
 		spHandler = new SerialPortHandler();
 		reader = spHandler.openConnection();
 		finished = false;
+		stabilized = false;
 		parser = new Parser();
 		timeStampsGSR = new ArrayList<Long>();
 		GSRStamps = new ArrayList<Float>();
@@ -34,9 +36,20 @@ public class EDAReader extends Thread {
 					Float data = parser.getData(line);
 					if (data != null) {
 						System.out.println("EDA: " + data + ", time stamp: "
-								+ delta);
-						GSRStamps.add(data);
-						timeStampsGSR.add(delta);
+								+ delta + ", stabilized: " + stabilized);
+						if (stabilized) {
+							GSRStamps.add(data);
+							timeStampsGSR.add(delta);
+						} else {
+							if (calcStabilized()) {
+								stabilized = true;
+								timeStampsGSR = new ArrayList<Long>();
+								GSRStamps = new ArrayList<Float>();
+							} else {
+								GSRStamps.add(data);
+								timeStampsGSR.add(delta);
+							}
+						}
 					}
 				}
 			} catch (IOException e) {
@@ -51,7 +64,32 @@ public class EDAReader extends Thread {
 			e.printStackTrace();
 		}
 		spHandler.closeConnection();
-		
+
+	}
+
+	public boolean isStabilized() {
+		return stabilized;
+	}
+
+	private boolean calcStabilized() {
+		int noGSR = GSRStamps.size();
+		int noValuesPerSum = 20;
+		float firstSum = 0;
+		float secondSum = 0;
+		if (noGSR > 2 * noValuesPerSum) {
+			for (int i = noGSR - 2 * noValuesPerSum; i < noGSR - noValuesPerSum; i++) {
+				firstSum += GSRStamps.get(i);
+				secondSum += GSRStamps.get(i + noValuesPerSum);
+			}
+			// The difference in average between the two sums must be less then
+			// 1 for it to be stabilized
+			System.out.println((Math.abs(secondSum - firstSum) > 1 * noValuesPerSum));
+			if (Math.abs(secondSum - firstSum) > 1 * noValuesPerSum) {
+				return false;
+			}
+		}
+		return false;
+
 	}
 
 	public static ArrayList<Long> getTimeStampsGSR() {
@@ -73,4 +111,5 @@ public class EDAReader extends Thread {
 	public void finish() {
 		finished = true;
 	}
+
 }

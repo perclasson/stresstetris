@@ -53,6 +53,7 @@ public class GamePlayState extends BasicGameState {
 		timeSinceGameOver = 0;
 		viewGameOverText = false;
 		this.game = game;
+		edaReader = null;
 		difficultyManager = new DifficultyManager(game.optionsFile, this, game.useGSRFeedback);
 	}
 
@@ -78,10 +79,7 @@ public class GamePlayState extends BasicGameState {
 		difficultyManager = new DifficultyManager(game.optionsFile, this, game.useGSRFeedback);
 		theme = new Music("sounds/themeTetris.wav");
 		theme.loop(0.8f, 1);
-		if (game.useGSR) {
-			edaReader = new EDAReader();
-			edaReader.start();	
-		}
+		edaReader = game.getEDAReader();
     }
 	
 	public void updatePitch(float difficulty) {
