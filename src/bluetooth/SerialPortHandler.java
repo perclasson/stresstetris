@@ -16,41 +16,19 @@ public class SerialPortHandler {
 	public SerialPort serialPort;
 	public OutputStream outStream;
 	public InputStream inStream;
-
-	public static void main(String args[]) {
-		SerialPortHandler handler = new SerialPortHandler();
+	
+	public BufferedReader openConnection() {
 		try {
-			handler.run();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	public void run() throws IOException {
-		try {
-			// Obtain a CommPortIdentifier object for the port you want to open
 			CommPortIdentifier portId = CommPortIdentifier
 					.getPortIdentifier("/dev/ttyS32");
 
-			// Get the port's ownership
 			serialPort = (SerialPort) portId.open("Demo application", 5000);
 
-			// Set the parameters of the connection.
-			//setSerialPortParameters();
-
-			// Open the input and output streams for the connection. If they
-			// won't
-			// open, close the port before throwing an exception.
 			outStream = serialPort.getOutputStream();
 			inStream = serialPort.getInputStream();
 			BufferedReader reader = new BufferedReader(new InputStreamReader(
 					inStream));
-			String line = reader.readLine();
-			while (line != null) {
-				System.out.println(line);
-				line = reader.readLine();
-			}
+			return reader;
 
 		} catch (NoSuchPortException e) {
 			e.printStackTrace();
@@ -59,6 +37,7 @@ public class SerialPortHandler {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		return null;
 	}
 
 	/**

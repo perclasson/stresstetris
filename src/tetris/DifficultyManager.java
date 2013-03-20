@@ -6,25 +6,28 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import bluetooth.SerialPortHandler;
+import bluetooth.Parser;
 
 public class DifficultyManager {
 
 	private BufferedReader in;
-	private boolean isReady;
+	private boolean isReady, GSREffect;
 	private GamePlayState gps;
 	private double currentTime, changeTime;
 	private float difficulty;
-	private static ArrayList<Double> timeStamps;
+	private static ArrayList<Double> timeStampsDiff;
 	private static ArrayList<Float> difficultyStamps;
 
-	public DifficultyManager(File file, GamePlayState gps) {
+	public DifficultyManager(File file, GamePlayState gps, boolean GSREffect) {
 		try {
 			in = new BufferedReader(new FileReader(file));
 			isReady = true;
 			currentTime = 0;
+			this.GSREffect = GSREffect;
 			changeTime = 0;
 			difficulty = 0;
-			timeStamps = new ArrayList<Double>();
+			timeStampsDiff = new ArrayList<Double>();
 			difficultyStamps = new ArrayList<Float>();
 			this.gps = gps;
 		} catch (FileNotFoundException e) {
@@ -33,9 +36,15 @@ public class DifficultyManager {
 	}
 
 	public void update(int delta) {
+		
+		if(!GSREffect) {
+			updateDiffFromFile(delta);
+		}
+	}
+	
+	public void updateDiffFromFile(int delta) {
 		String line = "";
 		currentTime += delta;
-
 		try {
 			if (isReady) {
 				line = in.readLine();
@@ -51,7 +60,7 @@ public class DifficultyManager {
 			if (changeTime <= currentTime) {
 				System.out.println("Time: " + currentTime);
 				System.out.println("Difficulty: " + difficulty);
-				timeStamps.add(Double.valueOf(currentTime/1000));
+				timeStampsDiff.add(Double.valueOf(currentTime/1000));
 				difficultyStamps.add(difficulty);
 				gps.updatePitch(difficulty);
 				gps.setBlockSpeed(difficulty);
@@ -63,8 +72,9 @@ public class DifficultyManager {
 			e.printStackTrace();
 		}
 	}
+	
 	public static ArrayList<Double> getTimeStamps() {
-		return timeStamps;
+		return timeStampsDiff;
 	}
 	
 	public static ArrayList<Float> getDifficultyStamps() {

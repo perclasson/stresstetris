@@ -20,6 +20,7 @@ import resources.Measurements;
 import tetris.components.Block;
 import tetris.components.BlockBuilder;
 import tetris.components.Square;
+import bluetooth.EDAReader;
 
 public class GamePlayState extends BasicGameState {
 	private int stateID = 1;
@@ -41,6 +42,7 @@ public class GamePlayState extends BasicGameState {
 	private boolean viewGameOverText;
 	private static DifficultyManager difficultyManager;
 	private Game game;
+	private EDAReader edaReader;
 
 	public GamePlayState(int stateID, Game game) {
 		this.stateID = stateID;
@@ -51,7 +53,7 @@ public class GamePlayState extends BasicGameState {
 		timeSinceGameOver = 0;
 		viewGameOverText = false;
 		this.game = game;
-		difficultyManager = new DifficultyManager(game.optionsFile, this);
+		difficultyManager = new DifficultyManager(game.optionsFile, this, game.useGSRFeedback);
 	}
 
 	private void resetGame() {
@@ -69,9 +71,12 @@ public class GamePlayState extends BasicGameState {
 	@Override
     public void enter(GameContainer gc, StateBasedGame sb) throws SlickException
     {
-		difficultyManager = new DifficultyManager(game.optionsFile, this);
+		gc.setMinimumLogicUpdateInterval(15);
+		difficultyManager = new DifficultyManager(game.optionsFile, this, game.useGSRFeedback);
 		theme = new Music("sounds/themeTetris.wav");
 		theme.loop(0.8f, 1);
+		edaReader = new EDAReader();
+		edaReader.start();
     }
 	
 	public void updatePitch(float difficulty) {
