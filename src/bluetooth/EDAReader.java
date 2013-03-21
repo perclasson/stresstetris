@@ -58,6 +58,7 @@ public class EDAReader extends Thread {
 				e.printStackTrace();
 			} catch (NullPointerException e) {
 				e.printStackTrace();
+				break;
 			}
 		}
 		try {

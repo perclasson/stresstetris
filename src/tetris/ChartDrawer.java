@@ -1,8 +1,18 @@
 package tetris;
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -13,38 +23,62 @@ import org.jfree.data.category.DefaultCategoryDataset;
 
 import bluetooth.EDAReader;
 
-public class ChartDrawer extends JFrame {
+public class ChartDrawer extends JFrame implements ActionListener{
 
 	private static final long serialVersionUID = 1L;
-	private int fittingMethod;
+	private CategoryDataset dataset2;
+	private JFreeChart chart2;
+	private ChartPanel chartPanel2, chartPanel;
 	
 	public void reveal() {
 		pack();
 		setVisible(true);
 	}
 
-	public ChartDrawer(int fittingMethod) {
+	public ChartDrawer() {
 		super("EDA chart");
-		this.fittingMethod = fittingMethod;
 		// This will create the dataset
 		CategoryDataset dataset = createDiffDataset();
 		// based on the dataset we create the chart
-		JFreeChart chart = createDiffChart(dataset, "EDA over time");
+		JFreeChart chart = createDiffChart(dataset, "Difficulty over time");
 		// we put the chart into a panel
 		ChartPanel chartPanel = new ChartPanel(chart);
 		// default size
 		chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
 		// add it to our application
-		CategoryDataset dataset2 = createEDADataset();
+		
+		dataset2 = createEDADataset(0);
 
-		JFreeChart chart2 = createEDAChart(dataset2, "EDA over time");
+		chart2 = createEDAChart(dataset2, "EDA over time");
 		// we put the chart into a panel
-		ChartPanel chartPanel2 = new ChartPanel(chart2);
+		chartPanel2 = new ChartPanel(chart2);
 		// default size
-		chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
+		chartPanel2.setPreferredSize(new java.awt.Dimension(500, 270));
 		// add it to our application
-		setContentPane(chartPanel);
-		setContentPane(chartPanel2);
+		getContentPane().add(chartPanel, BorderLayout.EAST);
+		getContentPane().add(chartPanel2, BorderLayout.WEST);
+		createMenu();
+	} 
+	
+	public void createMenu() {
+		JMenuBar menuBar = new JMenuBar();
+		JMenu menu = new JMenu("Curve fitting");
+		menuBar.add(menu);	
+		JMenuItem menuItem1 = new JMenuItem("Raw");
+		menuItem1.addActionListener(this);
+		JMenuItem menuItem2 = new JMenuItem("Linear Least Squares");
+		menuItem2.addActionListener(this);
+		menu.add(menuItem1);
+		menu.add(menuItem2);
+		JMenu saveMenu = new JMenu("File");
+		JMenuItem saveMenuItem = new JMenuItem("Save test");
+		saveMenuItem.addActionListener(this);
+		saveMenu.add(saveMenuItem);
+		menuBar.add(saveMenu);
+		setJMenuBar(menuBar);
+		menuItem1.setActionCommand("RAW");
+		menuItem2.setActionCommand("LLS");
+		saveMenuItem.setActionCommand("SAVE");
 	}
 
 	/**
@@ -107,7 +141,7 @@ public class ChartDrawer extends JFrame {
 		return result;
 	}
 	
-	private CategoryDataset createEDADataset() {
+	private CategoryDataset createEDADataset(int fittingMethod) {
 		DefaultCategoryDataset result = new DefaultCategoryDataset();
 		final String series1 = "Session";
 		ArrayList<Long> timeStamps =EDAReader.getTimeStampsGSR();
@@ -138,9 +172,9 @@ public class ChartDrawer extends JFrame {
 	private JFreeChart createEDAChart(CategoryDataset dataset, String title) {
 
 		final JFreeChart chart = ChartFactory.createLineChart(
-				"Difficulty over time", // chart title
+				"EDA over time", // chart title
 				"Time (seconds)", // domain axis label
-				"Difficulty", // range axis label
+				"EDA", // range axis label
 				dataset, // data
 				PlotOrientation.VERTICAL, // orientation
 				true, // include legend
@@ -166,6 +200,65 @@ public class ChartDrawer extends JFrame {
 				);
 		
 		return chart;
+
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		String command = arg0.getActionCommand();
+		if(command.equals("LLS")) {
+			getContentPane().remove(chartPanel2);
+			dataset2 = createEDADataset(1);
+			System.out.println("Success! :D");
+			chart2 = createEDAChart(dataset2, "EDA over time");
+			// we put the chart into a panel
+			chartPanel2 = new ChartPanel(chart2);
+			// default size
+			chartPanel2.setPreferredSize(new java.awt.Dimension(500, 270));
+			getContentPane().add(chartPanel2, BorderLayout.WEST);
+			this.validate();
+		} else if(command.equals("RAW")) {
+			getContentPane().remove(chartPanel2);
+
+			dataset2 = createEDADataset(0);
+			System.out.println("Success! :D");
+			chart2 = createEDAChart(dataset2, "EDA over time");
+			// we put the chart into a panel
+			chartPanel2 = new ChartPanel(chart2);
+			// default size
+			chartPanel2.setPreferredSize(new java.awt.Dimension(500, 270));
+			getContentPane().add(chartPanel2, BorderLayout.WEST);
+			this.validate();
+		} else if(command.equals("SAVE")) {
+			saveTestToFiles();
+		}
+	}
+	
+	public void saveTestToFiles() {
+		ArrayList<Long> edaTimeStamps =EDAReader.getTimeStampsGSR();
+		ArrayList<Float> gsrStamps = EDAReader.getGSRStamps();
+		ArrayList<Double> diffTimeStamps = DifficultyManager.getTimeStamps();
+		ArrayList<Float> difficultyStamps = DifficultyManager.getDifficultyStamps();
+		
+		PrintWriter writer;
+		try {
+	
+		    String name = JOptionPane.showInputDialog(this,"Enter the name of the test:",null);
+			writer = new PrintWriter("tests/"+name+"(eda).txt", "UTF-8");
+			for(int i = 0; i < gsrStamps.size();i++) {
+				writer.println("EDA: " + gsrStamps.get(i) + ", Time: " + edaTimeStamps.get(i));
+			}
+			writer.close();
+			writer = new PrintWriter("tests/"+name+"(diff).txt", "UTF-8");
+			for(int i = 0; i < diffTimeStamps.size();i++) {
+				writer.println("Difficulty: " + difficultyStamps.get(i) + ", Time: " + diffTimeStamps.get(i));
+			}
+			writer.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
 
 	}
 }
