@@ -16,7 +16,7 @@ import bluetooth.EDAReader;
 
 public class CooldownState extends BasicGameState {
 	private int stateID = 4;
-	private Image background;
+	private Image gamecontrols, goodluck;
 	private UnicodeFont font;
 	private int time = 0;
 	private Game game;
@@ -31,7 +31,8 @@ public class CooldownState extends BasicGameState {
 	@Override
 	public void init(GameContainer container, final StateBasedGame game)
 			throws SlickException {
-		background = new Image("images/tetris.png");
+		gamecontrols = new Image("images/gamecontrols.png");
+		goodluck = new Image("images/goodluck.png");
 		font = new UnicodeFont(new java.awt.Font("Verdana", Font.BOLD, 40));
 		font.getEffects().add(new ColorEffect(new Color(211, 211, 211)));
 		font.addNeheGlyphs();
@@ -47,8 +48,12 @@ public class CooldownState extends BasicGameState {
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g)
 			throws SlickException {
-		background.draw(0, 0);
-		font.drawString(200, 400, "Cooldown");
+		if (time > 7000) {
+			goodluck.draw(0, 0);
+		}
+		else {
+			gamecontrols.draw(0, 0);	
+		}
 	}
 
 	@Override
@@ -56,7 +61,9 @@ public class CooldownState extends BasicGameState {
 			throws SlickException {
 		time += delta;
 		if (time > 10000) {
-			game.setBaseline(edaReader.getMedian());
+			if (edaReader != null) {
+				game.setBaseline(edaReader.getMedian());	
+			}
 			sb.enterState(Game.GAMEPLAYSTATE);
 		}
 	}
