@@ -66,13 +66,17 @@ public class EDAReader extends Thread {
 										float median = getMedian(lastIndex);
 										if (baseline < median) {
 											difficulty += 0.5f;
+											lastIndex = GSRStamps.size();
 											System.out.println("Difficulty: +0.5, Time: " + second);
+											// Update baseline
+											baseline = median;
 										} else if (difficulty >= 1.5f) {
 											difficulty -= 0.5f;
+											lastIndex = GSRStamps.size();
 											System.out.println("Difficulty: -0.5, Time: " + second);
+											// Update baseline
+											baseline = median;
 										}
-										// Update baseline
-										baseline = median;
 									}
 									timeStampsDiff.add(Double.valueOf(delta / 1000));
 									difficultyStamps.add(difficulty);
