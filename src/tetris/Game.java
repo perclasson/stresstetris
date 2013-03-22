@@ -19,7 +19,7 @@ public class Game extends StateBasedGame {
 	public static final int STABILIZER = 5;
 	public File optionsFile;
 	public boolean useGSR = false;
-	public boolean useGSRFeedback = false;
+	public static boolean useGSRFeedback = false;
 	private EDAReader reader;
 
 	public Game() {

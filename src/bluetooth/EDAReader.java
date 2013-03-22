@@ -90,6 +90,7 @@ public class EDAReader extends Thread {
 								stabilized = true;
 								timeStampsGSR = new ArrayList<Long>();
 								GSRStamps = new ArrayList<Float>();
+								startTime = System.currentTimeMillis();
 							} else {
 								System.out.println("Stabilizing with EDA data");
 								GSRStamps.add(data);
@@ -151,7 +152,7 @@ public class EDAReader extends Thread {
 	public static ArrayList<Long> getTimeStampsGSROffline() {
 		ArrayList<Long> GSRTimeStamps = new ArrayList<Long>();
 		try {
-			BufferedReader in = new BufferedReader(new FileReader(new File("tests/2013-03-22 10:40 anton (eda).txt")));
+			BufferedReader in = new BufferedReader(new FileReader(new File("tests/2013-03-22 15:58 Antonbramönster (eda).txt")));
 			try {
 			String line = in.readLine();
 			while(line != null) {
@@ -178,7 +179,7 @@ public class EDAReader extends Thread {
 	public static ArrayList<Float> getGSRStampsOffline() {
 		ArrayList<Float> GSRStamps = new ArrayList<Float>();
 		try {
-			BufferedReader in = new BufferedReader(new FileReader(new File("tests/2013-03-22 10:40 anton (eda).txt")));
+			BufferedReader in = new BufferedReader(new FileReader(new File("tests/2013-03-22 15:58 Antonbramönster (eda).txt")));
 			try {
 			String line = in.readLine();
 			while(line != null) {
@@ -213,5 +214,12 @@ public class EDAReader extends Thread {
 			return data.get(data.size() / 2);
 		}
 	}
-
+	
+	public static ArrayList<Double> getTimeStampsDiff() {
+		return timeStampsDiff;
+	}
+	
+	public static ArrayList<Float> getDifficultyStamps() {
+		return difficultyStamps;
+	}
 }
