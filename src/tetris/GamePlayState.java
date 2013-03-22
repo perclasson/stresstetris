@@ -54,7 +54,7 @@ public class GamePlayState extends BasicGameState {
 		viewGameOverText = false;
 		this.game = game;
 		edaReader = null;
-		difficultyManager = new DifficultyManager(game.optionsFile, this, game.useGSRFeedback);
+		difficultyManager = new DifficultyManager(game, this);
 	}
 
 	private void resetGame() {
@@ -76,7 +76,7 @@ public class GamePlayState extends BasicGameState {
     public void enter(GameContainer gc, StateBasedGame sb) throws SlickException
     {
 		gc.setMinimumLogicUpdateInterval(15);
-		difficultyManager = new DifficultyManager(game.optionsFile, this, game.useGSRFeedback);
+		difficultyManager = new DifficultyManager(game, this);
 		theme = new Music("sounds/themeTetris.wav");
 		theme.loop(0.8f, 1);
 		edaReader = game.getEDAReader();

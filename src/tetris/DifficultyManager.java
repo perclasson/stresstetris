@@ -10,36 +10,45 @@ import java.util.ArrayList;
 public class DifficultyManager {
 
 	private BufferedReader in;
-	private boolean isReady, GSREffect;
+	private boolean isReady, GSRFeedback;
 	private GamePlayState gps;
 	private double currentTime, changeTime;
 	private float difficulty;
 	private static ArrayList<Double> timeStampsDiff;
 	private static ArrayList<Float> difficultyStamps;
+	private float baseline;
 
-	public DifficultyManager(File file, GamePlayState gps, boolean GSREffect) {
+	public DifficultyManager(Game game, GamePlayState gamePlayState) {
 		try {
-			in = new BufferedReader(new FileReader(file));
+			in = new BufferedReader(new FileReader(game.optionsFile));
 			isReady = true;
 			currentTime = 0;
-			this.GSREffect = GSREffect;
+			this.GSRFeedback = game.useGSRFeedback;
+			this.baseline = game.baseline;
 			changeTime = 0;
 			difficulty = 0;
 			timeStampsDiff = new ArrayList<Double>();
 			difficultyStamps = new ArrayList<Float>();
-			this.gps = gps;
+			this.gps = gamePlayState;
 		} catch (FileNotFoundException e) {
-			System.err.println("Could not find file: " + file.getName());
+			System.err.println("Could not find file: " + game.optionsFile.getName());
 		}
 	}
 
 	public void update(int delta) {
-		
-		if(!GSREffect) {
+		if (!GSRFeedback) {
 			updateDiffFromFile(delta);
 		}
+		else {
+			updateDiffFromGSR(delta);
+		}
 	}
-	
+
+	private void updateDiffFromGSR(int delta) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	public void updateDiffFromFile(int delta) {
 		String line = "";
 		currentTime += delta;
@@ -50,15 +59,14 @@ public class DifficultyManager {
 					String[] args = line.split(",");
 					difficulty = Float.parseFloat(args[1]);
 					changeTime = Double.parseDouble(args[0]) * 1000;
-				}
-				else {
+				} else {
 					return;
 				}
 			}
 			if (changeTime <= currentTime) {
 				System.out.println("Time: " + currentTime);
 				System.out.println("Difficulty: " + difficulty);
-				timeStampsDiff.add(Double.valueOf(currentTime/1000));
+				timeStampsDiff.add(Double.valueOf(currentTime / 1000));
 				difficultyStamps.add(difficulty);
 				gps.updatePitch(difficulty);
 				gps.setBlockSpeed(difficulty);
@@ -70,11 +78,11 @@ public class DifficultyManager {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static ArrayList<Double> getTimeStamps() {
 		return timeStampsDiff;
 	}
-	
+
 	public static ArrayList<Float> getDifficultyStamps() {
 		return difficultyStamps;
 	}
