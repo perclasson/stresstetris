@@ -252,7 +252,6 @@ public class ChartDrawer extends JFrame implements ActionListener {
 		PrintWriter writer;
 		try {
 			Calendar cal = Calendar.getInstance();
-			cal.getTime();
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 			String time = sdf.format(cal.getTime());
 			String name = JOptionPane.showInputDialog(this,
