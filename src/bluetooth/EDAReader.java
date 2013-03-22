@@ -78,21 +78,22 @@ public class EDAReader extends Thread {
 		int noGSR = GSRStamps.size();
 		int noValuesPerSum = 20;
 		if (noGSR > 2 * noValuesPerSum) {
-			List<Float> data = GSRStamps.subList(noGSR-2*noValuesPerSum, noGSR);
+			List<Float> data = GSRStamps.subList(noGSR - 2 * noValuesPerSum,
+					noGSR);
 			float min = 0f;
 			float max = 0f;
 			for (float x : data) {
 				max = Math.max(max, x);
 				min = Math.min(min, x);
 			}
-			if (Math.abs(max-min) < 5) {
+			if (Math.abs(max - min) < 5) {
 				return true;
 			}
 		}
 		return false;
 
 	}
-	
+
 	public static ArrayList<Long> getTimeStampsGSR() {
 		return timeStampsGSR;
 	}
@@ -118,9 +119,8 @@ public class EDAReader extends Thread {
 		Collections.sort(data);
 		if (data.isEmpty()) {
 			return null;
-		}
-		else {
-			return data.get(GSRStamps.size()/2);	
+		} else {
+			return data.get(GSRStamps.size() / 2);
 		}
 	}
 
