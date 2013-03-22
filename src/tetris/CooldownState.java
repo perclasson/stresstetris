@@ -43,6 +43,7 @@ public class CooldownState extends BasicGameState {
     public void enter(GameContainer gc, StateBasedGame sb) throws SlickException
     {
 		edaReader = game.getEDAReader();
+		time = 0;
     }
 
 	@Override
