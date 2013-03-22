@@ -44,14 +44,14 @@ public class ChartDrawer extends JFrame implements ActionListener {
 	public ChartDrawer() {
 		super("EDA chart");
 		// This will create the dataset
-		/*CategoryDataset dataset = createDiffDataset();
-		// based on the dataset we create the chart
-		chart = createDiffChart(dataset, "Difficulty over time");
-		// we put the chart into a panel
-		ChartPanel chartPanel = new ChartPanel(chart);
-		// default size
-		chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
-		// add it to our application*/
+		/*
+		 * CategoryDataset dataset = createDiffDataset(); // based on the
+		 * dataset we create the chart chart = createDiffChart(dataset,
+		 * "Difficulty over time"); // we put the chart into a panel ChartPanel
+		 * chartPanel = new ChartPanel(chart); // default size
+		 * chartPanel.setPreferredSize(new java.awt.Dimension(500, 270)); // add
+		 * it to our application
+		 */
 
 		dataset2 = createEDADataset(0);
 
@@ -61,7 +61,7 @@ public class ChartDrawer extends JFrame implements ActionListener {
 		// default size
 		chartPanel2.setPreferredSize(new java.awt.Dimension(500, 270));
 		// add it to our application
-		//getContentPane().add(chartPanel, BorderLayout.EAST);
+		// getContentPane().add(chartPanel, BorderLayout.EAST);
 		getContentPane().add(chartPanel2);
 		createMenu();
 	}
@@ -112,46 +112,46 @@ public class ChartDrawer extends JFrame implements ActionListener {
 		ArrayList<Float> fitted = new ArrayList<Float>();
 		int points = calculateIndex(0);
 		for (int i = 0; i + points < timeStamps.size();) {
-			//long x1 = timeStamps.get(i);
+			// long x1 = timeStamps.get(i);
 			float sumC1 = 0;
-			for(int j = i; j < i+points; j++) {
+			for (int j = i; j < i + points; j++) {
 				sumC1 += edaStamps.get(j);
 			}
-			float c1 = 2*sumC1;
+			float c1 = 2 * sumC1;
 			float sumC2 = 0;
-			for(int j = i; j < i+points; j++) {
-				sumC2 += edaStamps.get(j)*timeStamps.get(j);
+			for (int j = i; j < i + points; j++) {
+				sumC2 += edaStamps.get(j) * timeStamps.get(j);
 			}
-			float c2 = 2*sumC2;
+			float c2 = 2 * sumC2;
 			float sumA2 = 0;
-			for(int j = i; j < i+points; j++) {
+			for (int j = i; j < i + points; j++) {
 				sumA2 += timeStamps.get(j);
 			}
-			float a2 = 2*sumA2;
-			float a1 = 2*4;
-			float b1 = 2*sumA2;
-			float sumB2 = 0;
-			for(int j = i; j < i+points; j++) {
-				sumB2 += timeStamps.get(j)*timeStamps.get(j);
-			}
-			float b2 = 2*sumB2;
-			//long x2 = timeStamps.get(i + 1);
-			//long x3 = timeStamps.get(i + 2);
-			//long x4 = timeStamps.get(i + 3);
-
-			/*float y1 = edaStamps.get(i);
-			float y2 = edaStamps.get(i + 1);
-			float y3 = edaStamps.get(i + 2);
-			float y4 = edaStamps.get(i + 3);*/
-
-			/*float c1 = 2 * (y1 + y2 + y3 + y4); // konstanter som står framför
-												// de okända i
-												// normalekvationerna
-			float c2 = 2 * ((x1 * y1) + (x2 * y2) + (x3 * y3) + (x4 * y4));
+			float a2 = 2 * sumA2;
 			float a1 = 2 * 4;
-			float a2 = 2 * (x1 + x2 + x3 + x4);
-			float b1 = 2 * (x1 + x2 + x3 + x4);
-			float b2 = 2 * ((x1 * x1) + (x2 * x2) + (x3 * x3) + (x4 * x4));*/
+			float b1 = 2 * sumA2;
+			float sumB2 = 0;
+			for (int j = i; j < i + points; j++) {
+				sumB2 += timeStamps.get(j) * timeStamps.get(j);
+			}
+			float b2 = 2 * sumB2;
+			// long x2 = timeStamps.get(i + 1);
+			// long x3 = timeStamps.get(i + 2);
+			// long x4 = timeStamps.get(i + 3);
+
+			/*
+			 * float y1 = edaStamps.get(i); float y2 = edaStamps.get(i + 1);
+			 * float y3 = edaStamps.get(i + 2); float y4 = edaStamps.get(i + 3);
+			 */
+
+			/*
+			 * float c1 = 2 * (y1 + y2 + y3 + y4); // konstanter som står
+			 * framför // de okända i // normalekvationerna float c2 = 2 * ((x1
+			 * * y1) + (x2 * y2) + (x3 * y3) + (x4 * y4)); float a1 = 2 * 4;
+			 * float a2 = 2 * (x1 + x2 + x3 + x4); float b1 = 2 * (x1 + x2 + x3
+			 * + x4); float b2 = 2 * ((x1 * x1) + (x2 * x2) + (x3 * x3) + (x4 *
+			 * x4));
+			 */
 
 			float Det11 = (c1 * b2) - (b1 * c2); // Vi räknar ut determinanterna
 													// för att lösa systemet
@@ -163,36 +163,36 @@ public class ChartDrawer extends JFrame implements ActionListener {
 			float b1Sol = Det11 / Det12; // ySol och xSol bildar ekvationen
 											// --y=xSol + ySol*x--
 			float b2Sol = Det21 / Det22;
-			fitted.add(b1Sol + b2Sol * timeStamps.get(i+points));
-			i+=points;
+			fitted.add(b1Sol + b2Sol * timeStamps.get(i + points));
+			i += points;
 			points = calculateIndex(i);
 		}
 		return fitted;
 	}
-	
+
 	public int calculateIndex(int index) {
 		ArrayList<Long> gsrTimeStamps = EDAReader.getTimeStampsGSROffline();
 		int nextIndex = 0;
 		int testIndex = index;
 		long firstStamp = gsrTimeStamps.get(testIndex);
-		
-		while(testIndex+1 < gsrTimeStamps.size()) {
+
+		while (testIndex + 1 < gsrTimeStamps.size()) {
 			nextIndex++;
 			testIndex++;
 			long time = gsrTimeStamps.get(testIndex);
-			if(time-firstStamp >= 1000) {
+			if (time - firstStamp >= 1000) {
 				return nextIndex;
 			}
 		}
-		return nextIndex+1;
+		return nextIndex + 1;
 	}
- 
+
 	public ArrayList<Long> formatStamps(ArrayList<Long> timeStamps) {
 		ArrayList<Long> result = new ArrayList<Long>();
 		int points = calculateIndex(0);
 		for (int i = 0; i + points < timeStamps.size();) {
-			result.add(timeStamps.get(i)/1000);
-			i+=points;
+			result.add(timeStamps.get(i) / 1000);
+			i += points;
 			points = calculateIndex(i);
 		}
 		return result;
@@ -201,8 +201,8 @@ public class ChartDrawer extends JFrame implements ActionListener {
 	private CategoryDataset createEDADataset(int fittingMethod) {
 		DefaultCategoryDataset result = new DefaultCategoryDataset();
 		final String series1 = "Session";
-		//ArrayList<Long> timeStamps = EDAReader.getTimeStampsGSR();
-		//ArrayList<Float> gsrStamps = EDAReader.getGSRStamps();
+		// ArrayList<Long> timeStamps = EDAReader.getTimeStampsGSR();
+		// ArrayList<Float> gsrStamps = EDAReader.getGSRStamps();
 		ArrayList<Long> timeStamps = EDAReader.getTimeStampsGSROffline();
 		ArrayList<Float> gsrStamps = EDAReader.getGSRStampsOffline();
 		switch (fittingMethod) {
@@ -212,7 +212,7 @@ public class ChartDrawer extends JFrame implements ActionListener {
 			timeStamps = formatStamps(timeStamps);
 			break;
 		}
-	
+
 		for (int i = 0; i < gsrStamps.size(); i++) {
 			Long time = timeStamps.get(i);
 			result.addValue(gsrStamps.get(i), series1, time);
@@ -305,23 +305,27 @@ public class ChartDrawer extends JFrame implements ActionListener {
 			String time = sdf.format(cal.getTime());
 			String name = JOptionPane.showInputDialog(this,
 					"Enter the name of the test:", null);
-			writer = new PrintWriter("tests/" + (time + " " + name).trim() + " (eda).txt",
-					"UTF-8");
+			writer = new PrintWriter("tests/" + (time + " " + name).trim()
+					+ " (eda).txt", "UTF-8");
 			for (int i = 0; i < gsrStamps.size(); i++) {
 				writer.println("EDA: " + gsrStamps.get(i) + ", Time: "
 						+ edaTimeStamps.get(i));
 			}
 			writer.close();
-			writer = new PrintWriter("tests/" + (time + " " + name).trim() + " (diff).txt",
-					"UTF-8");
+			writer = new PrintWriter("tests/" + (time + " " + name).trim()
+					+ " (diff).txt", "UTF-8");
 			for (int i = 0; i < diffTimeStamps.size(); i++) {
 				writer.println("Difficulty: " + difficultyStamps.get(i)
 						+ ", Time: " + diffTimeStamps.get(i));
 			}
 			writer.close();
-		    try {
-				ChartUtilities.saveChartAsPNG(new File("tests/" + (time + " " + name).trim() + " (diff).png"), chart2, 1000, 540);
-				ChartUtilities.saveChartAsPNG(new File("tests/" + (time + " " + name).trim() + " (eda).png"), chart, 1000, 540);
+			try {
+				ChartUtilities.saveChartAsPNG(new File("tests/"
+						+ (time + " " + name).trim() + " (diff).png"), chart2,
+						1000, 540);
+				ChartUtilities.saveChartAsPNG(new File("tests/"
+						+ (time + " " + name).trim() + " (eda).png"), chart,
+						1000, 540);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
