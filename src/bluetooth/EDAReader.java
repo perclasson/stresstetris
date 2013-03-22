@@ -1,6 +1,9 @@
 package bluetooth;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -97,11 +100,50 @@ public class EDAReader extends Thread {
 		return timeStampsGSR;
 	}
 
+	public static ArrayList<Long> getTimeStampsGSROffline() {
+		ArrayList<Long> GSRTimeStamps = new ArrayList<Long>();
+		try {
+			BufferedReader in = new BufferedReader(new FileReader(new File("tests/2013-03-22 10:40 anton (eda).txt")));
+			try {
+			String line = in.readLine();
+			while(line != null) {
+				GSRTimeStamps.add(Long.parseLong(line.split(" ")[3]));
+				line = in.readLine();
+			}
+			} catch(IOException e) {
+				e.printStackTrace();
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		return GSRTimeStamps;	
+	}
+	
 	public static void setTimeStampsGSR(ArrayList<Long> timeStampsGSR) {
 		EDAReader.timeStampsGSR = timeStampsGSR;
 	}
+	
 
 	public static ArrayList<Float> getGSRStamps() {
+		return GSRStamps;
+	}
+	public static ArrayList<Float> getGSRStampsOffline() {
+		ArrayList<Float> GSRStamps = new ArrayList<Float>();
+		try {
+			BufferedReader in = new BufferedReader(new FileReader(new File("tests/2013-03-22 10:40 anton (eda).txt")));
+			try {
+			String line = in.readLine();
+			while(line != null) {
+				GSRStamps.add(Float.parseFloat(line.split(" ")[1].replaceAll(",", "")));
+				line = in.readLine();
+			}
+			} catch(IOException e) {
+				e.printStackTrace();
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+
 		return GSRStamps;
 	}
 
