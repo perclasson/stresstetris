@@ -111,7 +111,7 @@ public class ChartDrawer extends JFrame implements ActionListener {
 			ArrayList<Long> timeStamps) {
 		ArrayList<Float> fitted = new ArrayList<Float>();
 		int points = calculateIndex(0);
-		for (int i = 0; i + points < timeStamps.size();) {
+		for (int i = 0; i + points < edaStamps.size();) {
 			// long x1 = timeStamps.get(i);
 			float sumC1 = 0;
 			for (int j = i; j < i + points; j++) {
@@ -167,6 +167,8 @@ public class ChartDrawer extends JFrame implements ActionListener {
 			i += points;
 			points = calculateIndex(i);
 		}
+
+		System.out.println("here?");
 		return fitted;
 	}
 

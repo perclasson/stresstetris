@@ -63,7 +63,7 @@ public class CooldownState extends BasicGameState {
 		time += delta;
 		if (time > 10000) {
 			if (edaReader != null) {
-				game.setBaseline(edaReader.getMedian());	
+				edaReader.getNewBaseline();	
 			}
 			sb.enterState(Game.GAMEPLAYSTATE);
 		}
