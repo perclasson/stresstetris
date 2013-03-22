@@ -44,14 +44,14 @@ public class ChartDrawer extends JFrame implements ActionListener {
 	public ChartDrawer() {
 		super("EDA chart");
 		// This will create the dataset
-		CategoryDataset dataset = createDiffDataset();
+		/*CategoryDataset dataset = createDiffDataset();
 		// based on the dataset we create the chart
 		chart = createDiffChart(dataset, "Difficulty over time");
 		// we put the chart into a panel
 		ChartPanel chartPanel = new ChartPanel(chart);
 		// default size
 		chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
-		// add it to our application
+		// add it to our application*/
 
 		dataset2 = createEDADataset(0);
 
@@ -61,8 +61,8 @@ public class ChartDrawer extends JFrame implements ActionListener {
 		// default size
 		chartPanel2.setPreferredSize(new java.awt.Dimension(500, 270));
 		// add it to our application
-		getContentPane().add(chartPanel, BorderLayout.EAST);
-		getContentPane().add(chartPanel2, BorderLayout.WEST);
+		//getContentPane().add(chartPanel, BorderLayout.EAST);
+		getContentPane().add(chartPanel2);
 		createMenu();
 	}
 
@@ -111,27 +111,27 @@ public class ChartDrawer extends JFrame implements ActionListener {
 			ArrayList<Long> timeStamps) {
 		ArrayList<Float> fitted = new ArrayList<Float>();
 		int points = calculateIndex(0);
-		for (int i = 0; i + points < edaStamps.size();) {
+		for (int i = 0; i + points < timeStamps.size();) {
 			//long x1 = timeStamps.get(i);
 			float sumC1 = 0;
-			for(int j = i; j < i+10; j++) {
+			for(int j = i; j < i+points; j++) {
 				sumC1 += edaStamps.get(j);
 			}
 			float c1 = 2*sumC1;
 			float sumC2 = 0;
-			for(int j = i; j < i+10; j++) {
+			for(int j = i; j < i+points; j++) {
 				sumC2 += edaStamps.get(j)*timeStamps.get(j);
 			}
 			float c2 = 2*sumC2;
 			float sumA2 = 0;
-			for(int j = i; j < i+10; j++) {
+			for(int j = i; j < i+points; j++) {
 				sumA2 += timeStamps.get(j);
 			}
 			float a2 = 2*sumA2;
 			float a1 = 2*4;
 			float b1 = 2*sumA2;
 			float sumB2 = 0;
-			for(int j = i; j < i+10; j++) {
+			for(int j = i; j < i+points; j++) {
 				sumB2 += timeStamps.get(j)*timeStamps.get(j);
 			}
 			float b2 = 2*sumB2;
@@ -165,36 +165,35 @@ public class ChartDrawer extends JFrame implements ActionListener {
 			float b2Sol = Det21 / Det22;
 			fitted.add(b1Sol + b2Sol * timeStamps.get(i+points));
 			i+=points;
-			System.out.println(i);
 			points = calculateIndex(i);
 		}
 		return fitted;
 	}
 	
 	public int calculateIndex(int index) {
-		ArrayList<Long> gsrTimeStamps = EDAReader.getTimeStampsGSR();
-		int nextIndex = index;
-		long firstStamp = gsrTimeStamps.get(nextIndex)/1000;
-		nextIndex++;
-		while(nextIndex < gsrTimeStamps.size()) {
-			long time = gsrTimeStamps.get(nextIndex);
-			if(firstStamp+(time/1000) > firstStamp+1) {
+		ArrayList<Long> gsrTimeStamps = EDAReader.getTimeStampsGSROffline();
+		int nextIndex = 0;
+		int testIndex = index;
+		long firstStamp = gsrTimeStamps.get(testIndex);
+		
+		while(testIndex+1 < gsrTimeStamps.size()) {
+			nextIndex++;
+			testIndex++;
+			long time = gsrTimeStamps.get(testIndex);
+			if(time-firstStamp >= 1000) {
 				return nextIndex;
 			}
-			System.out.println("I'm stuck :(");
-			nextIndex++;
 		}
-		return nextIndex;
+		return nextIndex+1;
 	}
-
+ 
 	public ArrayList<Long> formatStamps(ArrayList<Long> timeStamps) {
 		ArrayList<Long> result = new ArrayList<Long>();
 		int points = calculateIndex(0);
 		for (int i = 0; i + points < timeStamps.size();) {
-			result.add(timeStamps.get(points)/1000);
+			result.add(timeStamps.get(i)/1000);
 			i+=points;
-			System.out.println(i);
-			points = calculateIndex(points);
+			points = calculateIndex(i);
 		}
 		return result;
 	}
@@ -202,9 +201,10 @@ public class ChartDrawer extends JFrame implements ActionListener {
 	private CategoryDataset createEDADataset(int fittingMethod) {
 		DefaultCategoryDataset result = new DefaultCategoryDataset();
 		final String series1 = "Session";
-		ArrayList<Long> timeStamps = EDAReader.getTimeStampsGSR();
-		ArrayList<Float> gsrStamps = EDAReader.getGSRStamps();
-
+		//ArrayList<Long> timeStamps = EDAReader.getTimeStampsGSR();
+		//ArrayList<Float> gsrStamps = EDAReader.getGSRStamps();
+		ArrayList<Long> timeStamps = EDAReader.getTimeStampsGSROffline();
+		ArrayList<Float> gsrStamps = EDAReader.getGSRStampsOffline();
 		switch (fittingMethod) {
 		case 1:
 			System.out.println("Fitted using LSM!");
@@ -212,8 +212,8 @@ public class ChartDrawer extends JFrame implements ActionListener {
 			timeStamps = formatStamps(timeStamps);
 			break;
 		}
-
-		for (int i = 0; i < timeStamps.size(); i++) {
+	
+		for (int i = 0; i < gsrStamps.size(); i++) {
 			Long time = timeStamps.get(i);
 			result.addValue(gsrStamps.get(i), series1, time);
 		}
@@ -272,7 +272,7 @@ public class ChartDrawer extends JFrame implements ActionListener {
 			chartPanel2 = new ChartPanel(chart2);
 			// default size
 			chartPanel2.setPreferredSize(new java.awt.Dimension(500, 270));
-			getContentPane().add(chartPanel2, BorderLayout.WEST);
+			getContentPane().add(chartPanel2);
 			this.validate();
 		} else if (command.equals("RAW")) {
 			getContentPane().remove(chartPanel2);
@@ -284,7 +284,7 @@ public class ChartDrawer extends JFrame implements ActionListener {
 			chartPanel2 = new ChartPanel(chart2);
 			// default size
 			chartPanel2.setPreferredSize(new java.awt.Dimension(500, 270));
-			getContentPane().add(chartPanel2, BorderLayout.WEST);
+			getContentPane().add(chartPanel2);
 			this.validate();
 		} else if (command.equals("SAVE")) {
 			saveTestToFiles();
