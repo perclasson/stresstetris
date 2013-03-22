@@ -3,7 +3,9 @@ package tetris;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.text.DecimalFormat;
@@ -19,6 +21,7 @@ import javax.swing.JOptionPane;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
+import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.CategoryDataset;
@@ -30,7 +33,7 @@ public class ChartDrawer extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 	private CategoryDataset dataset2;
-	private JFreeChart chart2;
+	private JFreeChart chart2, chart;
 	private ChartPanel chartPanel2;
 
 	public void reveal() {
@@ -43,7 +46,7 @@ public class ChartDrawer extends JFrame implements ActionListener {
 		// This will create the dataset
 		CategoryDataset dataset = createDiffDataset();
 		// based on the dataset we create the chart
-		JFreeChart chart = createDiffChart(dataset, "Difficulty over time");
+		chart = createDiffChart(dataset, "Difficulty over time");
 		// we put the chart into a panel
 		ChartPanel chartPanel = new ChartPanel(chart);
 		// default size
@@ -271,6 +274,13 @@ public class ChartDrawer extends JFrame implements ActionListener {
 						+ ", Time: " + diffTimeStamps.get(i));
 			}
 			writer.close();
+		    try {
+				ChartUtilities.saveChartAsPNG(new File("tests/" + (time + " " + name).trim() + " (diff).png"), chart2, 1000, 540);
+				ChartUtilities.saveChartAsPNG(new File("tests/" + (time + " " + name).trim() + " (eda).png"), chart, 1000, 540);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (UnsupportedEncodingException e) {
