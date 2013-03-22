@@ -80,6 +80,7 @@ public class GamePlayState extends BasicGameState {
 		theme = new Music("sounds/themeTetris.wav");
 		theme.loop(0.8f, 1);
 		edaReader = game.getEDAReader();
+		edaReader.setFeedback(game.useGSRFeedback, this); 
     }
 	
 	public void updatePitch(float difficulty) {

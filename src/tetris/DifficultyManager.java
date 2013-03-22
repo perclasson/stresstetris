@@ -41,9 +41,6 @@ public class DifficultyManager {
 		if (!GSRFeedback) {
 			updateDiffFromFile(delta);
 		}
-		else {
-			edaReader.setFeedback(true);
-		}
 	}
 
 	public void updateDiffFromFile(int delta) {

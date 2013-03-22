@@ -117,9 +117,10 @@ public class OptionsState extends BasicGameState {
 		fileButtonSelected.setIsEnabled(false);
 		
 		//Set first GSR option as the chosen button.
-		gsrButtonSelected = buttons[2];
+		gsrButtonSelected = buttons[3];
 		gsrButtonSelected.setIsEnabled(false);
 		mainGame.useGSR(true);
+		mainGame.useGSRFeedback(true);
 	}
 
 	@Override

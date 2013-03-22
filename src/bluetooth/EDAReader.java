@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import tetris.GamePlayState;
+
 public class EDAReader extends Thread {
 	private SerialPortHandler spHandler;
 	private BufferedReader reader;
@@ -13,7 +15,11 @@ public class EDAReader extends Thread {
 	private static ArrayList<Float> GSRStamps;
 	private boolean finished, stabilized, feedback;
 	private Parser parser;
-	private float baseline;
+	private float baseline, difficulty;
+	private static ArrayList<Double> timeStampsDiff;
+	private static ArrayList<Float> difficultyStamps;
+	private int lastIndex, lastSecond;
+	private GamePlayState gamePlayState;
 
 	public EDAReader() {
 		spHandler = new SerialPortHandler();
@@ -23,7 +29,11 @@ public class EDAReader extends Thread {
 		parser = new Parser();
 		timeStampsGSR = new ArrayList<Long>();
 		GSRStamps = new ArrayList<Float>();
+		timeStampsDiff = new ArrayList<Double>();
+		difficultyStamps = new ArrayList<Float>();
 		feedback = false;
+		lastIndex = 0;
+		lastSecond = -1;
 	}
 
 	@Override
@@ -40,9 +50,36 @@ public class EDAReader extends Thread {
 					if (data != null) {
 						if (stabilized) {
 							if (feedback) {
-								System.out.println("Diff: " + (baseline - data));
+								// Every 5th second
+								int second = ((int) (delta / 1000));
+								if (second % 5 == 0 && second != lastSecond) {
+									lastSecond = second;
+									if (lastIndex == 0) {
+										lastIndex = GSRStamps.size();
+										baseline = getMedian(0);
+										// We always start on this difficulty
+										difficulty = 3.0f;
+									} else {
+										float median = getMedian(lastIndex);
+										if (baseline < median) {
+											difficulty += 0.5f;
+											System.out.println("Difficulty: +0.5, Time: " + second);
+										} else if (difficulty >= 1.5f) {
+											difficulty -= 0.5f;
+											System.out.println("Difficulty: -0.5, Time: " + second);
+										}
+										// Update baseline
+										baseline = median;
+									}
+									timeStampsDiff.add(Double.valueOf(delta / 1000));
+									difficultyStamps.add(difficulty);
+									gamePlayState.setBlockSpeed(difficulty);
+									gamePlayState.updatePitch(difficulty);
+								}
+								
+
+								// We should save our difficulty in an array
 							}
-							System.out.println("Diff2: " + (baseline - data));
 							GSRStamps.add(data);
 							timeStampsGSR.add(delta);
 						} else {
@@ -78,9 +115,12 @@ public class EDAReader extends Thread {
 		return stabilized;
 	}
 
-	public void setFeedback(boolean feedback) {
+	public void setFeedback(boolean feedback, GamePlayState gamePlayState) {
+		System.out.println("Set feedback on Edareader");
 		this.feedback = feedback;
+		this.gamePlayState = gamePlayState;
 	}
+
 	private boolean isStabilized() {
 		int noGSR = GSRStamps.size();
 		int noValuesPerSum = 20;
@@ -121,21 +161,14 @@ public class EDAReader extends Thread {
 		finished = true;
 	}
 
-	public float getNewBaseline() {
-		baseline = getMedian();
-		return baseline;
-	}
-	public float getBaseline() {
-		return baseline;
-	}
-	
-	private Float getMedian() {
-		List<Float> data = new ArrayList<Float>(GSRStamps);
+	private Float getMedian(int fromIndex) {
+		List<Float> data = new ArrayList<Float>(GSRStamps.subList(fromIndex,
+				GSRStamps.size()));
 		Collections.sort(data);
 		if (data.isEmpty()) {
 			return null;
 		} else {
-			return data.get(GSRStamps.size() / 2);
+			return data.get(data.size() / 2);
 		}
 	}
 

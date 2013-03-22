@@ -62,9 +62,6 @@ public class CooldownState extends BasicGameState {
 			throws SlickException {
 		time += delta;
 		if (time > 10000) {
-			if (edaReader != null) {
-				edaReader.getNewBaseline();	
-			}
 			sb.enterState(Game.GAMEPLAYSTATE);
 		}
 	}
