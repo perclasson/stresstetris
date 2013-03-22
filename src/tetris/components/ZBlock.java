@@ -128,7 +128,6 @@ public class ZBlock extends Block {
 	public boolean canRotate(int dir) {
 		ZBlock block = new ZBlock(getMainSquareXPos(), getMainSquareYPos(), 0);
 		block.editPosition((getRotation()+dir) % 4);
-		System.out.println(CollisionHandler.isColliding(block));
 		if(CollisionHandler.isColliding(block)) {
 			block = null;
 			return false;

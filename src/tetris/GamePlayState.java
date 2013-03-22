@@ -179,7 +179,6 @@ public class GamePlayState extends BasicGameState {
 
 			float collisionDistance = collisionHandler.willCollideDown(block);
 			if (collisionDistance > 0) {
-				System.out.println(collisionDistance);
 				block.moveDown(collisionDistance); // The block is moved down
 													// the
 													// distance left to

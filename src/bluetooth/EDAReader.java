@@ -11,9 +11,9 @@ public class EDAReader extends Thread {
 	private BufferedReader reader;
 	private static ArrayList<Long> timeStampsGSR;
 	private static ArrayList<Float> GSRStamps;
-	private boolean finished;
-	private boolean stabilized;
+	private boolean finished, stabilized, feedback;
 	private Parser parser;
+	private float baseline;
 
 	public EDAReader() {
 		spHandler = new SerialPortHandler();
@@ -23,6 +23,7 @@ public class EDAReader extends Thread {
 		parser = new Parser();
 		timeStampsGSR = new ArrayList<Long>();
 		GSRStamps = new ArrayList<Float>();
+		feedback = false;
 	}
 
 	@Override
@@ -37,9 +38,11 @@ public class EDAReader extends Thread {
 				if (line != null) {
 					Float data = parser.getData(line);
 					if (data != null) {
-						System.out.println("EDA: " + data + ", time stamp: "
-								+ delta + ", stabilized: " + stabilized);
 						if (stabilized) {
+							if (feedback) {
+								System.out.println("Diff: " + (baseline - data));
+							}
+							System.out.println("Diff2: " + (baseline - data));
 							GSRStamps.add(data);
 							timeStampsGSR.add(delta);
 						} else {
@@ -48,6 +51,7 @@ public class EDAReader extends Thread {
 								timeStampsGSR = new ArrayList<Long>();
 								GSRStamps = new ArrayList<Float>();
 							} else {
+								System.out.println("Stabilizing with EDA data");
 								GSRStamps.add(data);
 								timeStampsGSR.add(delta);
 							}
@@ -74,6 +78,9 @@ public class EDAReader extends Thread {
 		return stabilized;
 	}
 
+	public void setFeedback(boolean feedback) {
+		this.feedback = feedback;
+	}
 	private boolean isStabilized() {
 		int noGSR = GSRStamps.size();
 		int noValuesPerSum = 20;
@@ -114,7 +121,15 @@ public class EDAReader extends Thread {
 		finished = true;
 	}
 
-	public Float getMedian() {
+	public float getNewBaseline() {
+		baseline = getMedian();
+		return baseline;
+	}
+	public float getBaseline() {
+		return baseline;
+	}
+	
+	private Float getMedian() {
 		List<Float> data = new ArrayList<Float>(GSRStamps);
 		Collections.sort(data);
 		if (data.isEmpty()) {

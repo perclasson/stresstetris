@@ -113,7 +113,6 @@ public class TBlock extends Block {
 	public boolean canRotate(int dir) {
 		TBlock block = new TBlock(getMainSquareXPos(), getMainSquareYPos(), 0);
 		block.editPosition((getRotation()+dir) % 4);
-		System.out.println(CollisionHandler.isColliding(block));
 		if(CollisionHandler.isColliding(block)) {
 			block = null;
 			return false;

@@ -7,6 +7,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import bluetooth.EDAReader;
+
 public class DifficultyManager {
 
 	private BufferedReader in;
@@ -16,7 +18,7 @@ public class DifficultyManager {
 	private float difficulty;
 	private static ArrayList<Double> timeStampsDiff;
 	private static ArrayList<Float> difficultyStamps;
-	private float baseline;
+	private EDAReader edaReader;
 
 	public DifficultyManager(Game game, GamePlayState gamePlayState) {
 		try {
@@ -24,7 +26,7 @@ public class DifficultyManager {
 			isReady = true;
 			currentTime = 0;
 			this.GSRFeedback = game.useGSRFeedback;
-			this.baseline = game.baseline;
+			this.edaReader = game.getEDAReader();
 			changeTime = 0;
 			difficulty = 0;
 			timeStampsDiff = new ArrayList<Double>();
@@ -40,13 +42,8 @@ public class DifficultyManager {
 			updateDiffFromFile(delta);
 		}
 		else {
-			updateDiffFromGSR(delta);
+			edaReader.setFeedback(true);
 		}
-	}
-
-	private void updateDiffFromGSR(int delta) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public void updateDiffFromFile(int delta) {
@@ -64,8 +61,6 @@ public class DifficultyManager {
 				}
 			}
 			if (changeTime <= currentTime) {
-				System.out.println("Time: " + currentTime);
-				System.out.println("Difficulty: " + difficulty);
 				timeStampsDiff.add(Double.valueOf(currentTime / 1000));
 				difficultyStamps.add(difficulty);
 				gps.updatePitch(difficulty);

@@ -112,7 +112,6 @@ public class LBlock extends Block{
 	public boolean canRotate(int dir) {
 		LBlock block = new LBlock(getMainSquareXPos(), getMainSquareYPos(), 0);
 		block.editPosition((getRotation()+dir) % 4);
-		System.out.println(CollisionHandler.isColliding(block));
 		if(CollisionHandler.isColliding(block)) {
 			block = null;
 			return false;
