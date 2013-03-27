@@ -1,5 +1,6 @@
 package tetris;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -37,12 +38,13 @@ public class GamePlayState extends BasicGameState {
 			/ BlockInfo.SIZE;
 	private static final int gridHeight = Measurements.GRID_HEIGHT
 			/ BlockInfo.SIZE;
-	private UnicodeFont font;
+	private UnicodeFont font, redFont, greenFont;
 	private int timeSinceGameOver;
 	private boolean viewGameOverText;
 	private static DifficultyManager difficultyManager;
 	private Game game;
 	private EDAReader edaReader;
+	private boolean stressIncreasing;
 
 	public GamePlayState(int stateID, Game game) {
 		this.stateID = stateID;
@@ -55,10 +57,11 @@ public class GamePlayState extends BasicGameState {
 		this.game = game;
 		edaReader = null;
 		difficultyManager = new DifficultyManager(game, this);
+		stressIncreasing = false;
 	}
 
 	private void resetGame() {
-		if (game.useGSR) {
+		if (Game.useGSR) {
 			edaReader.finish();
 		}
 		gridSquares = new Square[gridWidth][gridHeight];
@@ -71,20 +74,22 @@ public class GamePlayState extends BasicGameState {
 		theme.stop();
 		nextBlock = builder.generateBlock();
 	}
-	
+
 	@Override
-    public void enter(GameContainer gc, StateBasedGame sb) throws SlickException
-    {
+	public void enter(GameContainer gc, StateBasedGame sb)
+			throws SlickException {
 		gc.setMinimumLogicUpdateInterval(15);
 		difficultyManager = new DifficultyManager(game, this);
 		theme = new Music("sounds/themeTetris.wav");
 		theme.loop(0.8f, 1);
 		edaReader = game.getEDAReader();
-		edaReader.setFeedback(game.useGSRFeedback, this); 
-    }
-	
+		if (edaReader != null) {
+			edaReader.setFeedback(Game.useGSRFeedback, this);
+		}
+	}
+
 	public void updatePitch(float difficulty) {
-		float pitch = 0.8f + difficulty/10;
+		float pitch = 0.8f + difficulty / 10;
 		float pos = theme.getPosition();
 		theme.stop();
 		theme.loop(pitch, 1);
@@ -108,6 +113,16 @@ public class GamePlayState extends BasicGameState {
 		font.getEffects().add(new ColorEffect(java.awt.Color.white));
 		font.addNeheGlyphs();
 		font.loadGlyphs();
+		
+		redFont = new UnicodeFont(new java.awt.Font("Verdana", Font.BOLD, 20));
+		redFont.getEffects().add(new ColorEffect(new Color(139, 26, 26)));
+		redFont.addNeheGlyphs();
+		redFont.loadGlyphs();
+		
+		greenFont = new UnicodeFont(new java.awt.Font("Verdana", Font.BOLD, 20));
+		greenFont.getEffects().add(new ColorEffect(new Color(46, 139, 87)));
+		greenFont.addNeheGlyphs();
+		greenFont.loadGlyphs();
 	}
 
 	@Override
@@ -125,6 +140,13 @@ public class GamePlayState extends BasicGameState {
 				gameover.setAlpha(((timeSinceGameOver - 1500) / 100) * 0.1f);
 				gameover.draw();
 			}
+		}
+		
+		if (stressIncreasing && Game.useGSRFeedback) {
+			redFont.drawString(585, 275, "Your stress\nis increasing");			
+		}
+		else if (!stressIncreasing && Game.useGSRFeedback) {
+			greenFont.drawString(585, 275, "Your stress\nis decreasing");			
 		}
 	}
 
@@ -144,7 +166,7 @@ public class GamePlayState extends BasicGameState {
 		}
 		if (!paused) {
 			difficultyManager.update(delta);
-			
+
 			if (!block.isMoving()) {
 				if (block.isInsideGrid()) {
 					prepareNextBlock();
@@ -171,8 +193,7 @@ public class GamePlayState extends BasicGameState {
 				block.rotate();
 			} else if (input.isKeyPressed(Input.KEY_R)) {
 				block.setPosition(276, 26);
-			}
-			else if (input.isKeyDown(Input.KEY_DOWN)) {
+			} else if (input.isKeyDown(Input.KEY_DOWN)) {
 				block.setSpeed(10);
 			} else {
 				block.setSpeed(getBlockSpeed());
@@ -199,7 +220,7 @@ public class GamePlayState extends BasicGameState {
 		nextBlock.setOnTop();
 		block = nextBlock;
 		nextBlock = builder.generateBlock();
-		
+
 	}
 
 	public void updateScore(int fullRow) {
@@ -247,8 +268,8 @@ public class GamePlayState extends BasicGameState {
 					/ BlockInfo.SIZE;
 			int yIndex = (int) (squareY - Measurements.GRID_YSTART)
 					/ BlockInfo.SIZE;
-			square.setX(xIndex*BlockInfo.SIZE + Measurements.GRID_XSTART);
-			square.setY(yIndex*BlockInfo.SIZE + Measurements.GRID_YSTART);
+			square.setX(xIndex * BlockInfo.SIZE + Measurements.GRID_XSTART);
+			square.setY(yIndex * BlockInfo.SIZE + Measurements.GRID_YSTART);
 
 			gridSquares[xIndex][yIndex] = square;
 		}
@@ -329,13 +350,18 @@ public class GamePlayState extends BasicGameState {
 	public float getBlockSpeed() {
 		return blockSpeed;
 	}
-	
+
 	public void setBlockSpeed(float speed) {
+		if (blockSpeed > speed) {
+			stressIncreasing = false;
+		} else {
+			stressIncreasing = true;
+		}
 		blockSpeed = speed;
 	}
-	
+
 	public static DifficultyManager getDifficultyManager() {
-		
+
 		return difficultyManager;
 	}
 }

@@ -18,22 +18,21 @@ public class DifficultyManager {
 	private float difficulty;
 	private static ArrayList<Double> timeStampsDiff;
 	private static ArrayList<Float> difficultyStamps;
-	private EDAReader edaReader;
 
 	public DifficultyManager(Game game, GamePlayState gamePlayState) {
 		try {
 			in = new BufferedReader(new FileReader(game.optionsFile));
 			isReady = true;
 			currentTime = 0;
-			this.GSRFeedback = game.useGSRFeedback;
-			this.edaReader = game.getEDAReader();
+			this.GSRFeedback = Game.useGSRFeedback;
 			changeTime = 0;
 			difficulty = 0;
 			timeStampsDiff = new ArrayList<Double>();
 			difficultyStamps = new ArrayList<Float>();
 			this.gps = gamePlayState;
 		} catch (FileNotFoundException e) {
-			System.err.println("Could not find file: " + game.optionsFile.getName());
+			System.err.println("Could not find file: "
+					+ game.optionsFile.getName());
 		}
 	}
 
