@@ -1,6 +1,7 @@
 package tetris;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -226,9 +227,17 @@ public class ChartDrawer extends JFrame implements ActionListener {
 	public void saveTestToFiles() {
 		ArrayList<Long> edaTimeStamps = EDAReader.getTimeStampsGSR();
 		ArrayList<Float> gsrStamps = EDAReader.getGSRStamps();
-		ArrayList<Double> diffTimeStamps = DifficultyManager.getTimeStamps();
-		ArrayList<Float> difficultyStamps = DifficultyManager
-				.getDifficultyStamps();
+		ArrayList<Double> diffTimeStamps;
+		ArrayList<Float> difficultyStamps;
+		
+		if (Game.useGSRFeedback) {
+			diffTimeStamps = EDAReader.getTimeStampsDiff();
+			difficultyStamps = EDAReader.getDifficultyStamps();
+		} else {
+			diffTimeStamps = DifficultyManager.getTimeStamps();
+			difficultyStamps = DifficultyManager.getDifficultyStamps();
+		}
+
 		PrintWriter writer;
 		try {
 			Calendar cal = Calendar.getInstance();
