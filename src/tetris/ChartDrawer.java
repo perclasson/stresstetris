@@ -1,7 +1,6 @@
 package tetris;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -83,9 +82,18 @@ public class ChartDrawer extends JFrame implements ActionListener {
 	private CategoryDataset createDiffDataset() {
 		DefaultCategoryDataset result = new DefaultCategoryDataset();
 		final String series1 = "Session";
-		ArrayList<Double> timeStamps = DifficultyManager.getTimeStamps();
-		ArrayList<Float> difficultyStamps = DifficultyManager
-				.getDifficultyStamps();
+
+		ArrayList<Double> timeStamps;
+		ArrayList<Float> difficultyStamps;
+		
+		if (Game.useGSRFeedback) {
+			timeStamps = EDAReader.getTimeStampsDiff();
+			difficultyStamps = EDAReader.getDifficultyStamps();
+		} else {
+			timeStamps = DifficultyManager.getTimeStamps();
+			difficultyStamps = DifficultyManager.getDifficultyStamps();
+		}
+		
 		DecimalFormat ds = new DecimalFormat("#.");
 		for (int i = 0; i < timeStamps.size(); i++) {
 			Double time = Double.valueOf(ds.format(timeStamps.get(i)));
