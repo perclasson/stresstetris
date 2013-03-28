@@ -254,8 +254,9 @@ public class ChartDrawer extends JFrame implements ActionListener {
 			String name = JOptionPane.showInputDialog(this,
 					"Enter the name of the test:", null);
 			String useFeedback = Game.useGSRFeedback ? "feedback " : "";
+			String score = " " + GamePlayState.getScore() + " pts";
 			writer = new PrintWriter("tests/"
-					+ (time + " " + useFeedback + name).trim() + " (eda).txt",
+					+ (time + " " + useFeedback + name + score).trim() + " (eda).txt",
 					"UTF-8");
 			for (int i = 0; i < gsrStamps.size(); i++) {
 				writer.println("EDA: " + gsrStamps.get(i) + ", Time: "
@@ -263,7 +264,7 @@ public class ChartDrawer extends JFrame implements ActionListener {
 			}
 			writer.close();
 			writer = new PrintWriter("tests/"
-					+ (time + " " + useFeedback + name).trim() + " (diff).txt",
+					+ (time + " " + useFeedback + name + score).trim() + " (diff).txt",
 					"UTF-8");
 			for (int i = 0; i < diffTimeStamps.size(); i++) {
 				writer.println("Difficulty: " + difficultyStamps.get(i)
@@ -272,10 +273,10 @@ public class ChartDrawer extends JFrame implements ActionListener {
 			writer.close();
 			try {
 				ChartUtilities.saveChartAsPNG(new File("tests/"
-						+ (time + " " + useFeedback + name).trim()
+						+ (time + " " + useFeedback + name + score).trim()
 						+ " (diff).png"), edaChart, 1000, 540);
 				ChartUtilities.saveChartAsPNG(new File("tests/"
-						+ (time + " " + useFeedback + name).trim()
+						+ (time + " " + useFeedback + name + score).trim()
 						+ " (eda).png"), diffChart, 1000, 540);
 			} catch (IOException e) {
 				e.printStackTrace();

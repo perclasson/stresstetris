@@ -25,7 +25,7 @@ import bluetooth.EDAReader;
 
 public class GamePlayState extends BasicGameState {
 	private int stateID = 1;
-	private int score;
+	private static int score;
 	private Block block, nextBlock;
 	private Image frame, grid, gameover;
 	private Square[][] gridSquares;
@@ -59,9 +59,9 @@ public class GamePlayState extends BasicGameState {
 		difficultyManager = new DifficultyManager(game, this);
 		stressIncreasing = false;
 	}
-
+	
 	private void resetGame() {
-		if (Game.useGSR) {
+		if (game.useGSR) {
 			edaReader.finish();
 		}
 		gridSquares = new Square[gridWidth][gridHeight];
@@ -126,7 +126,7 @@ public class GamePlayState extends BasicGameState {
 	}
 
 	@Override
-	public void render(GameContainer container, StateBasedGame game, Graphics g)
+	public void render(GameContainer container, StateBasedGame game2, Graphics g)
 			throws SlickException {
 		grid.draw(276, 26);
 		drawGridSquares();
@@ -363,5 +363,9 @@ public class GamePlayState extends BasicGameState {
 	public static DifficultyManager getDifficultyManager() {
 
 		return difficultyManager;
+	}
+
+	public static int getScore() {
+		return score;
 	}
 }
