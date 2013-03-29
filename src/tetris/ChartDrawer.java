@@ -48,8 +48,10 @@ public class ChartDrawer extends JFrame implements ActionListener {
 		ChartPanel diffChartPanel = new ChartPanel(diffChart);
 		diffChartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
 
-		edaData = createEDADataset(0);
-		edaChart = createEDAChart(edaData, "EDA over time");
+		if (Game.useGSR) {
+			edaData = createEDADataset(0);
+			edaChart = createEDAChart(edaData, "EDA over time");
+		}
 		edaChartPanel = new ChartPanel(edaChart);
 		edaChartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
 
@@ -74,9 +76,11 @@ public class ChartDrawer extends JFrame implements ActionListener {
 		saveMenu.add(saveMenuItem);
 		menuBar.add(saveMenu);
 		setJMenuBar(menuBar);
-		menuItem1.setActionCommand("RAW");
-		menuItem2.setActionCommand("LLS");
-		saveMenuItem.setActionCommand("SAVE");
+		if(Game.useGSR) {
+			menuItem1.setActionCommand("RAW");
+			menuItem2.setActionCommand("LLS");
+			saveMenuItem.setActionCommand("SAVE");
+		}
 	}
 
 	private CategoryDataset createDiffDataset() {
@@ -85,7 +89,7 @@ public class ChartDrawer extends JFrame implements ActionListener {
 
 		ArrayList<Double> timeStamps;
 		ArrayList<Float> difficultyStamps;
-		
+
 		if (Game.useGSRFeedback) {
 			timeStamps = EDAReader.getTimeStampsDiff();
 			difficultyStamps = EDAReader.getDifficultyStamps();
@@ -93,7 +97,7 @@ public class ChartDrawer extends JFrame implements ActionListener {
 			timeStamps = DifficultyManager.getTimeStamps();
 			difficultyStamps = DifficultyManager.getDifficultyStamps();
 		}
-		
+
 		DecimalFormat ds = new DecimalFormat("#.");
 		for (int i = 0; i < timeStamps.size(); i++) {
 			Double time = Double.valueOf(ds.format(timeStamps.get(i)));
@@ -237,7 +241,7 @@ public class ChartDrawer extends JFrame implements ActionListener {
 		ArrayList<Float> gsrStamps = EDAReader.getGSRStamps();
 		ArrayList<Double> diffTimeStamps;
 		ArrayList<Float> difficultyStamps;
-		
+
 		if (Game.useGSRFeedback) {
 			diffTimeStamps = EDAReader.getTimeStampsDiff();
 			difficultyStamps = EDAReader.getDifficultyStamps();
@@ -256,16 +260,16 @@ public class ChartDrawer extends JFrame implements ActionListener {
 			String useFeedback = Game.useGSRFeedback ? "feedback " : "";
 			String score = " " + GamePlayState.getScore() + " pts";
 			writer = new PrintWriter("tests/"
-					+ (time + " " + useFeedback + name + score).trim() + " (eda).txt",
-					"UTF-8");
+					+ (time + " " + useFeedback + name + score).trim()
+					+ " (eda).txt", "UTF-8");
 			for (int i = 0; i < gsrStamps.size(); i++) {
 				writer.println("EDA: " + gsrStamps.get(i) + ", Time: "
 						+ edaTimeStamps.get(i));
 			}
 			writer.close();
 			writer = new PrintWriter("tests/"
-					+ (time + " " + useFeedback + name + score).trim() + " (diff).txt",
-					"UTF-8");
+					+ (time + " " + useFeedback + name + score).trim()
+					+ " (diff).txt", "UTF-8");
 			for (int i = 0; i < diffTimeStamps.size(); i++) {
 				writer.println("Difficulty: " + difficultyStamps.get(i)
 						+ ", Time: " + diffTimeStamps.get(i));

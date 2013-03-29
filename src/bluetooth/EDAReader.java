@@ -55,7 +55,7 @@ public class EDAReader extends Thread {
 							if (feedback) {
 								// Every 5th second
 								int second = ((int) (delta / 1000));
-								if (second % 5 == 0 && second != lastSecond) {
+								if (second % 3 == 0 && second != lastSecond) {
 									lastSecond = second;
 									if (lastIndex == 0) {
 										lastIndex = GSRStamps.size();
@@ -65,13 +65,13 @@ public class EDAReader extends Thread {
 									} else {
 										float median = getMedian(lastIndex);
 										if (baseline < median) {
-											difficulty += 0.5f;
+											difficulty += 0.3f;
 											lastIndex = GSRStamps.size();
 											System.out.println("Difficulty: +0.5, Time: " + second);
 											// Update baseline
 											baseline = median;
 										} else if (difficulty >= 1.5f) {
-											difficulty -= 0.5f;
+											difficulty -= 0.1f;
 											lastIndex = GSRStamps.size();
 											System.out.println("Difficulty: -0.5, Time: " + second);
 											// Update baseline
@@ -115,10 +115,12 @@ public class EDAReader extends Thread {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		spHandler.closeConnection();
-
+		closeConnection();
 	}
 
+	public void closeConnection() {
+		spHandler.closeConnection();
+	}
 	public boolean getStabilized() {
 		return stabilized;
 	}
