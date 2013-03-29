@@ -76,7 +76,7 @@ public class ChartDrawer extends JFrame implements ActionListener {
 		saveMenu.add(saveMenuItem);
 		menuBar.add(saveMenu);
 		setJMenuBar(menuBar);
-		if(Game.useGSR) {
+		if (Game.useGSR) {
 			menuItem1.setActionCommand("RAW");
 			menuItem2.setActionCommand("LLS");
 			saveMenuItem.setActionCommand("SAVE");
@@ -251,37 +251,43 @@ public class ChartDrawer extends JFrame implements ActionListener {
 		}
 
 		PrintWriter writer;
+
 		try {
 			Calendar cal = Calendar.getInstance();
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 			String time = sdf.format(cal.getTime());
 			String name = JOptionPane.showInputDialog(this,
 					"Enter the name of the test:", null);
-			String useFeedback = Game.useGSRFeedback ? "feedback " : "";
-			String score = " " + GamePlayState.getScore() + " pts";
-			writer = new PrintWriter("tests/"
-					+ (time + " " + useFeedback + name + score).trim()
-					+ " (eda).txt", "UTF-8");
+			name = name.replace(" ", "-").toLowerCase();
+			String useFeedback = Game.useGSRFeedback ? "feedback-" : "";
+			String score = "-" + GamePlayState.getScore() + "pts";
+
+			// Create tests folder
+			File dir = new File("tests/" + name);
+			dir.mkdir();
+
+			String fileName = "tests/" + name + "/"
+					+ (time + " " + useFeedback + score).trim();
+
+			writer = new PrintWriter(fileName + "-eda.txt", "UTF-8");
 			for (int i = 0; i < gsrStamps.size(); i++) {
 				writer.println("EDA: " + gsrStamps.get(i) + ", Time: "
 						+ edaTimeStamps.get(i));
 			}
 			writer.close();
-			writer = new PrintWriter("tests/"
-					+ (time + " " + useFeedback + name + score).trim()
-					+ " (diff).txt", "UTF-8");
+
+			writer = new PrintWriter(fileName + "-dif.txt", "UTF-8");
 			for (int i = 0; i < diffTimeStamps.size(); i++) {
 				writer.println("Difficulty: " + difficultyStamps.get(i)
 						+ ", Time: " + diffTimeStamps.get(i));
 			}
 			writer.close();
+
 			try {
-				ChartUtilities.saveChartAsPNG(new File("tests/"
-						+ (time + " " + useFeedback + name + score).trim()
-						+ " (diff).png"), edaChart, 1000, 540);
-				ChartUtilities.saveChartAsPNG(new File("tests/"
-						+ (time + " " + useFeedback + name + score).trim()
-						+ " (eda).png"), diffChart, 1000, 540);
+				ChartUtilities.saveChartAsPNG(new File(fileName + "-eda.png"),
+						edaChart, 1000, 540);
+				ChartUtilities.saveChartAsPNG(new File(fileName + "-dif.png"),
+						diffChart, 1000, 540);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
