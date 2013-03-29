@@ -1,0 +1,6 @@
+Difficulty: 1.0, Time: 0.016
+Difficulty: 1.5, Time: 5.001
+Difficulty: 2.0, Time: 10.002
+Difficulty: 2.5, Time: 15.002
+Difficulty: 3.0, Time: 20.003
+Difficulty: 3.5, Time: 25.004
