@@ -21,6 +21,7 @@ public class Game extends StateBasedGame {
 	public static boolean useGSR = false;
 	public static boolean useGSRFeedback = false;
 	private EDAReader reader;
+	public static boolean implicitFeedback = false;
 
 	public Game() {
 		super("Stress Tetris");
@@ -62,5 +63,10 @@ public class Game extends StateBasedGame {
 		this.addState(new OptionsState(OPTIONS, this));
 		this.addState(new CooldownState(COOLDOWN, this));
 		this.addState(new StabilizerState(STABILIZER, this));
+	}
+
+	public void implicitFeedback(boolean b) {
+		implicitFeedback = b;
+		
 	}
 }

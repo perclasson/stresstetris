@@ -58,7 +58,7 @@ public class OptionsState extends BasicGameState {
 			}
 		};
 
-		buttons[1] = new FontButton(container, smallFont, "No GSR", 450, 345, game,
+		buttons[1] = new FontButton(container, smallFont, "No EDA", 450, 345, game,
 				stateID) {
 			@Override
 			public void perform() {
@@ -69,7 +69,7 @@ public class OptionsState extends BasicGameState {
 				gsrButtonSelected = this;
 			}
 		};
-		buttons[2] = new FontButton(container, smallFont, "Listen to GSR", 450, 375, game,
+		buttons[2] = new FontButton(container, smallFont, "Correlation", 450, 375, game,
 				stateID) {
 			@Override
 			public void perform() {
@@ -80,7 +80,7 @@ public class OptionsState extends BasicGameState {
 				gsrButtonSelected = this;
 			}
 		};
-		buttons[3] = new FontButton(container, smallFont, "Feedback from GSR", 450, 405, game,
+		buttons[3] = new FontButton(container, smallFont, "Explicit feedback", 450, 405, game,
 				stateID) {
 			@Override
 			public void perform() {
@@ -88,10 +88,11 @@ public class OptionsState extends BasicGameState {
 				gsrButtonSelected.setIsEnabled(true);
 				mainGame.useGSR(true);
 				mainGame.useGSRFeedback(true);
+				mainGame.implicitFeedback(false);
 				gsrButtonSelected = this;
 			}
 		};
-		buttons[4] = new FontButton(container, smallFont, "Feedback from GSR", 450, 405, game,
+		buttons[4] = new FontButton(container, smallFont, "Implicit feedback", 450, 435, game,
 				stateID) {
 			@Override
 			public void perform() {
@@ -99,6 +100,7 @@ public class OptionsState extends BasicGameState {
 				gsrButtonSelected.setIsEnabled(true);
 				mainGame.useGSR(true);
 				mainGame.useGSRFeedback(true);
+				mainGame.implicitFeedback(true);
 				gsrButtonSelected = this;
 			}
 		};
@@ -128,10 +130,11 @@ public class OptionsState extends BasicGameState {
 		fileButtonSelected.setIsEnabled(false);
 		
 		//Set first GSR option as the chosen button.
-		gsrButtonSelected = buttons[3];
+		gsrButtonSelected = buttons[4];
 		gsrButtonSelected.setIsEnabled(false);
 		mainGame.useGSR(true);
 		mainGame.useGSRFeedback(true);
+		mainGame.implicitFeedback(true);
 	}
 
 	@Override

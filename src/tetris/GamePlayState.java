@@ -142,10 +142,10 @@ public class GamePlayState extends BasicGameState {
 			}
 		}
 		
-		if (stressIncreasing && Game.useGSRFeedback) {
+		if (stressIncreasing && Game.useGSRFeedback && !Game.implicitFeedback) {
 			redFont.drawString(585, 275, "Your stress\nis increasing");			
 		}
-		else if (!stressIncreasing && Game.useGSRFeedback) {
+		else if (!stressIncreasing && Game.useGSRFeedback && !Game.implicitFeedback) {
 			greenFont.drawString(585, 275, "Your stress\nis decreasing");			
 		}
 	}
