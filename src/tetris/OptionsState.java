@@ -47,7 +47,7 @@ public class OptionsState extends BasicGameState {
 
 		File folder = new File("conf/");
 		files = folder.listFiles();
-		int noButtonsExcludingFiles = 4;
+		int noButtonsExcludingFiles = 5;
 		buttons = new FontButton[files.length + noButtonsExcludingFiles];
 		
 		buttons[0] = new FontButton(container, font, "BACK", 200, 270, game,
@@ -81,6 +81,17 @@ public class OptionsState extends BasicGameState {
 			}
 		};
 		buttons[3] = new FontButton(container, smallFont, "Feedback from GSR", 450, 405, game,
+				stateID) {
+			@Override
+			public void perform() {
+				setIsEnabled(false);
+				gsrButtonSelected.setIsEnabled(true);
+				mainGame.useGSR(true);
+				mainGame.useGSRFeedback(true);
+				gsrButtonSelected = this;
+			}
+		};
+		buttons[4] = new FontButton(container, smallFont, "Feedback from GSR", 450, 405, game,
 				stateID) {
 			@Override
 			public void perform() {

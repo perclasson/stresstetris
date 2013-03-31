@@ -269,17 +269,17 @@ public class ChartDrawer extends JFrame implements ActionListener {
 			String fileName = "tests/" + name + "/"
 					+ (time + " " + useFeedback + score).trim();
 
-			writer = new PrintWriter(fileName + "-eda.txt", "UTF-8");
+			writer = new PrintWriter(fileName + "-eda.csv", "UTF-8");
 			for (int i = 0; i < gsrStamps.size(); i++) {
-				writer.println("EDA: " + gsrStamps.get(i) + ", Time: "
+				writer.println(gsrStamps.get(i) + ","
 						+ edaTimeStamps.get(i));
 			}
 			writer.close();
 
-			writer = new PrintWriter(fileName + "-dif.txt", "UTF-8");
+			writer = new PrintWriter(fileName + "-dif.csv", "UTF-8");
 			for (int i = 0; i < diffTimeStamps.size(); i++) {
-				writer.println("Difficulty: " + difficultyStamps.get(i)
-						+ ", Time: " + diffTimeStamps.get(i));
+				writer.println(difficultyStamps.get(i)
+						+ "," + diffTimeStamps.get(i));
 			}
 			writer.close();
 
