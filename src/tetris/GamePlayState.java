@@ -73,6 +73,7 @@ public class GamePlayState extends BasicGameState {
 		block.setOnTop();
 		theme.stop();
 		nextBlock = builder.generateBlock();
+		blockSpeed = 2.5f;
 	}
 
 	@Override
@@ -87,6 +88,7 @@ public class GamePlayState extends BasicGameState {
 			edaReader.setFeedback(Game.useGSRFeedback, this);
 			edaReader.setStartTime();
 		}
+		score = 0;
 	}
 
 	public void updatePitch(float difficulty) {
