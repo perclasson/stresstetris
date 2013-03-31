@@ -23,6 +23,7 @@ public class EDAReader extends Thread {
 	private static ArrayList<Float> difficultyStamps;
 	private int lastIndex, lastSecond;
 	private GamePlayState gamePlayState;
+	long startTime;
 
 	public EDAReader() {
 		spHandler = new SerialPortHandler();
@@ -41,7 +42,7 @@ public class EDAReader extends Thread {
 
 	@Override
 	public void run() {
-		long startTime = System.currentTimeMillis();
+		startTime = System.currentTimeMillis();
 		long currentTime;
 		while (!finished) {
 			try {
@@ -93,6 +94,8 @@ public class EDAReader extends Thread {
 								stabilized = true;
 								timeStampsGSR = new ArrayList<Long>();
 								GSRStamps = new ArrayList<Float>();
+								timeStampsDiff = new ArrayList<Double>();
+								difficultyStamps = new ArrayList<Float>();
 								startTime = System.currentTimeMillis();
 							} else {
 								System.out.println("Stabilizing with EDA data");
@@ -226,5 +229,9 @@ public class EDAReader extends Thread {
 	
 	public static ArrayList<Float> getDifficultyStamps() {
 		return difficultyStamps;
+	}
+
+	public void setStartTime() {
+		this.startTime = System.currentTimeMillis();
 	}
 }

@@ -85,6 +85,7 @@ public class GamePlayState extends BasicGameState {
 		edaReader = game.getEDAReader();
 		if (edaReader != null) {
 			edaReader.setFeedback(Game.useGSRFeedback, this);
+			edaReader.setStartTime();
 		}
 	}
 
