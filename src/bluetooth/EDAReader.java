@@ -77,7 +77,7 @@ public class EDAReader extends Thread {
 											baseline = median;
 										}
 									}
-									timeStampsDiff.add(Double.valueOf(delta / 1000));
+									timeStampsDiff.add(Double.valueOf(delta));
 									difficultyStamps.add(difficulty);
 									gamePlayState.setBlockSpeed(difficulty);
 									gamePlayState.updatePitch(difficulty);

@@ -57,7 +57,7 @@ public class DifficultyManager {
 				}
 			}
 			if (changeTime <= currentTime) {
-				timeStampsDiff.add(Double.valueOf(currentTime / 1000));
+				timeStampsDiff.add(Double.valueOf(currentTime));
 				difficultyStamps.add(difficulty);
 				gps.updatePitch(difficulty);
 				gps.setBlockSpeed(difficulty);
