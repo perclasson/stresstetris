@@ -61,19 +61,18 @@ public class EDAReader extends Thread {
 										lastIndex = GSRStamps.size();
 										baseline = getMedian(0);
 										// We always start on this difficulty
-										difficulty = 3.0f;
+										difficulty = gamePlayState.getBlockSpeed();
+										//gamePlayState
 									} else {
 										float median = getMedian(lastIndex);
 										if (baseline < median) {
 											difficulty += 0.3f;
 											lastIndex = GSRStamps.size();
-											System.out.println("Difficulty: +0.5, Time: " + second);
 											// Update baseline
 											baseline = median;
 										} else if (difficulty >= 1.5f) {
-											difficulty -= 0.1f;
+											difficulty -= 0.2f;
 											lastIndex = GSRStamps.size();
-											System.out.println("Difficulty: -0.5, Time: " + second);
 											// Update baseline
 											baseline = median;
 										}
