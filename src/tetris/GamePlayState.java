@@ -49,7 +49,7 @@ public class GamePlayState extends BasicGameState {
 	public GamePlayState(int stateID, Game game) {
 		this.stateID = stateID;
 		gridSquares = new Square[gridWidth][gridHeight];
-		blockSpeed = 3.3f;// The speed with which all blocks will be falling
+		blockSpeed = 2.5f;// The speed with which all blocks will be falling
 		collisionHandler = new CollisionHandler(this);
 		builder = new BlockBuilder(this);
 		timeSinceGameOver = 0;
@@ -81,7 +81,7 @@ public class GamePlayState extends BasicGameState {
 		gc.setMinimumLogicUpdateInterval(15);
 		difficultyManager = new DifficultyManager(game, this);
 		theme = new Music("sounds/themeTetris.wav");
-		theme.loop(0.8f, 1);
+		theme.loop(0.8f+blockSpeed/10, 1);
 		edaReader = game.getEDAReader();
 		if (edaReader != null) {
 			edaReader.setFeedback(Game.useGSRFeedback, this);
