@@ -13,3 +13,8 @@
 .classpath
 .project
 bin/*
+/Linux/i686-unknown-linux-gnu/librxtxParallel.so
+/Linux/i686-unknown-linux-gnu/librxtxSerial.so
+/Linux/ia64-unkown-linux-gnu/librxtxSerial.so
+/Linux/x86_64-unknown-linux-gnu/librxtxSerial.so
+/.settings/org.eclipse.jdt.core.prefs
