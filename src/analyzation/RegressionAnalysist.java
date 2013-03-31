@@ -1,10 +1,10 @@
-package tetris;
+package analyzation;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class RegressionAnalysist {
 
-	public double correlationAnalysis(List<Double> xValues, List<Double> yValues) {
+	public double correlationAnalysisEDA(ArrayList<Float> xValues, ArrayList<Float> yValues) {
 		if(xValues.size() != yValues.size()) {
 			return -2.0;
 		}

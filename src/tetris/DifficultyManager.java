@@ -51,7 +51,7 @@ public class DifficultyManager {
 				if (line != null) {
 					String[] args = line.split(",");
 					difficulty = Float.parseFloat(args[1]);
-					changeTime = Double.parseDouble(args[0]) * 1000;
+					changeTime = Double.parseDouble(args[0]);
 				} else {
 					return;
 				}

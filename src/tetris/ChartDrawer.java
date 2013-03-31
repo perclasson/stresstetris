@@ -100,7 +100,7 @@ public class ChartDrawer extends JFrame implements ActionListener {
 
 		DecimalFormat ds = new DecimalFormat("#.");
 		for (int i = 0; i < timeStamps.size(); i++) {
-			Double time = Double.valueOf(ds.format(timeStamps.get(i)));
+			Double time = Double.valueOf(ds.format(timeStamps.get(i)/1000));
 			result.addValue(difficultyStamps.get(i), series1, time);
 		}
 		return result;
