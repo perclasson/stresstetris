@@ -1,5 +1,6 @@
 package analyzation;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -23,6 +24,7 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
@@ -137,10 +139,10 @@ public class EDAChartDrawer extends JFrame implements ActionListener {
 			System.out.println("Fitted using LSM!");
 			Object[] options = { "5", "1" };
 			int n = JOptionPane.showOptionDialog(this,
-					"Please choose an interval length",
-					"Fitting interval", JOptionPane.YES_NO_CANCEL_OPTION,
+					"Please choose an interval length", "Fitting interval",
+					JOptionPane.YES_NO_CANCEL_OPTION,
 					JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
-			if(n ==1) {
+			if (n == 1) {
 				interval = 1000;
 			} else {
 				interval = 5000;
@@ -172,11 +174,12 @@ public class EDAChartDrawer extends JFrame implements ActionListener {
 
 	private JFreeChart createEDAChart(CategoryDataset data, String title) {
 		final JFreeChart chart = ChartFactory.createLineChart("EDA over time",
-				"Time (seconds)", "EDA", data, PlotOrientation.VERTICAL, true, // include
-																				// legend
-				true, // tooltips
-				false // urls
-				);
+				"Time (seconds)", "EDA", data, PlotOrientation.VERTICAL, true,
+				true, false);
+		CategoryPlot plot = (CategoryPlot) chart.getPlot();
+		 plot.setBackgroundPaint(Color.white);
+		plot.setRangeGridlinePaint(Color.DARK_GRAY);
+		plot.getDomainAxis().setVisible(false);
 		return chart;
 	}
 
@@ -239,25 +242,27 @@ public class EDAChartDrawer extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent arg0) {
 		String command = arg0.getActionCommand();
 		if (command.equals("LLS")) {
-			getContentPane().remove(edaChartPanel);
 			edaData = createEDADataset(1);
-			edaChart = createEDAChart(edaData, "EDA over time");
-			edaChartPanel = new ChartPanel(edaChart);
-			edaChartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
-			getContentPane().add(edaChartPanel);
+			redrawChartPanel();
 			this.validate();
 		} else if (command.equals("RAW")) {
-			getContentPane().remove(edaChartPanel);
-
 			edaData = createEDADataset(0);
-			edaChart = createEDAChart(edaData, "EDA over time");
-			edaChartPanel = new ChartPanel(edaChart);
-			edaChartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
-			getContentPane().add(edaChartPanel);
+			redrawChartPanel();
 			this.validate();
 		} else if (command.equals("ANA")) {
 			correlationAnalysis();
 		}
+	}
+
+	private void redrawChartPanel() {
+		getContentPane().remove(edaChartPanel);
+		edaChart = createEDAChart(edaData, "EDA over time");
+
+		edaChartPanel = new ChartPanel(edaChart);
+		edaChartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
+		edaChartPanel.setHorizontalAxisTrace(true);
+		edaChartPanel.setVerticalAxisTrace(true);
+		getContentPane().add(edaChartPanel);
 	}
 
 	public void correlationAnalysis() {
@@ -271,7 +276,7 @@ public class EDAChartDrawer extends JFrame implements ActionListener {
 				for (Float l : edaStamps) {
 					System.out.println(l);
 				}
-				diffStamps = getDifficultySetRaw(edaStamps, interval/1000);
+				diffStamps = getDifficultySetRaw(edaStamps, interval / 1000);
 				for (Float l : diffStamps) {
 					System.out.println(l);
 				}
@@ -285,7 +290,7 @@ public class EDAChartDrawer extends JFrame implements ActionListener {
 								+ analysist.correlationAnalysisEDA(diffStamps,
 										edaStamps), "Result",
 						JOptionPane.INFORMATION_MESSAGE);
-			
+
 			}
 		} else {
 			if (!testFile.getName().contains("feedback")) {
@@ -294,7 +299,7 @@ public class EDAChartDrawer extends JFrame implements ActionListener {
 				edaStamps = formatRawEDA(fitted);
 				diffStamps = getDifficultySetRaw(edaStamps, 1);
 				edaStamps = getEDASetRaw(edaStamps, diffStamps);
-	
+
 				JOptionPane.showMessageDialog(
 						this,
 						"Correlation coefficient: "
@@ -327,7 +332,7 @@ public class EDAChartDrawer extends JFrame implements ActionListener {
 				lastSecond = second;
 				rawEDAStamps.add(edaStamps.get(i));
 			}
-		}	
+		}
 		return rawEDAStamps;
 	}
 
@@ -348,7 +353,8 @@ public class EDAChartDrawer extends JFrame implements ActionListener {
 		return edaStampsShort;
 	}
 
-	public ArrayList<Float> getDifficultySetRaw(ArrayList<Float> edaStamps, int seconds) {
+	public ArrayList<Float> getDifficultySetRaw(ArrayList<Float> edaStamps,
+			int seconds) {
 		ArrayList<Float> diffStamps = new ArrayList<Float>();
 		System.out.println("Seconds : " + seconds);
 		try {
@@ -361,7 +367,7 @@ public class EDAChartDrawer extends JFrame implements ActionListener {
 				diffStamps.add(Float.parseFloat(line.split(",")[1]));
 				while (line != null && i < edaStamps.size()) {
 					line = in.readLine();
-					if(num == seconds && line != null) {
+					if (num == seconds && line != null) {
 						num = 0;
 						diffStamps.add(Float.parseFloat(line.split(",")[1]));
 						i++;
