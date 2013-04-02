@@ -32,7 +32,7 @@ public class GameOverState extends BasicGameState {
 		font.addNeheGlyphs();
 		font.loadGlyphs();
 
-		buttons = new FontButton[2];
+		buttons = new FontButton[3];
 		buttons[0] = new FontButton(container, font, "STATISTICS", 260, 310, game,
 				stateID) {
 			@Override
@@ -41,8 +41,17 @@ public class GameOverState extends BasicGameState {
 				test.reveal();
 			}
 		};
+
+		buttons[1] = new FontButton(container, font, "SAVE", 330, 370,
+				game, stateID) {
+			@Override
+			public void perform() {
+				ChartDrawer test = new ChartDrawer();
+				test.saveTestToFiles();
+			}
+		};
 		
-		buttons[1] = new FontButton(container, font, "BACK", 330, 370,
+		buttons[2] = new FontButton(container, font, "BACK", 330, 430,
 				game, stateID) {
 			@Override
 			public void perform() {

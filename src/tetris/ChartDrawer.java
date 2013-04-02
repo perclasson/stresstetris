@@ -259,7 +259,16 @@ public class ChartDrawer extends JFrame implements ActionListener {
 			String name = JOptionPane.showInputDialog(this,
 					"Enter the name of the test:", null);
 			name = name.replace(" ", "-").toLowerCase();
-			String useFeedback = Game.useGSRFeedback ? "feedback-" : "";
+			String useFeedback;
+			if (Game.useGSRFeedback && Game.implicitFeedback) {
+				useFeedback = "implicit-feedback-";
+			}
+			else if (Game.useGSRFeedback) {
+				useFeedback = "explicit-feedback-";
+			}
+			else {
+				useFeedback = "";
+			}
 			String score = "-" + GamePlayState.getScore() + "pts";
 
 			// Create tests folder
