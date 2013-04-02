@@ -177,9 +177,8 @@ public class EDAChartDrawer extends JFrame implements ActionListener {
 				"Time (seconds)", "EDA", data, PlotOrientation.VERTICAL, true,
 				true, false);
 		CategoryPlot plot = (CategoryPlot) chart.getPlot();
-		 plot.setBackgroundPaint(Color.white);
+		plot.setBackgroundPaint(Color.white);
 		plot.setRangeGridlinePaint(Color.DARK_GRAY);
-		plot.getDomainAxis().setVisible(false);
 		return chart;
 	}
 
@@ -271,16 +270,11 @@ public class EDAChartDrawer extends JFrame implements ActionListener {
 		if (fitted) {
 			if (!testFile.getName().contains("feedback")) {
 				ArrayList<Float> diffStamps = new ArrayList<Float>();
-				ArrayList<Float> edaStamps = new ArrayList<Float>();
-				edaStamps = formatRawEDA(fitted);
-				for (Float l : edaStamps) {
-					System.out.println(l);
-				}
-				diffStamps = getDifficultySetRaw(edaStamps, interval / 1000);
+				diffStamps = getDifficultySet();
+				edaStamps = getEDASet(diffStamps);
 				for (Float l : diffStamps) {
 					System.out.println(l);
 				}
-				edaStamps = getEDASetRaw(edaStamps, diffStamps);
 				for (Float l : edaStamps) {
 					System.out.println(l);
 				}
@@ -328,7 +322,7 @@ public class EDAChartDrawer extends JFrame implements ActionListener {
 				second = ((int) (time / 1000));
 			else
 				second = (int) (time);
-			if (second % 1 == 0 && second != lastSecond) {
+			if (second % 5 == 0 && second != lastSecond) {
 				lastSecond = second;
 				rawEDAStamps.add(edaStamps.get(i));
 			}
@@ -358,21 +352,22 @@ public class EDAChartDrawer extends JFrame implements ActionListener {
 		ArrayList<Float> diffStamps = new ArrayList<Float>();
 		System.out.println("Seconds : " + seconds);
 		try {
-			BufferedReader in = new BufferedReader(new FileReader(new File(
-					"conf/easy.dif")));
+			String difFileName = testFile.getAbsolutePath().replaceFirst(
+					"-eda", "-dif");
+			File difFile = new File(difFileName);
+			BufferedReader in = new BufferedReader(new FileReader(difFile));
 			try {
 				String line = in.readLine();
 				int i = 1;
-				int num = 1;
-				diffStamps.add(Float.parseFloat(line.split(",")[1]));
-				while (line != null && i < edaStamps.size()) {
+				diffStamps.add(Float.parseFloat(line.split(",")[0]));
+				System.out.println("EDA-Stamps: " + edaStamps.size());
+				while (line != null && i <= edaStamps.size()) {
 					line = in.readLine();
-					if (num == seconds && line != null) {
-						num = 0;
-						diffStamps.add(Float.parseFloat(line.split(",")[1]));
+					if (line != null) {
+						diffStamps.add(Float.parseFloat(line.split(",")[0]));
 						i++;
 					}
-					num++;
+					System.out.println("Line: " + line);
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -380,24 +375,30 @@ public class EDAChartDrawer extends JFrame implements ActionListener {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-		for (Float l : diffStamps) {
-			System.out.println(l);
-		}
+		System.out.println("Length: " + diffStamps.size());
 		return diffStamps;
 	}
-
+	
 	public ArrayList<Float> getDifficultySet() {
 		ArrayList<Float> diffStamps = new ArrayList<Float>();
 		try {
-			BufferedReader in = new BufferedReader(new FileReader(new File(
-					"conf/easy.dif")));
+			String difFileName = testFile.getAbsolutePath().replaceFirst(
+					"-eda", "-dif");
+			File difFile = new File(difFileName);
+			BufferedReader in = new BufferedReader(new FileReader(difFile));
 			try {
 				String line = in.readLine();
-				int i = 0;
+				int i = 1;
+				diffStamps.add(Float.parseFloat(line.split(",")[0]));
+				System.out.println("EDA-Stamps: " + edaStamps.size());
 				while (line != null && i < edaStamps.size()) {
-					diffStamps.add(Float.parseFloat(line.split(",")[1]));
 					line = in.readLine();
-					i++;
+					if (line != null) {
+						diffStamps.add(Float.parseFloat(line.split(",")[0]));
+						i++;
+						System.out.println("i: " + i);
+					}
+					System.out.println("Line: " + line);
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -405,6 +406,7 @@ public class EDAChartDrawer extends JFrame implements ActionListener {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
+		System.out.println("Length: " + diffStamps.size() + ", EDASTAMPS LENGTH: " + edaStamps.size());
 		return diffStamps;
 	}
 
