@@ -100,7 +100,7 @@ public class Analysis {
 			@Override
 			public boolean accept(File file, String name) {
 				return name.contains("csv") && name.contains("eda")
-						&& !name.contains("feedback");
+						&& !name.contains("feedback") && !name.contains("FIXED");
 			}
 		};
 	}
