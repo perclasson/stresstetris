@@ -164,9 +164,11 @@ public class EDAChartDrawer extends JFrame implements ActionListener {
 	public ArrayList<Long> formatStamps(ArrayList<Long> timeStamps) {
 		ArrayList<Long> result = new ArrayList<Long>();
 		int points = calculateIndex(0);
+		result.add(timeStamps.get(0)/1000);
+		
 		for (int i = 0; i + points < timeStamps.size();) {
-			result.add(timeStamps.get(i) / 1000);
 			i += points;
+			result.add((Long)timeStamps.get(i) / 1000);
 			points = calculateIndex(i);
 		}
 		return result;
@@ -186,6 +188,7 @@ public class EDAChartDrawer extends JFrame implements ActionListener {
 			ArrayList<Long> timeStamps) {
 		ArrayList<Float> fitted = new ArrayList<Float>();
 		int points = calculateIndex(0);
+		fitted.add(edaStamps.get(0));
 		for (int i = 0; i + points < edaStamps.size();) {
 			float sumC1 = 0;
 			float sumC2 = 0;
@@ -354,6 +357,8 @@ public class EDAChartDrawer extends JFrame implements ActionListener {
 		try {
 			String difFileName = testFile.getAbsolutePath().replaceFirst(
 					"-eda", "-dif");
+			difFileName = difFileName.replaceFirst(" \\(FIXED\\)", "");
+			System.out.println(difFileName);
 			File difFile = new File(difFileName);
 			BufferedReader in = new BufferedReader(new FileReader(difFile));
 			try {
@@ -384,6 +389,8 @@ public class EDAChartDrawer extends JFrame implements ActionListener {
 		try {
 			String difFileName = testFile.getAbsolutePath().replaceFirst(
 					"-eda", "-dif");
+			difFileName = difFileName.replaceFirst(" \\(FIXED\\)", "");
+			System.out.println(difFileName);
 			File difFile = new File(difFileName);
 			BufferedReader in = new BufferedReader(new FileReader(difFile));
 			try {
