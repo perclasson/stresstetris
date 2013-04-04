@@ -1,39 +1,81 @@
 package analyzation;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.FilenameFilter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.math.stat.correlation.PearsonsCorrelation;
-import org.apache.commons.math.stat.regression.SimpleRegression;
-
 public class Analysis {
-	File[] subjects;
+	String root;
 
 	public static void main(String[] args) {
 		Analysis analysis = new Analysis(
 				"/home/per/workspace/stresstetris/tests/");
-		analysis.printLatex();
+		analysis.printBaselineDifferences();
 	}
 
-	public Analysis(String testFolderPath) {
-		subjects = getTestFolders(testFolderPath);
+	private void printBaselineDifferences() {
+		File[] subjects = getTestFolders(root, explicitFeedbackFilter());
+		System.out.println("Explicit");
+		System.out.println("------------");
+		for (File subject : subjects) {
+			FeedbackTest test = getFeedbackTestData(subject,
+					explicitFeedbackFilter());
+			test.printBaselineDifference();
+		}
+
+		subjects = getTestFolders(root, implicitFeedbackFilter());
+		System.out.println("Implicit");
+		System.out.println("------------");
+		for (File subject : subjects) {
+			FeedbackTest test = getFeedbackTestData(subject,
+					implicitFeedbackFilter());
+			test.printBaselineDifference();
+		}
+	}
+
+	private void printMeanDifferences() {
+		File[] subjects = getTestFolders(root, explicitFeedbackFilter());
+
+		System.out.println("Explicit");
+		System.out.println("------------");
+		for (File subject : subjects) {
+			FeedbackTest test = getFeedbackTestData(subject,
+					explicitFeedbackFilter());
+			if (test.getFeedbackSize() >= 2) {
+				System.out.println(capitalize(subject.getName()));
+				test.printDifference();
+			}
+		}
+
+		subjects = getTestFolders(root, implicitFeedbackFilter());
+
+		System.out.println("Implicit");
+		System.out.println("------------");
+		for (File subject : subjects) {
+			FeedbackTest test = getFeedbackTestData(subject,
+					implicitFeedbackFilter());
+			if (test.getFeedbackSize() >= 2) {
+				System.out.println(capitalize(subject.getName()));
+				test.printDifference();
+			}
+		}
+	}
+
+	public Analysis(String root) {
+		this.root = root;
 	}
 
 	private void printResult() {
+		File[] subjects = getTestFolders(root, patternFilter());
 		StringBuilder sb = new StringBuilder();
 
 		for (File subject : subjects) {
-			List<PatternTestFile> tests = getPatternTestData(subject);
+			List<EdaTest> tests = getPatternTestData(subject);
 			sb.append(subject.getName()).append("\n");
 			sb.append("-------------").append("\n");
 
-			for (PatternTestFile test : tests) {
+			for (EdaTest test : tests) {
 				sb.append(test.getName()).append("\n");
 				sb.append(test.getCorrelation()).append("\n\n");
 			}
@@ -45,10 +87,11 @@ public class Analysis {
 	}
 
 	private void printLatex() {
+		File[] subjects = getTestFolders(root, patternFilter());
 		StringBuilder sb = new StringBuilder();
 
 		for (File subject : subjects) {
-			List<PatternTestFile> tests = getPatternTestData(subject);
+			List<EdaTest> tests = getPatternTestData(subject);
 			for (int i = 0; i < tests.size(); i++) {
 				sb.append("    ").append(
 						capitalize(subject.getName())
@@ -67,20 +110,39 @@ public class Analysis {
 		return Character.toUpperCase(line.charAt(0)) + line.substring(1);
 	}
 
-	private List<PatternTestFile> getPatternTestData(File firstTestSubject) {
-		List<PatternTestFile> testFiles = new ArrayList<PatternTestFile>();
+	private List<EdaTest> getPatternTestData(File firstTestSubject) {
+		List<EdaTest> testFiles = new ArrayList<EdaTest>();
 
-		File[] edaFiles = firstTestSubject.listFiles(csvFilter());
+		File[] edaFiles = firstTestSubject.listFiles(patternFilter());
 
 		for (File eda : edaFiles) {
 			File time = new File(eda.getAbsolutePath().replace("-eda", "-dif"));
-			testFiles.add(new PatternTestFile(eda, time));
+			testFiles.add(new EdaTest(eda, time));
 		}
 
 		return testFiles;
 	}
 
-	private File[] getTestFolders(String testFolderPath) {
+	private FeedbackTest getFeedbackTestData(File subject, FilenameFilter filter) {
+		List<EdaTest> patternTests = new ArrayList<EdaTest>();
+		List<EdaTest> feedbackTests = new ArrayList<EdaTest>();
+
+		File[] patternFiles = subject.listFiles(patternFilter());
+		File[] explicitFiles = subject.listFiles(filter);
+
+		for (File edaFile : patternFiles) {
+			patternTests.add(new EdaTest(edaFile));
+		}
+
+		for (File edaFile : explicitFiles) {
+			feedbackTests.add(new EdaTest(edaFile));
+		}
+
+		return new FeedbackTest(feedbackTests, patternTests);
+	}
+
+	private File[] getTestFolders(String testFolderPath,
+			final FilenameFilter filter) {
 		File testRoot = new File(testFolderPath);
 
 		File[] listOfTestFolder = testRoot.listFiles(new FilenameFilter() {
@@ -88,7 +150,7 @@ public class Analysis {
 			public boolean accept(File folder, String name) {
 				return folder.isDirectory()
 						&& new File(folder.getAbsolutePath() + "/" + name + "/")
-								.listFiles(csvFilter()).length > 0;
+								.listFiles(filter).length > 0;
 			}
 		});
 
@@ -100,7 +162,38 @@ public class Analysis {
 			@Override
 			public boolean accept(File file, String name) {
 				return name.contains("csv") && name.contains("eda")
-						&& !name.contains("feedback") && !name.contains("FIXED");
+						&& !name.contains("FIXED");
+			}
+		};
+	}
+
+	private FilenameFilter patternFilter() {
+		return new FilenameFilter() {
+			@Override
+			public boolean accept(File file, String name) {
+				return name.contains("csv") && name.contains("eda")
+						&& !name.contains("FIXED")
+						&& !name.contains("feedback");
+			}
+		};
+	}
+
+	private FilenameFilter explicitFeedbackFilter() {
+		return new FilenameFilter() {
+			@Override
+			public boolean accept(File file, String name) {
+				return name.contains("csv") && name.contains("eda")
+						&& !name.contains("FIXED") && name.contains("explicit");
+			}
+		};
+	}
+
+	private FilenameFilter implicitFeedbackFilter() {
+		return new FilenameFilter() {
+			@Override
+			public boolean accept(File file, String name) {
+				return name.contains("csv") && name.contains("eda")
+						&& !name.contains("FIXED") && name.contains("implicit");
 			}
 		};
 	}
