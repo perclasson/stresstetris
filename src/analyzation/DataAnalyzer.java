@@ -1,52 +1,29 @@
 package analyzation;
 
-import java.awt.BorderLayout;
 import java.awt.Container;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 
 import tetris.DifficultyManager;
-import tetris.Game;
-import tetris.GamePlayState;
 import bluetooth.EDAReader;
 
 public class DataAnalyzer extends JFrame{
 	private static final long serialVersionUID = 1L;
 	
-	private final long interval = 5000;
-
-	private JTextField filename = new JTextField(), dir = new JTextField();
-
 	private JButton showEDA = new JButton("Show EDA chart"),
 			showDiff = new JButton("Show Difficulty chart");
 
@@ -80,14 +57,21 @@ public class DataAnalyzer extends JFrame{
 		}
 	}
 
+	
 	class DiffChartListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			JFileChooser fc = new JFileChooser();
-			fc.setCurrentDirectory(new File(System.getProperty("user.home"))); 
-			// Demonstrate "Open" dialog:
+			if (new File("/home").list()[0].equals("per")) {
+				fc.setCurrentDirectory(new File("/home/per/workspace/stresstetris/tests"));
+			}
+			else {
+				fc.setCurrentDirectory(new File("/home/anton/workspace/stresstetris/tests"));
+			}
 			int rVal = fc.showOpenDialog(DataAnalyzer.this);
 			if (rVal == JFileChooser.APPROVE_OPTION) {
 				File file = fc.getSelectedFile();
+				DifChartDrawer drawer = new DifChartDrawer(file);
+				drawer.reveal();
 			}
 		}
 	}

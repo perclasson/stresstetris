@@ -226,8 +226,8 @@ public class EDAChartDrawer extends JFrame implements ActionListener {
 		while (testIndex + 1 < gsrTimeStamps.size()) {
 			nextIndex++;
 			testIndex++;
-			long time = gsrTimeStamps.get(testIndex);
-			if (time - firstStamp >= interval) {
+			long time = gsrTimeStamps.get(testIndex);	
+			if (time - firstStamp >= interval || nextIndex+testIndex-1 == gsrTimeStamps.size()) {
 				return nextIndex;
 			}
 		}
