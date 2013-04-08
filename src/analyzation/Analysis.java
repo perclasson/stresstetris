@@ -11,13 +11,13 @@ public class Analysis {
 	public static void main(String[] args) {
 		Analysis analysis = new Analysis(
 				"/home/per/workspace/stresstetris/tests/");
-		analysis.printBaselineDifferences();
+		analysis.printLatex();
 	}
 
 	private void printBaselineDifferences() {
 		File[] subjects = getTestFolders(root, explicitFeedbackFilter());
 		System.out.println("Explicit");
-		System.out.println("------------");
+		// System.out.println("------------");
 		for (File subject : subjects) {
 			FeedbackTest test = getFeedbackTestData(subject,
 					explicitFeedbackFilter());
@@ -26,7 +26,7 @@ public class Analysis {
 
 		subjects = getTestFolders(root, implicitFeedbackFilter());
 		System.out.println("Implicit");
-		System.out.println("------------");
+		// System.out.println("------------");
 		for (File subject : subjects) {
 			FeedbackTest test = getFeedbackTestData(subject,
 					implicitFeedbackFilter());
@@ -38,12 +38,10 @@ public class Analysis {
 		File[] subjects = getTestFolders(root, explicitFeedbackFilter());
 
 		System.out.println("Explicit");
-		System.out.println("------------");
 		for (File subject : subjects) {
 			FeedbackTest test = getFeedbackTestData(subject,
 					explicitFeedbackFilter());
 			if (test.getFeedbackSize() >= 2) {
-				System.out.println(capitalize(subject.getName()));
 				test.printDifference();
 			}
 		}
@@ -51,12 +49,10 @@ public class Analysis {
 		subjects = getTestFolders(root, implicitFeedbackFilter());
 
 		System.out.println("Implicit");
-		System.out.println("------------");
 		for (File subject : subjects) {
 			FeedbackTest test = getFeedbackTestData(subject,
 					implicitFeedbackFilter());
 			if (test.getFeedbackSize() >= 2) {
-				System.out.println(capitalize(subject.getName()));
 				test.printDifference();
 			}
 		}
@@ -77,7 +73,8 @@ public class Analysis {
 
 			for (EdaTest test : tests) {
 				sb.append(test.getName()).append("\n");
-				sb.append(test.getCorrelation()).append("\n\n");
+				sb.append(test.getCorrelation()).append("\n");
+				sb.append(test.getConfidence()).append("\n\n");
 			}
 			sb.append("\n\n");
 		}
@@ -98,6 +95,8 @@ public class Analysis {
 								+ (i > 0 ? " (" + (i + 1) + ") " : ""));
 				sb.append(" & ").append(tests.get(i).getRawCorrelation());
 				sb.append(" & ").append(tests.get(i).getCorrelation());
+				sb.append(" & ").append(tests.get(i).getConfidence());
+				sb.append(" & ").append(tests.get(i).getN());
 				sb.append("\\\\ \\hline\n");
 			}
 		}
@@ -148,6 +147,7 @@ public class Analysis {
 		File[] listOfTestFolder = testRoot.listFiles(new FilenameFilter() {
 			@Override
 			public boolean accept(File folder, String name) {
+				System.out.println(name);
 				return folder.isDirectory()
 						&& new File(folder.getAbsolutePath() + "/" + name + "/")
 								.listFiles(filter).length > 0;

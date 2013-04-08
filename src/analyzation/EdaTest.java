@@ -8,13 +8,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.math.MathException;
+import org.apache.commons.math.linear.MatrixIndexException;
 import org.apache.commons.math.stat.correlation.PearsonsCorrelation;
 import org.apache.commons.math.stat.regression.SimpleRegression;
 
 public class EdaTest {
 	private File edaFile, difficultyFile;
 	private double[] difficulty, eda, rawEda;
-	private double correlation, rawCorrelation;
+	private double correlation, rawCorrelation, confidence;
 
 	public EdaTest(File edaFile, File timeFile) {
 		this.edaFile = edaFile;
@@ -22,7 +24,21 @@ public class EdaTest {
 		difficulty = calculateDifficulty();
 		rawEda = new double[difficulty.length];
 		eda = calculateEda(difficulty.length);
+		double[][] data = new double[eda.length][2];
+		for (int i = 0; i < difficulty.length; i++) {
+			data[i][0] = difficulty[i];
+			data[i][1] = eda[i];
+		}
+		PearsonsCorrelation pc = new PearsonsCorrelation(data);
+		try {
+			confidence = pc.getCorrelationPValues().getEntry(0, 1);
+		} catch (MatrixIndexException e1) {
+			e1.printStackTrace();
+		} catch (MathException e1) {
+			e1.printStackTrace();
+		}
 		correlation = new PearsonsCorrelation().correlation(difficulty, eda);
+
 		if (correlation < 0) {
 			System.out.println(getName());
 			for (double d : difficulty) {
@@ -50,8 +66,16 @@ public class EdaTest {
 		return String.format("%.3g", rawCorrelation);
 	}
 
+	public String getConfidence() {
+		return String.format("%.3g", confidence);
+	}
+
 	public String getName() {
 		return edaFile.getName();
+	}
+
+	public int getN() {
+		return eda.length;
 	}
 
 	private double[] calculateDifficulty() {
@@ -203,4 +227,5 @@ public class EdaTest {
 		}
 		return sum / i;
 	}
+
 }

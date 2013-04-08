@@ -34,10 +34,7 @@ public class FeedbackTest {
 			double firstMean = feedbackTests.get(0).getMeanEda();
 			double secondMean = feedbackTests.get(1).getMeanEda();
 
-			System.out.println(firstMean);
-			System.out.println(secondMean);
-			System.out.println(firstMean - secondMean > 0);
-			System.out.println("------");
+			System.out.println(firstMean + "," + secondMean);
 		}
 	}
 
@@ -47,11 +44,6 @@ public class FeedbackTest {
 		double baseline = test.getMeanBaseline();
 		double mean = test.getMeanEda();
 		i++;
-		System.out.println(baseline);
-		System.out.println(mean);
-		System.out.println(mean - baseline > 0 ? "Medelvärde ökat"
-				: "Medelvärde minskat");
-		System.out.println("------");
-
+		System.out.println(baseline + "," + mean);
 	}
 }
