@@ -176,11 +176,14 @@ public class EDAChartDrawer extends JFrame implements ActionListener {
 
 	private JFreeChart createEDAChart(CategoryDataset data, String title) {
 		final JFreeChart chart = ChartFactory.createLineChart("EDA over time",
-				"Time (seconds)", "EDA", data, PlotOrientation.VERTICAL, true,
+				"Time (seconds)", "EDA", data, PlotOrientation.VERTICAL, false,
 				true, false);
 		CategoryPlot plot = (CategoryPlot) chart.getPlot();
 		plot.setBackgroundPaint(Color.white);
 		plot.setRangeGridlinePaint(Color.DARK_GRAY);
+		plot.setDomainGridlinesVisible(false);
+		plot.setRangeGridlinesVisible(false);
+		
 		return chart;
 	}
 
@@ -216,18 +219,19 @@ public class EDAChartDrawer extends JFrame implements ActionListener {
 		}
 		return fitted;
 	}
-
 	public int calculateIndex(int index) {
 		ArrayList<Long> gsrTimeStamps = getTime();
 		int nextIndex = 0;
 		int testIndex = index;
 		long firstStamp = gsrTimeStamps.get(testIndex);
-
+		int second = (int)(firstStamp/1000);
+		int lastSecond = second;
 		while (testIndex + 1 < gsrTimeStamps.size()) {
 			nextIndex++;
 			testIndex++;
 			long time = gsrTimeStamps.get(testIndex);	
-			if (time - firstStamp >= interval || nextIndex+testIndex-1 == gsrTimeStamps.size()) {
+			second = ((int) (time / 1000));
+			if (second % 5 == 0 && lastSecond != second) {				
 				return nextIndex;
 			}
 		}
